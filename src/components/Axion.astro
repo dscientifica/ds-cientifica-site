@@ -1,1 +1,36 @@
---- import { axionUrl } from "../config/site"; ---  <section id="axion" class="client-band" aria-labelledby="axion-title">   <div class="container client-band-inner">     <div>       <p class="eyebrow">AXION / Área do Cliente</p><h2 id="axion-title">         Já é cliente? Acesse sua Área do Cliente       </h2><p>Certificados, equipamentos e histórico de calibrações.</p>     </div>     <div class="client-band-action">       {         axionUrl ? (           <a class="button" href={axionUrl}>             Acessar AXION <span aria-hidden="true">↗</span>           </a>         ) : (           <>             <>               <button                 class="button"                 type="button"                 disabled                 aria-describedby="axion-pending"               >                 Acessar AXION               </button>               <p id="axion-pending">Acesso em preparação.</p>             </>           </>         )       }     </div>   </div> </section>
+---
+import { axionUrl } from "../config/site";
+---
+
+<section id="axion" class="client-band" aria-labelledby="axion-title">
+  <div class="container client-band-inner">
+    <div>
+      <p class="eyebrow">AXION / Área do Cliente</p><h2 id="axion-title">
+        Já é cliente? Acesse sua Área do Cliente
+      </h2><p>Certificados, equipamentos e histórico de calibrações.</p>
+    </div>
+    <div class="client-band-action">
+      {
+        axionUrl ? (
+          <a class="button" href={axionUrl}>
+            Acessar AXION <span aria-hidden="true">↗</span>
+          </a>
+        ) : (
+          <>
+            <>
+              <button
+                class="button"
+                type="button"
+                disabled
+                aria-describedby="axion-pending"
+              >
+                Acessar AXION
+              </button>
+              <p id="axion-pending">Acesso em preparação.</p>
+            </>
+          </>
+        )
+      }
+    </div>
+  </div>
+</section>
