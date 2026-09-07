@@ -1,0 +1,22 @@
+# Validação técnica do piloto
+
+Execução local em 07/09/2026, Windows, Node 24.19.0, pnpm 11.19.0 e Chromium do Playwright.
+
+| Verificação                      | Resultado                                                            |
+| -------------------------------- | -------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile` | Passou; lockfile reproduzível                                        |
+| `pnpm lint`                      | Passou; 0 erros, 0 warnings, 0 hints no Astro e formatação conferida |
+| `pnpm build`                     | Passou; quatro páginas do piloto, 404 e recursos estáticos           |
+| `pnpm test`                      | 4 testes passaram                                                    |
+| `pnpm test:browser`              | 11 testes passaram                                                   |
+| `git diff --check`               | Passou                                                               |
+
+Os testes de build verificaram todos os links internos, âncoras e recursos referenciados, metadados, sitemap restrito ao piloto, bloqueio de indexação e ausência de destinos inventados.
+
+Os testes de navegador cobriram as quatro páginas em 320, 375, 390, 768, 1280 e 1920 px; carregamento das imagens; ausência de erros JavaScript; menu móvel e Escape; teclado; percurso completo até o formulário; obrigatoriedade e valores inválidos; ausência de requisições de envio e armazenamento; navegação sem JavaScript; 404; texto a 200% e preferência por movimento reduzido. O axe não encontrou violações nas verificações automáticas WCAG A/AA configuradas.
+
+A ampliação a 200% inicialmente expôs transbordamento de palavras no hub. A quebra de texto foi corrigida e a suíte completa passou depois do ajuste. A primeira tentativa de build identificou a necessidade de declarar Sharp; a dependência foi adicionada e as imagens passaram no build e no navegador.
+
+Revisão visual local: Home em desktop e formulário em celular; capturas adicionais de Pressão e Manômetros disponíveis no diretório local ignorado `test-results/visual/`. O servidor de desenvolvimento foi reiniciado após instalar Sharp; confirmado o carregamento da imagem na prévia atual.
+
+Este registro descreve testes locais. O resultado da CI no GitHub deve ser consultado no PR. Não houve validação de produção, Safari/Firefox, leitor de tela, dispositivos físicos ou auditoria metrológica. A homologação DS permanece pendente conforme `HOMOLOGACAO.md`.

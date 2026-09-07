@@ -1,0 +1,144 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import CTA from "../components/CTA.astro";
+import QuoteForm from "../components/QuoteForm.astro";
+import { segments } from "../data/catalog";
+interface Props {
+  equipment: {
+    title: string;
+    description: string;
+    introduction: string;
+    types: { title: string; description: string }[];
+    steps: { title: string; description: string }[];
+  };
+}
+const { equipment } = Astro.props;
+---
+
+<BaseLayout title={equipment.title} description={equipment.description}>
+  <Breadcrumbs
+    items={[
+      { label: "Início", href: "/" },
+      { label: "Calibração", href: "/calibracao" },
+      { label: "Pressão", href: "/calibracao/pressao" },
+      { label: "Manômetros" },
+    ]}
+  />
+  <Hero
+    eyebrow="Calibração / Pressão / Manômetros"
+    title={equipment.title}
+    description={equipment.introduction}
+    href="#orcamento"
+    cta="Preparar informações"><slot name="image" /></Hero
+  >
+  <Section
+    eyebrow="Sobre o instrumento"
+    title="Digital ou analógico. A aplicação orienta a avaliação."
+    ><div class="grid grid-two">
+      {
+        equipment.types.map((type) => (
+          <article class="card">
+            <>
+              <h3>{type.title}</h3>
+              <p>{type.description}</p>
+            </>
+          </article>
+        ))
+      }
+    </div></Section
+  >
+  <Section
+    eyebrow="Aplicações"
+    title="Onde a pressão faz parte da rotina."
+    tone="light"
+    ><div class="split">
+      <p>
+        Manômetros são utilizados no acompanhamento de pressão em linhas de
+        processo, sistemas pneumáticos, circuitos hidráulicos e bancadas de
+        laboratório.
+      </p><p>
+        A adequação do instrumento depende da aplicação, das condições de
+        operação e dos requisitos de medição. Informe esses requisitos na
+        solicitação de análise.
+      </p>
+    </div></Section
+  >
+  <Section
+    eyebrow="Como funciona"
+    title="Um percurso que começa com informação."
+    ><ol class="steps">
+      {
+        equipment.steps.map((step) => (
+          <li>
+            <>
+              <h3>{step.title}</h3>
+              <p>{step.description}</p>
+            </>
+          </li>
+        ))
+      }
+    </ol></Section
+  >
+  <Section
+    eyebrow="Resultados e documentação"
+    title="Certificado, contexto e análise."
+    tone="light"
+    ><div class="split">
+      <div class="prose">
+        <h3>Interpretação dos resultados</h3><p>
+          A avaliação considera as indicações do instrumento, os valores de
+          referência, a incerteza de medição e as condições da calibração. A
+          calibração não equivale a ajuste ou aprovação automática.
+        </p><p>
+          Uma eventual declaração de conformidade depende de critério de
+          aceitação e regra de decisão definidos, quando aplicáveis.
+        </p>
+      </div><div class="prose">
+        <h3>Rastreabilidade metrológica</h3><p>
+          A rastreabilidade de um resultado requer uma cadeia documentada e
+          ininterrupta de calibrações, cada uma contribuindo para a incerteza de
+          medição. A documentação pertinente ao atendimento deve ser verificada
+          na análise técnica.
+        </p><p>
+          As informações específicas sobre padrões, método e condições do
+          serviço dependem da avaliação da DS.
+        </p>
+      </div>
+    </div></Section
+  >
+  <Section
+    eyebrow="Local de atendimento"
+    title="Laboratório ou campo: consulte a viabilidade."
+    ><p>
+      A possibilidade de atendimento é avaliada a partir do instrumento, da
+      instalação e das condições necessárias à medição. Informe a cidade e
+      eventuais restrições de retirada do equipamento.
+    </p></Section
+  >
+  <Section
+    eyebrow="Segmentos"
+    title="Atenção aos requisitos de cada aplicação."
+    tone="light"
+    ><div class="chips">
+      {segments.map((segment) => <span>{segment}</span>)}
+    </div></Section
+  >
+  <CTA href="#orcamento" />
+  <QuoteForm />
+  <Section eyebrow="Continue explorando" title="Outros caminhos em calibração."
+    ><div class="grid grid-two">
+      <article class="card">
+        <h3><a href="/calibracao/pressao">Instrumentos de pressão ↗</a></h3><p>
+          Consulte a relação de instrumentos previstos para esta grandeza.
+        </p>
+      </article><article class="card">
+        <h3><a href="/calibracao">Todas as grandezas ↗</a></h3><p>
+          Volte à visão geral de calibração.
+        </p>
+      </article>
+    </div></Section
+  >
+</BaseLayout>

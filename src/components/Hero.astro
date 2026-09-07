@@ -1,0 +1,27 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  href?: string;
+  cta?: string;
+}
+const { eyebrow, title, description, href, cta } = Astro.props;
+---
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">{eyebrow}</p><h1>{title}</h1><p class="lead">
+        {description}
+      </p>{
+        href && (
+          <a class="button" href={href}>
+            {cta}
+            <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }<slot name="after" />
+    </div><div class="hero-visual"><slot /></div>
+  </div>
+</section>

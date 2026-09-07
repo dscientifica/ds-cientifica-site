@@ -1,0 +1,68 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Hero from "../../components/Hero.astro";
+import Section from "../../components/Section.astro";
+import Card from "../../components/Card.astro";
+import CTA from "../../components/CTA.astro";
+import { quantities } from "../../data/catalog";
+---
+
+<BaseLayout
+  title="Calibração de instrumentos"
+  description="Explore as grandezas de calibração da DS Científica e consulte as informações necessárias para avaliar seu instrumento e sua aplicação."
+>
+  <Breadcrumbs
+    items={[{ label: "Início", href: "/" }, { label: "Calibração" }]}
+  />
+  <Hero
+    eyebrow="Calibração"
+    title="Entenda suas medições. Avalie seu instrumento."
+    description="Comece pela grandeza medida. A análise das características do instrumento e da aplicação orienta a definição do atendimento."
+    href="/calibracao/pressao"
+    cta="Explorar pressão"
+  >
+    <aside class="topic-panel">
+      <p class="eyebrow">Por onde começar</p><h2>
+        Da grandeza ao equipamento.
+      </h2><a href="#grandezas">01 <span>Escolha a grandeza</span> ↓</a><a
+        href="/calibracao/pressao">02 <span>Encontre o instrumento</span> ↗</a
+      ><a href="/calibracao/pressao/manometros#orcamento"
+        >03 <span>Prepare as informações</span> ↗</a
+      ><p>Piloto disponível: pressão → manômetros.</p>
+    </aside>
+  </Hero>
+  <Section
+    id="grandezas"
+    eyebrow="Grandezas"
+    title="O que você precisa calibrar?"
+    intro="As categorias abaixo organizam a navegação. A disponibilidade e as condições de atendimento dependem de análise técnica; as demais páginas ainda estão em preparação."
+    tone="light"
+    ><div class="grid">
+      {
+        quantities.map((item, index) => (
+          <Card {...item} number={`0${index + 1}`} />
+        ))
+      }
+    </div></Section
+  >
+  <Section
+    eyebrow="Antes do orçamento"
+    title="A aplicação faz parte da análise."
+    ><div class="split">
+      <div class="prose">
+        <h3>Identifique seu instrumento</h3><p>
+          Reúna fabricante, modelo, faixa utilizada, resolução e quantidade de
+          instrumentos. Informe também a cidade e as condições de uso.
+        </p>
+      </div><div class="prose">
+        <h3>Compartilhe seus requisitos</h3><p>
+          Pontos de interesse, requisitos internos e necessidade de declaração
+          de conformidade devem ser discutidos na análise técnica, quando
+          aplicáveis.
+        </p>
+      </div>
+    </div></Section
+  >
+  <CTA />
+</BaseLayout>

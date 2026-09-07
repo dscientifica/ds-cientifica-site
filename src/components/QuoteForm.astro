@@ -1,0 +1,183 @@
+<section class="section" id="orcamento">
+  <div class="container form-layout">
+    <div>
+      <p class="eyebrow">Informações para orçamento</p><h2>
+        Comece pelo seu manômetro.
+      </h2><p class="lead">
+        Reúna as características do instrumento e os requisitos da sua
+        aplicação.
+      </p><p class="inline-notice" id="form-disclaimer">
+        Formulário de demonstração. Valida os campos neste navegador, mas não
+        envia nem salva dados. Use dados de teste nesta prévia.
+      </p><p class="privacy-note">
+        A política de privacidade, o destino dos dados e o mecanismo de proteção
+        contra spam devem ser aprovados antes de habilitar o recebimento de
+        solicitações.
+      </p>
+    </div>
+    <form
+      class="quote-form"
+      aria-label="Informações para orçamento"
+      aria-describedby="form-disclaimer"
+      autocomplete="off"
+    >
+      <p class="form-note">
+        * Campos obrigatórios para a validação do roteiro.
+      </p>
+      <noscript
+        ><p class="noscript">
+          Ative o JavaScript para testar a validação. Este formulário não
+          realiza envios.
+        </p></noscript
+      >
+      <fieldset disabled style="border:0;padding:0;margin:0;min-width:0">
+        <legend class="sr-only">Dados do contato e do instrumento</legend><div
+          class="form-grid"
+        >
+          <label class="field"
+            >Empresa *<input
+              name="empresa"
+              required
+              maxlength="120"
+              autocomplete="organization"
+            /></label
+          >
+          <label class="field"
+            >Nome *<input
+              name="nome"
+              required
+              maxlength="100"
+              autocomplete="name"
+            /></label
+          >
+          <label class="field"
+            >WhatsApp<input
+              name="whatsapp"
+              type="tel"
+              inputmode="tel"
+              maxlength="25"
+              autocomplete="tel"
+            /><small>Opcional. Inclua DDD e número.</small></label
+          >
+          <label class="field"
+            >E-mail *<input
+              name="email"
+              type="email"
+              required
+              maxlength="160"
+              autocomplete="email"
+            /></label
+          >
+          <label class="field"
+            >Serviço *<select name="servico" required
+              ><option value="calibracao">Calibração</option></select
+            ></label
+          >
+          <label class="field"
+            >Equipamento *<select name="equipamento" required
+              ><option value="">Selecione o tipo</option><option
+                >Manômetro digital</option
+              ><option>Manômetro analógico</option><option
+                >Manômetro — tipo a confirmar</option
+              ></select
+            ></label
+          >
+          <label class="field"
+            >Fabricante<input name="fabricante" maxlength="100" /></label
+          >
+          <label class="field"
+            >Modelo<input name="modelo" maxlength="100" /></label
+          >
+          <label class="field"
+            >Faixa utilizada e unidade<input
+              name="faixa"
+              maxlength="100"
+            /><small>Informe a faixa da sua aplicação, se conhecida.</small
+            ></label
+          >
+          <label class="field"
+            >Quantidade *<input
+              name="quantidade"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              step="1"
+              required
+            /></label
+          >
+          <label class="field field-wide"
+            >Cidade/UF *<input
+              name="cidade"
+              required
+              maxlength="120"
+              autocomplete="address-level2"
+            /></label
+          >
+          <label class="field field-wide"
+            >Observações<textarea name="observacoes" rows="4" maxlength="2000"
+            ></textarea><small
+              >Condições de uso, pontos de interesse, resolução e outros
+              requisitos. Não inclua informações sensíveis.</small
+            ></label
+          >
+        </div>
+      </fieldset>
+      <button type="button" class="button" id="validate-quote" hidden
+        >Validar preenchimento <span aria-hidden="true">→</span></button
+      >
+      <p
+        class="form-status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+      </p>
+    </form>
+  </div>
+</section>
+<script>
+  const form = document.querySelector<HTMLFormElement>(".quote-form");
+  const button = document.querySelector<HTMLButtonElement>("#validate-quote");
+  const status = form?.querySelector<HTMLElement>(".form-status");
+  if (form && button && status) {
+    // Register before enabling fields. No network, endpoint or persistence.
+    const validate = () => {
+      status.textContent = "";
+      form
+        .querySelectorAll<HTMLInputElement>("input[required]")
+        .forEach((input) => {
+          input.setCustomValidity(
+            input.value.trim() ? "" : "Preencha este campo.",
+          );
+        });
+      const phone = form.querySelector<HTMLInputElement>('[name="whatsapp"]')!;
+      const digits = phone.value.replace(/\D/g, "");
+      phone.setCustomValidity(
+        !phone.value.trim() ||
+          (/^[+\d\s().-]+$/.test(phone.value) &&
+            digits.length >= 10 &&
+            digits.length <= 15)
+          ? ""
+          : "Informe um telefone com DDD, usando de 10 a 15 dígitos.",
+      );
+      if (!form.reportValidity()) return;
+      status.textContent =
+        "Campos validados. Nenhuma solicitação foi enviada ou salva. O envio será disponibilizado após a integração e a aprovação da DS.";
+    };
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      validate();
+    });
+    button.addEventListener("click", validate);
+    form.addEventListener("input", (event) => {
+      status.textContent = "";
+      const input = event.target;
+      if (input instanceof HTMLInputElement) input.setCustomValidity("");
+    });
+    form.addEventListener("change", () => {
+      status.textContent = "";
+    });
+    form.querySelector("fieldset")!.disabled = false;
+    button.hidden = false;
+  }
+</script>

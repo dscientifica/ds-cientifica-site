@@ -1,0 +1,31 @@
+---
+import { axionUrl } from "../config/site";
+---
+
+<section id="axion" class="section">
+  <div class="container axion-panel">
+    <div>
+      <p class="eyebrow">Área do Cliente</p><h2>
+        O seu próximo acesso:<br />AXION.
+      </h2><p>
+        O ambiente do cliente é separado do site institucional. Acesse o AXION
+        pelo endereço confirmado pela DS.
+      </p>{
+        axionUrl ? (
+          <a class="button button-outline" href={axionUrl}>
+            Acessar AXION ↗
+          </a>
+        ) : (
+          <p class="inline-notice">
+            Acesso em preparação. O endereço será disponibilizado após
+            validação.
+          </p>
+        )
+      }
+    </div><div class="axion-side">
+      <span class="axion-word">AXION</span><p>Ambiente do cliente</p><span
+        >Informações e documentos em um acesso dedicado.</span
+      >
+    </div>
+  </div>
+</section>

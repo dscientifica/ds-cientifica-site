@@ -1,0 +1,178 @@
+import { test, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
+const routes = [
+  "/",
+  "/calibracao",
+  "/calibracao/pressao",
+  "/calibracao/pressao/manometros",
+];
+
+for (const width of [320, 375, 390, 768, 1280, 1920]) {
+  test(`all routes fit ${width}px and images load`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    for (const route of routes) {
+      expect((await page.goto(route))?.status()).toBe(200);
+      await expect(page.locator("h1")).toBeVisible();
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+      for (const img of await page.locator("img").all()) {
+        await img.scrollIntoViewIfNeeded();
+        await expect
+          .poll(() =>
+            img.evaluate(
+              (node: HTMLImageElement) =>
+                node.complete && node.naturalWidth > 0,
+            ),
+          )
+          .toBe(true);
+      }
+    }
+    expect(errors).toEqual([]);
+  });
+}
+
+test("mobile navigation, keyboard and complete pilot journey", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+  await expect(
+    page.getByRole("link", { name: "Pular para o conteúdo" }),
+  ).toBeFocused();
+  await page.getByRole("button", { name: "Menu" }).click();
+  await expect(page.getByRole("button", { name: "Menu" })).toHaveAttribute(
+    "aria-expanded",
+    "true",
+  );
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "Menu" })).toBeFocused();
+  await expect(page.locator("#main-nav")).toBeHidden();
+  await page.getByRole("button", { name: "Menu" }).click();
+  await page
+    .getByRole("navigation", { name: "Navegação principal" })
+    .getByRole("link", { name: "Calibração", exact: true })
+    .click();
+  await expect(page).toHaveURL("/calibracao");
+  await page.getByRole("link", { name: "Explorar pressão" }).click();
+  await expect(page).toHaveURL("/calibracao/pressao");
+  await page.getByRole("link", { name: "Conhecer manômetros" }).click();
+  await expect(page).toHaveURL("/calibracao/pressao/manometros");
+  await page.getByRole("link", { name: "Preparar informações" }).click();
+  await expect(page.locator("#orcamento")).toBeInViewport();
+});
+
+test("form rejects invalid fields and never sends or persists data", async ({
+  page,
+}) => {
+  await page.goto("/calibracao/pressao/manometros");
+  await expect(page.locator("#validate-quote")).toBeVisible();
+  const requests: string[] = [];
+  page.on("request", (req) => {
+    if (
+      req.method() !== "GET" ||
+      ["fetch", "xhr", "document"].includes(req.resourceType())
+    )
+      requests.push(req.url());
+  });
+  const submit = page.getByRole("button", { name: "Validar preenchimento" });
+  await submit.click();
+  await expect(page.getByRole("status")).toHaveText("");
+  expect(
+    await page
+      .locator("form")
+      .evaluate((form: HTMLFormElement) => form.checkValidity()),
+  ).toBe(false);
+  await page.getByLabel("Empresa *").fill("   ");
+  await page.getByLabel("Nome *").fill("Teste");
+  await page.getByLabel("E-mail *").fill("teste@example.test");
+  await page.getByLabel("Equipamento *").selectOption("Manômetro digital");
+  await page.getByLabel("Quantidade *").fill("1");
+  await page.getByLabel("Cidade/UF *").fill("Cidade de teste/SP");
+  await submit.click();
+  expect(
+    await page
+      .getByLabel("Empresa *")
+      .evaluate((el: HTMLInputElement) => el.checkValidity()),
+  ).toBe(false);
+  await page.getByLabel("Empresa *").fill("Empresa teste");
+  await page.getByLabel("E-mail *").fill("invalido");
+  await submit.click();
+  await expect(page.getByRole("status")).toHaveText("");
+  await page.getByLabel("E-mail *").fill("teste@example.test");
+  await page.getByLabel("Quantidade *").fill("0");
+  await submit.click();
+  await expect(page.getByRole("status")).toHaveText("");
+  await page.getByLabel("Quantidade *").fill("1.5");
+  await submit.click();
+  await expect(page.getByRole("status")).toHaveText("");
+  await page.getByLabel("Quantidade *").fill("1");
+  await page.getByLabel("WhatsApp").fill("abcdefghij");
+  await submit.click();
+  await expect(page.getByRole("status")).toHaveText("");
+  await page.getByLabel("WhatsApp").fill("");
+  await submit.click();
+  await expect(page.getByRole("status")).toContainText(
+    "Nenhuma solicitação foi enviada ou salva",
+  );
+  await page.getByLabel("Nome *").fill("Outro teste");
+  await expect(page.getByRole("status")).toHaveText("");
+  await page.getByLabel("Nome *").press("Enter");
+  expect(requests).toEqual([]);
+  expect(
+    await page.evaluate(() => [localStorage.length, sessionStorage.length]),
+  ).toEqual([0, 0]);
+  await expect(page).toHaveURL("/calibracao/pressao/manometros");
+});
+
+test("no JavaScript keeps navigation usable and form inert", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 320, height: 800 },
+  });
+  const page = await context.newPage();
+  await page.goto("/calibracao/pressao/manometros");
+  await expect(page.locator("#main-nav")).toBeVisible();
+  await expect(page.getByLabel("Empresa *")).toBeDisabled();
+  await expect(page.locator("#validate-quote")).toBeHidden();
+  await context.close();
+});
+
+test("WCAG A/AA automated checks across pilot and 404", async ({ page }) => {
+  for (const route of [...routes, "/pagina-inexistente"]) {
+    const response = await page.goto(route);
+    expect(response?.status()).toBe(
+      route === "/pagina-inexistente" ? 404 : 200,
+    );
+    const result = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(
+      result.violations,
+      `${route}: ${JSON.stringify(result.violations)}`,
+    ).toEqual([]);
+  }
+});
+
+test("200% text enlargement and reduced motion retain layout", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const route of routes) {
+    await page.goto(route);
+    await page.addStyleTag({ content: "html { font-size: 200%; }" });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  }
+});

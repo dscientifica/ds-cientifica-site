@@ -1,0 +1,9 @@
+---
+import EquipmentLayout from "../../../layouts/EquipmentLayout.astro";
+import InstrumentImage from "../../../components/InstrumentImage.astro";
+import { gauge } from "../../../data/catalog";
+---
+
+<EquipmentLayout equipment={gauge}
+  ><InstrumentImage slot="image" priority /></EquipmentLayout
+>

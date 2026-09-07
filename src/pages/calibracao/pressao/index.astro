@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import Hero from "../../../components/Hero.astro";
+import InstrumentImage from "../../../components/InstrumentImage.astro";
+import Section from "../../../components/Section.astro";
+import Card from "../../../components/Card.astro";
+import CTA from "../../../components/CTA.astro";
+import { pressureInstruments } from "../../../data/catalog";
+---
+
+<BaseLayout
+  title="Calibração de pressão"
+  description="Conheça os instrumentos de pressão e o fluxo de avaliação de manômetros digitais e analógicos da DS Científica."
+>
+  <Breadcrumbs
+    items={[
+      { label: "Início", href: "/" },
+      { label: "Calibração", href: "/calibracao" },
+      { label: "Pressão" },
+    ]}
+  />
+  <Hero
+    eyebrow="Calibração / Pressão"
+    title="Pressão sob uma perspectiva metrológica."
+    description="Instrumentos de pressão fazem parte da rotina de laboratórios e processos. Conhecer suas indicações ajuda a avaliar a adequação das medições à aplicação."
+    href="/calibracao/pressao/manometros"
+    cta="Conhecer manômetros"><InstrumentImage priority /></Hero
+  >
+  <Section
+    eyebrow="Instrumentos"
+    title="Encontre seu equipamento."
+    intro="O detalhamento de manômetros está disponível neste piloto. Outros instrumentos e suas condições de atendimento dependem de análise técnica."
+    tone="light"
+    ><div class="grid">
+      {
+        pressureInstruments.map((item, index) => (
+          <Card {...item}>{index === 0 && <InstrumentImage />}</Card>
+        ))
+      }
+    </div></Section
+  >
+  <Section
+    eyebrow="Medição e decisão"
+    title="Informação para avaliar o seu processo."
+    ><div class="split">
+      <div class="prose">
+        <h3>Por que avaliar a indicação?</h3><p>
+          A calibração fornece informações sobre a relação entre a indicação do
+          instrumento e valores de referência nas condições estabelecidas. A
+          avaliação de uso depende dos requisitos da aplicação.
+        </p><p>
+          Calibrar não significa, por si só, ajustar o instrumento ou aprová-lo
+          para qualquer uso.
+        </p>
+      </div><div class="prose">
+        <h3>Certificado e rastreabilidade</h3><p>
+          Os resultados precisam ser interpretados com suas incertezas e
+          condições de medição. As informações de rastreabilidade e os
+          documentos aplicáveis devem ser verificados na análise técnica.
+        </p><p>
+          Se houver solicitação de declaração de conformidade, o critério e a
+          regra de decisão devem ser definidos quando aplicáveis.
+        </p>
+      </div>
+    </div></Section
+  >
+  <Section
+    eyebrow="Atendimento"
+    title="Condições definidas com você."
+    tone="light"
+    ><p>
+      Informe a localização do instrumento e as condições da instalação. A
+      possibilidade de atendimento em laboratório ou em campo será avaliada
+      antes da proposta, conforme a aplicação e a viabilidade técnica.
+    </p></Section
+  >
+  <CTA />
+</BaseLayout>

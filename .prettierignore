@@ -1,0 +1,8 @@
+pnpm-lock.yaml
+dist
+.astro
+node_modules
+test-results
+playwright-report
+SPEC-SITE-DS-CIENTIFICA.md
+CODEX.md

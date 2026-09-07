@@ -1,0 +1,149 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import InstrumentImage from "../components/InstrumentImage.astro";
+import Section from "../components/Section.astro";
+import Card from "../components/Card.astro";
+import CTA from "../components/CTA.astro";
+import Axion from "../components/Axion.astro";
+import { quantities, segments } from "../data/catalog";
+import { site, whatsappUrl } from "../config/site";
+---
+
+<BaseLayout
+  title="Metrologia e instrumentação industrial"
+  description="Conheça as soluções da DS Científica em calibração, manutenção, qualificação e instrumentação para laboratórios e processos industriais."
+>
+  <Hero
+    eyebrow="Metrologia • Laboratório • Processo"
+    title="Cada medição importa para o seu processo."
+    description="Calibração, manutenção e instrumentação com atenção às características do seu equipamento e às necessidades da sua operação."
+    href="/calibracao"
+    cta="Conhecer calibração"
+  >
+    <p slot="after" class="hero-note">
+      <strong>Da aplicação à análise técnica.</strong><br />Encontre a grandeza
+      e o instrumento que você precisa avaliar.
+    </p>
+    <InstrumentImage priority />
+  </Hero>
+  <Section
+    eyebrow="Nossas soluções"
+    title="O cuidado com o seu equipamento começa aqui."
+  >
+    <div class="solutions">
+      <article class="solution">
+        <span class="card-number">01 / MEDIÇÃO</span><h3>Calibração</h3><p>
+          Informações para conhecer o comportamento metrológico dos seus
+          instrumentos.
+        </p><a class="text-link" href="/calibracao">Explorar grandezas ↗</a>
+      </article>
+      <article class="solution" id="manutencao">
+        <span class="card-number">02 / EQUIPAMENTOS</span><h3>Manutenção</h3><p>
+          Diagnóstico, manutenção preventiva e corretiva de equipamentos de
+          laboratório e instrumentação de processo.
+        </p><span class="status-label">Detalhamento em preparação</span>
+      </article>
+      <article class="solution" id="qualificacao">
+        <span class="card-number">03 / APLICAÇÃO</span><h3>Qualificação</h3><p>
+          Avaliação de necessidades de qualificação térmica para equipamentos e
+          aplicações.
+        </p><span class="status-label">Conteúdo sujeito à validação DS</span>
+      </article>
+      <article class="solution" id="produtos">
+        <span class="card-number">04 / INSTRUMENTAÇÃO</span><h3>Produtos</h3><p>
+          Instrumentação para pressão, temperatura, vazão, nível, analítica e
+          laboratório.
+        </p><span class="status-label">Catálogo em preparação</span>
+      </article>
+    </div>
+  </Section>
+  <Section
+    eyebrow="Calibração"
+    title="Encontre sua grandeza."
+    intro="Comece pela pressão e conheça o fluxo de avaliação de manômetros. As demais páginas serão disponibilizadas após homologação."
+    tone="light"
+  >
+    <div class="grid">
+      {
+        quantities
+          .slice(0, 3)
+          .map((item, index) => <Card {...item} number={`0${index + 1}`} />)
+      }
+    </div><a class="text-link" href="/calibracao">Ver todas as grandezas ↗</a>
+  </Section>
+  <Section
+    id="sobre"
+    eyebrow="Sobre a DS"
+    title="Laboratório e processo na mesma conversa."
+  >
+    <div class="split">
+      <p class="lead" style="margin-top:0">
+        A DS Científica atua com metrologia e instrumentação para laboratórios e
+        processos industriais. O entendimento da aplicação orienta a avaliação
+        da solução.
+      </p><div class="editorial">
+        <h3>Atenção ao que sua operação precisa</h3><p>
+          Identificação do equipamento, condições de uso e requisitos da medição
+          são o ponto de partida para uma análise técnica.
+        </p><p>
+          Informações institucionais e diferenciais adicionais permanecem em
+          revisão pela DS.
+        </p>
+      </div>
+    </div>
+  </Section>
+  <Section
+    id="segmentos"
+    eyebrow="Segmentos"
+    title="Diferentes processos. Atenção a cada aplicação."
+    tone="light"
+    ><div class="chips">
+      {segments.map((segment) => <span>{segment}</span>)}
+    </div></Section
+  >
+  <Section
+    id="conteudo-tecnico"
+    eyebrow="Conteúdo técnico"
+    title="Informação para a sua próxima decisão."
+    ><div class="editorial">
+      <h3>O que informar ao solicitar calibração de manômetros?</h3><p>
+        Identificação, faixa utilizada e requisitos da aplicação ajudam a
+        iniciar a análise técnica. Conheça as informações previstas no nosso
+        roteiro de orçamento.
+      </p><a class="text-link" href="/calibracao/pressao/manometros#orcamento"
+        >Consultar o roteiro de manômetros ↗</a
+      >
+    </div></Section
+  >
+  <Axion />
+  <Section
+    id="contato"
+    eyebrow="Contato"
+    title="Conte-nos sobre seu instrumento."
+    ><div class="split">
+      <p>
+        Para o orçamento, reúna a identificação do equipamento, as
+        características da medição e a cidade de atendimento.
+      </p><div>
+        <p>
+          Esta prévia ainda não recebe solicitações. WhatsApp, e-mail e política
+          de privacidade aguardam validação da DS.
+        </p>{
+          whatsappUrl && (
+            <a class="text-link" href={whatsappUrl}>
+              Conversar pelo WhatsApp ↗
+            </a>
+          )
+        }{
+          site.contacts.email && (
+            <a class="text-link" href={`mailto:${site.contacts.email}`}>
+              {site.contacts.email}
+            </a>
+          )
+        }
+      </div>
+    </div></Section
+  >
+  <CTA />
+</BaseLayout>
