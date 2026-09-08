@@ -1,0 +1,6 @@
+/*
+  Keep every temporary and production deployment out of search indexes until
+  the project is explicitly homologated and indexable is changed in source.
+*/
+  X-Robots-Tag: noindex, nofollow
+  X-Content-Type-Options: nosniff

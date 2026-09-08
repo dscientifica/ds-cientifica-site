@@ -1,6 +1,6 @@
 # DS Científica — Site institucional
 
-Fundação em Astro + TypeScript e fluxo-piloto da Issue #1. O Google Sites permanece em produção. Esta implementação não faz deploy nem altera domínio/DNS.
+Fundação em Astro + TypeScript e fluxo-piloto da Issue #1. O Google Sites permanece em produção. Esta implementação não faz deploy de produção nem altera domínio/DNS. A configuração de prévia temporária na Cloudflare está documentada em [docs/CLOUDFLARE-PREVIEW.md](./docs/CLOUDFLARE-PREVIEW.md).
 
 ## Documentos de referência
 
@@ -43,6 +43,9 @@ O `pnpm-workspace.yaml` permite somente o script de instalação necessário do 
 | `/calibracao`                    | Hub de grandezas               |
 | `/calibracao/pressao`            | Instrumentos de pressão        |
 | `/calibracao/pressao/manometros` | Detalhe e roteiro de orçamento |
+| `/manutencao`                    | Hub mínimo de manutenção       |
+| `/qualificacao`                  | Hub mínimo de qualificação     |
+| `/produtos`                      | Hub mínimo de produtos         |
 
 Há ainda `404.html`, `robots.txt` e `sitemap-index.xml`. Não foram criadas páginas das demais grandezas nem página Serviços. Os itens de menu fora do piloto apontam a seções correspondentes da Home. Cards sem detalhamento não têm links fictícios.
 
@@ -65,7 +68,7 @@ Contatos começam vazios. Preencher `contacts.whatsapp` com dígitos internacion
 
 O formulário valida localmente e não recebe solicitações: sem endpoint, persistência ou upload. A configuração marca a integração pendente; mudar um booleano não implementa envio. Antes de integrá-lo, aprovar privacidade, base legal, retenção, destinatários, validação no servidor e proteção contra spam.
 
-O domínio canônico da SPEC está em `astro.config.mjs`. A prévia usa `indexable: false`, meta `noindex, nofollow` e robots bloqueado. O sitemap prepara as sete rotas aprovadas desta fase e não ativa indexação. Somente após homologação rever essas configurações e autorizar publicação. Não há configuração de deploy automático nem alteração do Google Sites.
+O domínio canônico da SPEC está em `astro.config.mjs`. A prévia usa `indexable: false`, meta `noindex, nofollow` e robots bloqueado. O sitemap prepara as sete rotas aprovadas desta fase e não ativa indexação. Somente após homologação rever essas configurações e autorizar publicação. Não há deploy automático: a prévia Cloudflare é iniciada manualmente na conta Cloudflare conforme [docs/CLOUDFLARE-PREVIEW.md](./docs/CLOUDFLARE-PREVIEW.md). O Google Sites permanece inalterado.
 
 ## Homologação obrigatória
 

@@ -101,6 +101,9 @@ test("sitemap contains only the seven authorized routes; preview robots disallow
     await readFile("dist/robots.txt", "utf8"),
     "User-agent: *\nDisallow: /\n",
   );
+  const headers = await readFile("dist/_headers", "utf8");
+  assert.match(headers, /X-Robots-Tag: noindex, nofollow/);
+  assert.match(headers, /X-Content-Type-Options: nosniff/);
 });
 
 test("pending integrations and unimplemented categories have no invented destinations", () => {
