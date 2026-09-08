@@ -37,10 +37,10 @@ export const principles = [
   "Laboratório e processo na mesma conversa",
 ];
 export const homeSegments = [
-  "Farmacêutico",
-  "Químico",
-  "Alimentos e Bebidas",
-  "Automotivo",
-  "Hospitalar",
-  "Industrial",
+  { title: "Farmacêutico", href: "/segmentos/farmaceutico" },
+  { title: "Químico", href: "/segmentos/quimico" },
+  { title: "Alimentos e Bebidas", href: "/segmentos/alimentos-bebidas" },
+  { title: "Automotivo", href: "/segmentos/automotivo" },
+  { title: "Hospitalar", href: "/segmentos/hospitalar" },
+  { title: "Industrial", href: "/segmentos/industrial" },
 ];

@@ -8,6 +8,12 @@ const routes = [
   "/manutencao",
   "/qualificacao",
   "/produtos",
+  "/segmentos/farmaceutico",
+  "/segmentos/quimico",
+  "/segmentos/alimentos-bebidas",
+  "/segmentos/automotivo",
+  "/segmentos/hospitalar",
+  "/segmentos/industrial",
 ];
 
 for (const width of [390, 1280]) {
@@ -54,6 +60,23 @@ for (const width of [390, 1280]) {
     await expect(page.locator("#contato")).toContainText(
       "Esta prévia ainda não recebe solicitações.",
     );
+    await page.goto("/");
+    for (const [label, path] of [
+      ["Farmacêutico", "/segmentos/farmaceutico"],
+      ["Químico", "/segmentos/quimico"],
+      ["Alimentos e Bebidas", "/segmentos/alimentos-bebidas"],
+      ["Automotivo", "/segmentos/automotivo"],
+      ["Hospitalar", "/segmentos/hospitalar"],
+      ["Industrial", "/segmentos/industrial"],
+    ]) {
+      await page.goto("/");
+      await page
+        .locator("#segmentos")
+        .getByRole("link", { name: label, exact: true })
+        .click();
+      await expect(page).toHaveURL(path);
+      await expect(page.locator("h1")).toHaveText(label);
+    }
   });
 }
 
@@ -144,7 +167,7 @@ test("form rejects invalid fields and never sends or persists data", async ({
   page,
 }) => {
   await page.goto("/calibracao/pressao/manometros");
-  await expect(page.locator("#validate-quote")).toBeVisible();
+  await expect(page.locator("#add-equipment")).toBeVisible();
   const requests: string[] = [];
   page.on("request", (req) => {
     if (
@@ -153,21 +176,36 @@ test("form rejects invalid fields and never sends or persists data", async ({
     )
       requests.push(req.url());
   });
-  const submit = page.getByRole("button", { name: "Validar preenchimento" });
-  await submit.click();
+  const add = page.getByRole("button", {
+    name: "+ Adicionar outro equipamento",
+  });
+  await add.click();
   await expect(page.getByRole("status")).toHaveText("");
   expect(
     await page
       .locator("form")
       .evaluate((form: HTMLFormElement) => form.checkValidity()),
   ).toBe(false);
+  await page.getByLabel("Serviço *").selectOption("Calibração");
+  await page.getByLabel("Equipamento *").fill("Manômetro digital");
+  await page.getByLabel("Quantidade *").fill("1");
+  await add.click();
+  await expect(page.getByRole("status")).toContainText(
+    "Equipamento adicionado à revisão local.",
+  );
+  await expect(page.locator(".equipment-list li")).toHaveCount(1);
+  await page.getByRole("button", { name: "Revisar solicitação" }).click();
+  await expect(page.getByRole("status")).toHaveText("");
+  expect(
+    await page
+      .getByLabel("Empresa *")
+      .evaluate((el: HTMLInputElement) => el.checkValidity()),
+  ).toBe(false);
   await page.getByLabel("Empresa *").fill("   ");
   await page.getByLabel("Nome *").fill("Teste");
   await page.getByLabel("E-mail *").fill("teste@example.test");
-  await page.getByLabel("Equipamento *").selectOption("Manômetro digital");
-  await page.getByLabel("Quantidade *").fill("1");
   await page.getByLabel("Cidade/UF *").fill("Cidade de teste/SP");
-  await submit.click();
+  await page.getByRole("button", { name: "Revisar solicitação" }).click();
   expect(
     await page
       .getByLabel("Empresa *")
@@ -175,32 +213,90 @@ test("form rejects invalid fields and never sends or persists data", async ({
   ).toBe(false);
   await page.getByLabel("Empresa *").fill("Empresa teste");
   await page.getByLabel("E-mail *").fill("invalido");
-  await submit.click();
+  await page.getByRole("button", { name: "Revisar solicitação" }).click();
   await expect(page.getByRole("status")).toHaveText("");
-  await page.getByLabel("E-mail *").fill("teste@example.test");
-  await page.getByLabel("Quantidade *").fill("0");
-  await submit.click();
-  await expect(page.getByRole("status")).toHaveText("");
-  await page.getByLabel("Quantidade *").fill("1.5");
-  await submit.click();
-  await expect(page.getByRole("status")).toHaveText("");
-  await page.getByLabel("Quantidade *").fill("1");
   await page.getByLabel("WhatsApp").fill("abcdefghij");
-  await submit.click();
+  await page.getByLabel("E-mail *").fill("teste@example.test");
+  await page.getByRole("button", { name: "Revisar solicitação" }).click();
   await expect(page.getByRole("status")).toHaveText("");
   await page.getByLabel("WhatsApp").fill("");
-  await submit.click();
-  await expect(page.getByRole("status")).toContainText(
-    "Nenhuma solicitação foi enviada ou salva",
+  await page.getByRole("button", { name: "Revisar solicitação" }).click();
+  await expect(page.locator(".quote-review")).toBeVisible();
+  await expect(page.locator("#review-client")).toContainText("Empresa teste");
+  await expect(page.locator("#review-equipment")).toContainText(
+    "Calibração - Manômetro digital",
   );
-  await page.getByLabel("Nome *").fill("Outro teste");
-  await expect(page.getByRole("status")).toHaveText("");
-  await page.getByLabel("Nome *").press("Enter");
+  await page
+    .getByRole("button", { name: "Confirmar revisão sem enviar" })
+    .click();
+  await expect(page.getByRole("status")).toContainText(
+    "Nenhuma solicitação foi enviada, salva ou processada.",
+  );
   expect(requests).toEqual([]);
   expect(
     await page.evaluate(() => [localStorage.length, sessionStorage.length]),
   ).toEqual([0, 0]);
   await expect(page).toHaveURL("/calibracao/pressao/manometros");
+});
+
+test("quote form handles multiple equipment items with edit and removal", async ({
+  page,
+}) => {
+  await page.goto("/calibracao/pressao/manometros");
+  await page.getByLabel("Empresa *").fill("Empresa teste");
+  await page.getByLabel("Nome *").fill("Teste");
+  await page.getByLabel("E-mail *").fill("teste@example.test");
+  await page.getByLabel("Cidade/UF *").fill("Cidade de teste/SP");
+
+  await page.getByLabel("Serviço *").selectOption("Calibração");
+  await page.getByLabel("Equipamento *").fill("Manômetro digital");
+  await page.getByLabel("Fabricante").fill("Fabricante A");
+  await page.getByLabel("Modelo").fill("M-1");
+  await page.getByLabel("Faixa utilizada/unidade").fill("0 a 10 bar");
+  await page.getByLabel("Quantidade *").fill("2");
+  await page
+    .getByRole("button", { name: "+ Adicionar outro equipamento" })
+    .click();
+
+  await page.getByLabel("Serviço *").selectOption("Manutenção");
+  await page.getByLabel("Equipamento *").fill("Transmissor de pressão");
+  await page.getByLabel("Quantidade *").fill("1");
+  await page
+    .getByRole("button", { name: "+ Adicionar outro equipamento" })
+    .click();
+  await expect(page.locator(".equipment-list li")).toHaveCount(2);
+
+  await page
+    .locator(".equipment-list li")
+    .nth(1)
+    .getByRole("button", { name: "Editar" })
+    .click();
+  await page.getByLabel("Quantidade *").fill("3");
+  await page.getByRole("button", { name: "Salvar equipamento" }).click();
+  await expect(page.locator(".equipment-list li").nth(1)).toContainText(
+    "Quantidade: 3",
+  );
+
+  await page
+    .locator(".equipment-list li")
+    .first()
+    .getByRole("button", { name: "Remover" })
+    .click();
+  await expect(page.locator(".equipment-list li")).toHaveCount(1);
+  await expect(page.locator(".equipment-list")).not.toContainText(
+    "Manômetro digital",
+  );
+
+  await page.getByRole("button", { name: "Revisar solicitação" }).click();
+  await expect(page.locator(".quote-review")).toContainText("Empresa teste");
+  await expect(page.locator(".quote-review")).toContainText(
+    "Manutenção - Transmissor de pressão",
+  );
+  await expect(page.locator(".quote-review")).toContainText("Quantidade");
+  await expect(page.locator(".quote-review")).toContainText("3");
+  await page.getByRole("button", { name: "Voltar para editar" }).click();
+  await expect(page.locator(".quote-review")).toBeHidden();
+  await expect(page.locator(".equipment-list li")).toHaveCount(1);
 });
 
 test("no JavaScript keeps navigation usable and form inert", async ({

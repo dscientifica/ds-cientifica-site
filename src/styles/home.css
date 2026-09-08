@@ -143,6 +143,21 @@
   color: var(--muted);
   font-size: 0.9375rem;
 }
+.home-segments a {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  color: var(--muted);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 6px;
+}
+.home-segments a:hover,
+.home-segments a:focus-visible {
+  color: var(--magenta);
+  text-decoration-color: currentcolor;
+}
 .client-band {
   background: var(--navy);
   color: white;
@@ -259,6 +274,24 @@
   max-width: 80ch;
   font-size: 0.9375rem;
 }
+.segment-symbol {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: var(--wash);
+  color: var(--magenta);
+}
+.segment-symbol span {
+  display: grid;
+  width: 112px;
+  height: 112px;
+  place-items: center;
+  border: 1px solid #d8bfd0;
+  border-radius: 50%;
+  font-size: 3.2rem;
+  font-weight: 700;
+}
 @media (max-width: 1050px) {
   .solution-paths {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -307,6 +340,9 @@
     margin-bottom: 40px;
   }
   .hub-symbol {
+    min-height: 180px;
+  }
+  .segment-symbol {
     min-height: 180px;
   }
   .hub-symbol .solution-icon {

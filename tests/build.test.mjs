@@ -28,6 +28,12 @@ const routes = [
   "/manutencao",
   "/qualificacao",
   "/produtos",
+  "/segmentos/farmaceutico",
+  "/segmentos/quimico",
+  "/segmentos/alimentos-bebidas",
+  "/segmentos/automotivo",
+  "/segmentos/hospitalar",
+  "/segmentos/industrial",
 ];
 const fileFor = (route) =>
   route === "/404" ? "dist/404.html" : join("dist", route, "index.html");
@@ -84,7 +90,7 @@ test("all internal links, fragments and assets resolve in the static build", asy
   }
 });
 
-test("sitemap contains only the seven authorized routes; preview robots disallows crawling", async () => {
+test("sitemap contains only the authorized routes; preview robots disallows crawling", async () => {
   const $ = load(await readFile("dist/sitemap-0.xml", "utf8"), { xml: true });
   assert.deepEqual(
     $("loc")
@@ -136,6 +142,25 @@ test("Home is a four-path hub and client navigation has a safe fallback", () => 
     ["/calibracao", "/manutencao", "/qualificacao", "/produtos"],
   );
   assert.equal($("#sobre li").length, 3);
+  assert.deepEqual(
+    $("#segmentos a")
+      .map((_, el) => [$(el).text().trim(), $(el).attr("href")])
+      .get(),
+    [
+      "Farmacêutico",
+      "/segmentos/farmaceutico",
+      "Químico",
+      "/segmentos/quimico",
+      "Alimentos e Bebidas",
+      "/segmentos/alimentos-bebidas",
+      "Automotivo",
+      "/segmentos/automotivo",
+      "Hospitalar",
+      "/segmentos/hospitalar",
+      "Industrial",
+      "/segmentos/industrial",
+    ],
+  );
   assert.equal(
     $("main form, main .instrument-image, main .status-label").length,
     0,
@@ -148,5 +173,20 @@ test("Home is a four-path hub and client navigation has a safe fallback", () => 
     );
     assert.equal(client.length, 1);
     assert.equal(client.attr("href"), "/#axion");
+  }
+});
+
+test("segment hubs stay minimal and avoid unsupported claims", () => {
+  for (const route of routes.filter((route) =>
+    route.startsWith("/segmentos/"),
+  )) {
+    const $ = documents.get(route);
+    assert.equal($("h1").length, 1);
+    assert.match($("main").text(), /Hub em validação/);
+    assert.doesNotMatch(
+      $("main").text(),
+      /acreditad|CGCRE|Inmetro|ISO|NR-13|CMC|incerteza|certifica/i,
+    );
+    assert.equal($("main a[href='/#contato']").length, 1);
   }
 });

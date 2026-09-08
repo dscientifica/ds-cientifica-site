@@ -1,0 +1,43 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import type { Segment } from "../data/segments";
+import "../styles/home.css";
+interface Props {
+  segment: Segment;
+}
+const { segment } = Astro.props;
+---
+
+<BaseLayout
+  title={`Segmento ${segment.title}`}
+  description={`${segment.description} Página hub mínima para navegação durante a homologação visual.`}
+>
+  <Breadcrumbs
+    items={[
+      { label: "Início", href: "/" },
+      { label: "Segmentos", href: "/#segmentos" },
+      { label: segment.title },
+    ]}
+  />
+  <section class="container minimal-hub segment-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Segmentos</p><h1>{segment.title}</h1><p
+          class="lead"
+        >
+          {segment.description}
+        </p><a class="button" href="/#contato"
+          >Solicitar avaliação <span aria-hidden="true">↗</span></a
+        >
+      </div><div class="segment-symbol" aria-hidden="true">
+        <span>{segment.title.charAt(0)}</span>
+      </div>
+    </div>
+    <h2>Hub em validação.</h2><p class="hub-note">
+      Esta página existe para validar a navegação do site piloto. O conteúdo
+      específico do segmento será definido pela DS Científica antes da expansão,
+      sem incluir informações não confirmadas.
+    </p><a class="text-link" href="/#segmentos">Voltar aos segmentos ↗</a>
+  </section>
+</BaseLayout>

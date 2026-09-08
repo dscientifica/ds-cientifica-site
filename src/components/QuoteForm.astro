@@ -2,22 +2,22 @@
   <div class="container form-layout">
     <div>
       <p class="eyebrow">Informações para orçamento</p><h2>
-        Comece pelo seu manômetro.
+        Monte sua solicitação com todos os equipamentos.
       </h2><p class="lead">
-        Reúna as características do instrumento e os requisitos da sua
-        aplicação.
+        Informe os dados do cliente uma única vez e adicione cada equipamento
+        que precisa de avaliação.
       </p><p class="inline-notice" id="form-disclaimer">
         Formulário de demonstração. Valida os campos neste navegador, mas não
         envia nem salva dados. Use dados de teste nesta prévia.
       </p><p class="privacy-note">
-        A política de privacidade, o destino dos dados e o mecanismo de proteção
-        contra spam devem ser aprovados antes de habilitar o recebimento de
-        solicitações.
+        A política de privacidade, o destino dos dados, o recebimento de anexos
+        por equipamento e o mecanismo de proteção contra spam devem ser
+        aprovados antes de habilitar solicitações reais.
       </p>
     </div>
     <form
       class="quote-form"
-      aria-label="Informações para orçamento"
+      aria-label="Solicitação de orçamento"
       aria-describedby="form-disclaimer"
       autocomplete="off"
     >
@@ -30,10 +30,13 @@
           realiza envios.
         </p></noscript
       >
-      <fieldset disabled style="border:0;padding:0;margin:0;min-width:0">
-        <legend class="sr-only">Dados do contato e do instrumento</legend><div
-          class="form-grid"
-        >
+      <fieldset
+        class="quote-step"
+        data-step="edit"
+        disabled
+        style="border:0;padding:0;margin:0;min-width:0"
+      >
+        <legend>Dados do cliente</legend><div class="form-grid">
           <label class="field"
             >Empresa *<input
               name="empresa"
@@ -68,43 +71,6 @@
               autocomplete="email"
             /></label
           >
-          <label class="field"
-            >Serviço *<select name="servico" required
-              ><option value="calibracao">Calibração</option></select
-            ></label
-          >
-          <label class="field"
-            >Equipamento *<select name="equipamento" required
-              ><option value="">Selecione o tipo</option><option
-                >Manômetro digital</option
-              ><option>Manômetro analógico</option><option
-                >Manômetro — tipo a confirmar</option
-              ></select
-            ></label
-          >
-          <label class="field"
-            >Fabricante<input name="fabricante" maxlength="100" /></label
-          >
-          <label class="field"
-            >Modelo<input name="modelo" maxlength="100" /></label
-          >
-          <label class="field"
-            >Faixa utilizada e unidade<input
-              name="faixa"
-              maxlength="100"
-            /><small>Informe a faixa da sua aplicação, se conhecida.</small
-            ></label
-          >
-          <label class="field"
-            >Quantidade *<input
-              name="quantidade"
-              type="number"
-              inputmode="numeric"
-              min="1"
-              step="1"
-              required
-            /></label
-          >
           <label class="field field-wide"
             >Cidade/UF *<input
               name="cidade"
@@ -113,18 +79,108 @@
               autocomplete="address-level2"
             /></label
           >
-          <label class="field field-wide"
-            >Observações<textarea name="observacoes" rows="4" maxlength="2000"
-            ></textarea><small
-              >Condições de uso, pontos de interesse, resolução e outros
-              requisitos. Não inclua informações sensíveis.</small
-            ></label
-          >
         </div>
+        <div class="equipment-builder" aria-labelledby="equipment-title">
+          <div class="form-section-heading">
+            <h3 id="equipment-title">Equipamentos</h3><p>
+              Adicione um item por equipamento ou grupo equivalente.
+            </p>
+          </div>
+          <div class="form-grid">
+            <label class="field"
+              >Serviço *<select name="servico" required
+                ><option value="">Selecione o serviço</option><option
+                  >Calibração</option
+                ><option>Manutenção</option><option>Qualificação</option><option
+                  >Produto</option
+                ></select
+              ></label
+            >
+            <label class="field"
+              >Equipamento *<input
+                name="equipamento"
+                required
+                maxlength="120"
+              /></label
+            >
+            <label class="field"
+              >Fabricante<input name="fabricante" maxlength="100" /></label
+            >
+            <label class="field"
+              >Modelo<input name="modelo" maxlength="100" /></label
+            >
+            <label class="field"
+              >Faixa utilizada/unidade<input
+                name="faixa"
+                maxlength="100"
+              /><small>Informe a faixa da aplicação, se conhecida.</small
+              ></label
+            >
+            <label class="field"
+              >Quantidade *<input
+                name="quantidade"
+                type="number"
+                inputmode="numeric"
+                min="1"
+                step="1"
+                required
+              /></label
+            >
+            <label class="field field-wide"
+              >Observações<textarea name="observacoes" rows="4" maxlength="2000"
+              ></textarea><small
+                >Condições de uso, pontos de interesse e requisitos. Não inclua
+                informações sensíveis.</small
+              ></label
+            >
+          </div>
+          <p class="future-note">
+            Estrutura preparada para incluir anexo/foto por equipamento em fase
+            futura, após definição de backend, privacidade e retenção.
+          </p>
+          <div class="quote-actions">
+            <button type="button" class="button" id="add-equipment" hidden>
+              + Adicionar outro equipamento
+            </button>
+            <button
+              type="button"
+              class="button button-outline"
+              id="cancel-edit"
+              hidden
+            >
+              Cancelar edição
+            </button>
+          </div>
+        </div>
+        <div class="equipment-summary" aria-live="polite">
+          <h3>Equipamentos adicionados</h3>
+          <p class="empty-equipment">Nenhum equipamento adicionado.</p>
+          <ol class="equipment-list"></ol>
+        </div>
+        <button type="button" class="button" id="review-quote" hidden>
+          Revisar solicitação <span aria-hidden="true">→</span>
+        </button>
       </fieldset>
-      <button type="button" class="button" id="validate-quote" hidden
-        >Validar preenchimento <span aria-hidden="true">→</span></button
-      >
+      <section class="quote-step quote-review" data-step="review" hidden>
+        <p class="eyebrow">Revisar solicitação</p><h3>
+          Confira os dados antes da confirmação local.
+        </h3><div class="review-block">
+          <h4>Cliente</h4><dl id="review-client"></dl>
+        </div><div class="review-block">
+          <h4>Equipamentos</h4><ol id="review-equipment"></ol>
+        </div><p class="inline-notice">
+          Esta etapa confirma apenas que as informações foram revisadas na
+          interface. Nenhuma solicitação será enviada, salva ou processada nesta
+          fase.
+        </p><div class="quote-actions">
+          <button type="button" class="button button-outline" id="back-to-edit">
+            Voltar para editar
+          </button>
+          <button type="button" class="button" id="confirm-review">
+            Confirmar revisão sem enviar
+          </button>
+        </div>
+      </section>
       <p
         class="form-status"
         role="status"
@@ -136,21 +192,96 @@
   </div>
 </section>
 <script>
+  type Equipment = {
+    servico: string;
+    equipamento: string;
+    fabricante: string;
+    modelo: string;
+    faixa: string;
+    quantidade: string;
+    observacoes: string;
+  };
   const form = document.querySelector<HTMLFormElement>(".quote-form");
-  const button = document.querySelector<HTMLButtonElement>("#validate-quote");
+  const editStep =
+    form?.querySelector<HTMLFieldSetElement>('[data-step="edit"]');
+  const reviewStep = form?.querySelector<HTMLElement>('[data-step="review"]');
+  const addButton = form?.querySelector<HTMLButtonElement>("#add-equipment");
+  const cancelButton = form?.querySelector<HTMLButtonElement>("#cancel-edit");
+  const reviewButton = form?.querySelector<HTMLButtonElement>("#review-quote");
+  const backButton = form?.querySelector<HTMLButtonElement>("#back-to-edit");
+  const confirmButton =
+    form?.querySelector<HTMLButtonElement>("#confirm-review");
   const status = form?.querySelector<HTMLElement>(".form-status");
-  if (form && button && status) {
-    // Register before enabling fields. No network, endpoint or persistence.
-    const validate = () => {
-      status.textContent = "";
-      form
-        .querySelectorAll<HTMLInputElement>("input[required]")
-        .forEach((input) => {
-          input.setCustomValidity(
-            input.value.trim() ? "" : "Preencha este campo.",
-          );
-        });
-      const phone = form.querySelector<HTMLInputElement>('[name="whatsapp"]')!;
+  const list = form?.querySelector<HTMLOListElement>(".equipment-list");
+  const emptyMessage = form?.querySelector<HTMLElement>(".empty-equipment");
+  const reviewClient = form?.querySelector<HTMLElement>("#review-client");
+  const reviewEquipment =
+    form?.querySelector<HTMLOListElement>("#review-equipment");
+
+  if (
+    form &&
+    editStep &&
+    reviewStep &&
+    addButton &&
+    cancelButton &&
+    reviewButton &&
+    backButton &&
+    confirmButton &&
+    status &&
+    list &&
+    emptyMessage &&
+    reviewClient &&
+    reviewEquipment
+  ) {
+    const clientFields = ["empresa", "nome", "whatsapp", "email", "cidade"];
+    const equipmentFields = [
+      "servico",
+      "equipamento",
+      "fabricante",
+      "modelo",
+      "faixa",
+      "quantidade",
+      "observacoes",
+    ];
+    const equipments: Equipment[] = [];
+    let editingIndex: number | null = null;
+
+    const field = <
+      T extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+    >(
+      name: string,
+    ) => form.elements.namedItem(name) as T;
+
+    const value = (name: string) => field(name).value.trim();
+
+    const setStatus = (message = "") => {
+      status.textContent = message;
+    };
+
+    const clearCustomValidity = (names: string[]) => {
+      for (const name of names) field(name).setCustomValidity("");
+    };
+
+    const reportFields = (names: string[]) => {
+      for (const name of names) {
+        const control = field(name);
+        if (!control.checkValidity()) {
+          control.reportValidity();
+          return false;
+        }
+      }
+      return true;
+    };
+
+    const validateClient = () => {
+      clearCustomValidity(clientFields);
+      for (const name of ["empresa", "nome", "email", "cidade"]) {
+        const input = field<HTMLInputElement>(name);
+        input.setCustomValidity(
+          input.value.trim() ? "" : "Preencha este campo.",
+        );
+      }
+      const phone = field<HTMLInputElement>("whatsapp");
       const digits = phone.value.replace(/\D/g, "");
       phone.setCustomValidity(
         !phone.value.trim() ||
@@ -160,24 +291,176 @@
           ? ""
           : "Informe um telefone com DDD, usando de 10 a 15 dígitos.",
       );
-      if (!form.reportValidity()) return;
-      status.textContent =
-        "Campos validados. Nenhuma solicitação foi enviada ou salva. O envio será disponibilizado após a integração e a aprovação da DS.";
+      return reportFields(clientFields);
     };
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      validate();
+
+    const validateEquipment = () => {
+      clearCustomValidity(equipmentFields);
+      for (const name of ["servico", "equipamento", "quantidade"]) {
+        const input = field<HTMLInputElement | HTMLSelectElement>(name);
+        input.setCustomValidity(
+          input.value.trim() ? "" : "Preencha este campo.",
+        );
+      }
+      return reportFields(equipmentFields);
+    };
+
+    const readEquipment = (): Equipment => ({
+      servico: value("servico"),
+      equipamento: value("equipamento"),
+      fabricante: value("fabricante"),
+      modelo: value("modelo"),
+      faixa: value("faixa"),
+      quantidade: value("quantidade"),
+      observacoes: value("observacoes"),
     });
-    button.addEventListener("click", validate);
-    form.addEventListener("input", (event) => {
-      status.textContent = "";
-      const input = event.target;
-      if (input instanceof HTMLInputElement) input.setCustomValidity("");
+
+    const clearEquipmentForm = () => {
+      for (const name of equipmentFields) field(name).value = "";
+      editingIndex = null;
+      addButton.textContent = "+ Adicionar outro equipamento";
+      cancelButton.hidden = true;
+      clearCustomValidity(equipmentFields);
+    };
+
+    const renderEquipments = () => {
+      list.textContent = "";
+      emptyMessage.hidden = equipments.length > 0;
+      reviewButton.disabled = equipments.length === 0;
+      for (const [index, item] of equipments.entries()) {
+        const li = document.createElement("li");
+        li.className = "equipment-item";
+        const copy = document.createElement("div");
+        const title = document.createElement("h4");
+        title.textContent = `${item.servico} - ${item.equipamento}`;
+        const meta = document.createElement("p");
+        meta.textContent = [
+          item.fabricante && `Fabricante: ${item.fabricante}`,
+          item.modelo && `Modelo: ${item.modelo}`,
+          item.faixa && `Faixa: ${item.faixa}`,
+          `Quantidade: ${item.quantidade}`,
+        ]
+          .filter(Boolean)
+          .join(" | ");
+        copy.append(title, meta);
+        if (item.observacoes) {
+          const notes = document.createElement("p");
+          notes.textContent = item.observacoes;
+          copy.append(notes);
+        }
+        const actions = document.createElement("div");
+        actions.className = "equipment-actions";
+        const edit = document.createElement("button");
+        edit.type = "button";
+        edit.textContent = "Editar";
+        edit.addEventListener("click", () => {
+          editingIndex = index;
+          for (const name of equipmentFields)
+            field(name).value = item[name as keyof Equipment];
+          addButton.textContent = "Salvar equipamento";
+          cancelButton.hidden = false;
+          setStatus("Edite os dados do equipamento selecionado.");
+          field("equipamento").focus();
+        });
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.textContent = "Remover";
+        remove.addEventListener("click", () => {
+          equipments.splice(index, 1);
+          clearEquipmentForm();
+          renderEquipments();
+          setStatus("Equipamento removido da revisão local.");
+        });
+        actions.append(edit, remove);
+        li.append(copy, actions);
+        list.append(li);
+      }
+    };
+
+    const appendDefinition = (
+      parent: HTMLElement,
+      term: string,
+      description: string,
+    ) => {
+      const dt = document.createElement("dt");
+      dt.textContent = term;
+      const dd = document.createElement("dd");
+      dd.textContent = description || "Não informado";
+      parent.append(dt, dd);
+    };
+
+    const renderReview = () => {
+      reviewClient.textContent = "";
+      appendDefinition(reviewClient, "Empresa", value("empresa"));
+      appendDefinition(reviewClient, "Nome", value("nome"));
+      appendDefinition(reviewClient, "WhatsApp", value("whatsapp"));
+      appendDefinition(reviewClient, "E-mail", value("email"));
+      appendDefinition(reviewClient, "Cidade/UF", value("cidade"));
+      reviewEquipment.textContent = "";
+      for (const item of equipments) {
+        const li = document.createElement("li");
+        const title = document.createElement("h4");
+        title.textContent = `${item.servico} - ${item.equipamento}`;
+        const details = document.createElement("dl");
+        appendDefinition(details, "Fabricante", item.fabricante);
+        appendDefinition(details, "Modelo", item.modelo);
+        appendDefinition(details, "Faixa utilizada/unidade", item.faixa);
+        appendDefinition(details, "Quantidade", item.quantidade);
+        appendDefinition(details, "Observações", item.observacoes);
+        li.append(title, details);
+        reviewEquipment.append(li);
+      }
+    };
+
+    addButton.addEventListener("click", () => {
+      setStatus("");
+      if (!validateEquipment()) return;
+      const item = readEquipment();
+      if (editingIndex === null) equipments.push(item);
+      else equipments[editingIndex] = item;
+      clearEquipmentForm();
+      renderEquipments();
+      setStatus("Equipamento adicionado à revisão local.");
     });
-    form.addEventListener("change", () => {
-      status.textContent = "";
+
+    cancelButton.addEventListener("click", () => {
+      clearEquipmentForm();
+      setStatus("");
     });
-    form.querySelector("fieldset")!.disabled = false;
-    button.hidden = false;
+
+    reviewButton.addEventListener("click", () => {
+      setStatus("");
+      if (!validateClient()) return;
+      if (equipments.length === 0) {
+        setStatus("Adicione pelo menos um equipamento antes de revisar.");
+        field("equipamento").focus();
+        return;
+      }
+      renderReview();
+      editStep.hidden = true;
+      reviewStep.hidden = false;
+      backButton.focus();
+    });
+
+    backButton.addEventListener("click", () => {
+      reviewStep.hidden = true;
+      editStep.hidden = false;
+      reviewButton.focus();
+      setStatus("");
+    });
+
+    confirmButton.addEventListener("click", () => {
+      setStatus(
+        "Revisão confirmada localmente. Nenhuma solicitação foi enviada, salva ou processada.",
+      );
+    });
+
+    form.addEventListener("submit", (event) => event.preventDefault());
+    form.addEventListener("input", () => setStatus(""));
+    form.addEventListener("change", () => setStatus(""));
+    editStep.disabled = false;
+    addButton.hidden = false;
+    reviewButton.hidden = false;
+    renderEquipments();
   }
 </script>

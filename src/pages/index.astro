@@ -91,7 +91,15 @@ import "../styles/home.css";
     <div class="container">
       <h2 id="segments-title">
         Da rotina do laboratório ao processo industrial.
-      </h2><ul>{homeSegments.map((segment) => <li>{segment}</li>)}</ul>
+      </h2><ul>
+        {
+          homeSegments.map((segment) => (
+            <li>
+              <a href={segment.href}>{segment.title}</a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
   <Axion />

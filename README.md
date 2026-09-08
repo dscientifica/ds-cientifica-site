@@ -30,7 +30,7 @@ pnpm preview
 - `format`: aplica Prettier; preserva a SPEC e o CODEX.md.
 - `build`: gera arquivos estáticos e imagens WebP em `dist/`.
 - `test`: verifica o build, links, âncoras, assets, sitemap, SEO e integrações pendentes. Execute após o build.
-- `test:browser`: sobe o build em `127.0.0.1:4322` e testa navegação, formulário, acessibilidade automática, seis larguras de tela, texto a 200% e ausência de JavaScript. A porta 4322 precisa estar livre.
+- `test:browser`: sobe o build em `127.0.0.1:4322` e testa navegação, formulário com múltiplos equipamentos, acessibilidade automática, seis larguras de tela, texto a 200% e ausência de JavaScript. A porta 4322 precisa estar livre.
 - `preview`: abre o build local para revisão; não publica na internet.
 
 O `pnpm-workspace.yaml` permite somente o script de instalação necessário do esbuild. O lockfile está versionado. TypeScript 6 foi escolhido por ser compatível com o peer declarado de `@astrojs/check`.
@@ -46,6 +46,12 @@ O `pnpm-workspace.yaml` permite somente o script de instalação necessário do 
 | `/manutencao`                    | Hub mínimo de manutenção       |
 | `/qualificacao`                  | Hub mínimo de qualificação     |
 | `/produtos`                      | Hub mínimo de produtos         |
+| `/segmentos/farmaceutico`        | Hub mínimo de segmento         |
+| `/segmentos/quimico`             | Hub mínimo de segmento         |
+| `/segmentos/alimentos-bebidas`   | Hub mínimo de segmento         |
+| `/segmentos/automotivo`          | Hub mínimo de segmento         |
+| `/segmentos/hospitalar`          | Hub mínimo de segmento         |
+| `/segmentos/industrial`          | Hub mínimo de segmento         |
 
 Há ainda `404.html`, `robots.txt` e `sitemap-index.xml`. Não foram criadas páginas das demais grandezas nem página Serviços. Os itens de menu fora do piloto apontam a seções correspondentes da Home. Cards sem detalhamento não têm links fictícios.
 
@@ -66,9 +72,9 @@ O template de equipamento está pilotado para Manômetros/Pressão. Após homolo
 
 Contatos começam vazios. Preencher `contacts.whatsapp` com dígitos internacionais confirmados habilita o link `wa.me`; preencher `contacts.email` habilita o e-mail. `contacts.axionUrl` aceita um destino HTTPS confirmado. Nenhum contato foi inferido ou preenchido com exemplos.
 
-O formulário valida localmente e não recebe solicitações: sem endpoint, persistência ou upload. A configuração marca a integração pendente; mudar um booleano não implementa envio. Antes de integrá-lo, aprovar privacidade, base legal, retenção, destinatários, validação no servidor e proteção contra spam.
+O formulário valida localmente e não recebe solicitações: sem endpoint, persistência ou upload. O roteiro permite informar dados do cliente uma vez, adicionar múltiplos equipamentos, editar/remover itens e revisar o compilado antes de confirmar apenas a revisão local. A estrutura prevê anexo/foto por equipamento em fase futura, mas armazenamento e upload dependem de backend, privacidade e retenção aprovados. A configuração marca a integração pendente; mudar um booleano não implementa envio. Antes de integrá-lo, aprovar privacidade, base legal, retenção, destinatários, validação no servidor e proteção contra spam.
 
-O domínio canônico da SPEC está em `astro.config.mjs`. A prévia usa `indexable: false`, meta `noindex, nofollow` e robots bloqueado. O sitemap prepara as sete rotas aprovadas desta fase e não ativa indexação. Somente após homologação rever essas configurações e autorizar publicação. Não há deploy automático: a prévia Cloudflare é iniciada manualmente na conta Cloudflare conforme [docs/CLOUDFLARE-PREVIEW.md](./docs/CLOUDFLARE-PREVIEW.md). O Google Sites permanece inalterado.
+O domínio canônico da SPEC está em `astro.config.mjs`. A prévia usa `indexable: false`, meta `noindex, nofollow` e robots bloqueado. O sitemap prepara as rotas aprovadas desta fase e não ativa indexação. Somente após homologação rever essas configurações e autorizar publicação. Não há deploy automático: a prévia Cloudflare é iniciada manualmente na conta Cloudflare conforme [docs/CLOUDFLARE-PREVIEW.md](./docs/CLOUDFLARE-PREVIEW.md). O Google Sites permanece inalterado.
 
 ## Homologação obrigatória
 
