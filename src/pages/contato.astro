@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
-import Section from "../components/Section.astro";
 import QuoteForm from "../components/QuoteForm.astro";
 import PageMedia from "../components/PageMedia.astro";
 import { pageMedia } from "../data/media";
@@ -15,27 +14,14 @@ import { pageMedia } from "../data/media";
   <section class="container minimal-hub">
     <div class="minimal-hub-heading">
       <div>
-        <p class="eyebrow">Contato</p><h1>Fale com a DS Científica.</h1><p
-          class="lead"
-        >
-          Use o formulário para organizar as informações da solicitação.
-          Solicitações reais por este canal dependem da integração aprovada de
-          backend, privacidade, retenção e proteção contra spam.
-        </p>
+        <p class="eyebrow">Vamos conversar</p><h1>
+          Seu processo exige precisão. A DS Científica entrega a solução.
+        </h1><p class="lead">
+          Conte o que você precisa medir, calibrar, manter ou qualificar. A DS
+          Científica avalia a aplicação e orienta a solução mais adequada.
+        </p><a class="button" href="#orcamento">Solicitar orçamento ↗</a>
       </div><PageMedia media={pageMedia.processo} priority />
     </div>
   </section>
-  <Section
-    eyebrow="Antes de enviar"
-    title="Quanto melhor a informação, melhor a análise."
-    tone="light"
-    ><ul class="check-list">
-      <li>informe os dados do cliente uma única vez</li><li>
-        adicione todos os equipamentos da mesma solicitação
-      </li><li>revise o resumo consolidado antes da futura submissão</li><li>
-        não inclua dados sensíveis até a política de privacidade estar aprovada
-      </li>
-    </ul></Section
-  >
   <QuoteForm />
 </BaseLayout>

@@ -56,4 +56,4 @@ Os arquivos abaixo permanecem como placeholders porque ainda dependem de fotogra
 
 ## Marca e tipografia
 
-`Brand.astro` contém somente identificação textual com aviso de logo pendente. `public/favicon.svg` é um marcador de desenvolvimento com sinais de código, não uma proposta de logotipo. Tipografia de sistema: Arial/Helvetica/sans-serif, sem requisições a provedores de fontes.
+`Brand.astro` contém somente identificação textual “DS Científica”, sem aviso público de piloto ou pendência. O arquivo oficial de logo da DS Científica ainda não foi localizado no repositório nesta fase; a substituição deve ser feita somente quando houver ativo oficial fornecido/autorizado pela DS. `public/favicon.svg` permanece como favicon simples provisório, sem título de desenvolvimento no arquivo público. Tipografia de sistema: Arial/Helvetica/sans-serif, sem requisições a provedores de fontes.

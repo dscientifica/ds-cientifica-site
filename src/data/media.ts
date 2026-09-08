@@ -8,123 +8,118 @@ export type PageMedia = {
   fit?: MediaFit;
 };
 
-const generatedCaption =
-  "Imagem fotográfica original gerada para apoio visual · validar/substituir por foto autorizada da DS quando disponível";
-const pendingCaption = "Imagem provisória · substituir por foto autorizada";
-
 export const pageMedia = {
   calibracao: {
     src: "/visuals/calibracao.webp",
     alt: "Técnico em laboratório realizando uma montagem genérica de calibração com instrumentos de pressão sem marca aparente.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   manutencao: {
     src: "/visuals/manutencao.webp",
     alt: "Mãos de técnico realizando manutenção em equipamento laboratorial genérico aberto sobre bancada limpa.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   qualificacao: {
     src: "/visuals/qualificacao.webp",
     alt: "Equipamento térmico laboratorial instrumentado com sensores e data logger para atividade de qualificação.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   produtos: {
     src: "/visuals/produtos.webp",
     alt: "Composição de instrumentos industriais e laboratoriais genéricos sem marcas, incluindo sensores e medidores.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
     fit: "contain",
   },
   segmentos: {
     src: "/visuals/segmentos.webp",
     alt: "Ambiente laboratorial com equipamentos de apoio e bancada técnica, sem marcas ou identificação de cliente.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   laboratorio: {
     src: "/visuals/laboratorio.webp",
     alt: "Laboratório limpo com equipamentos térmicos e de apoio, sem marcas ou identificação de terceiros.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   processo: {
     src: "/visuals/processo.webp",
     alt: "Bancada de instrumentação de processo com medidores de vazão e tubulação industrial genérica.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   pressao: {
     src: "/visuals/pressao.webp",
     alt: "Técnico em laboratório trabalhando em montagem genérica de calibração de pressão com manômetro sem marca.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   temperatura: {
     src: "/visuals/temperatura.webp",
     alt: "Sensores de temperatura, transmissores, termopares e termômetro genéricos sobre bancada de laboratório.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
     fit: "contain",
   },
   massa: {
     src: "/visuals/massa.webp",
     alt: "Balanças laboratoriais, plataforma de pesagem e pesos padrão genéricos em bancada metrológica limpa.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
     fit: "contain",
   },
   vazao: {
     src: "/visuals/vazao.webp",
     alt: "Medidores de vazão genéricos e seções de tubulação sobre bancada de instrumentação industrial.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
     fit: "contain",
   },
   nivel: {
     src: "/visuals/nivel.webp",
     alt: "Instrumentos genéricos de medição de nível instalados em tanque demonstrativo de processo.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   dimensional: {
     src: "/visuals/dimensional.webp",
     alt: "Paquímetro, micrômetro, relógio comparador e blocos padrão genéricos em bancada de inspeção dimensional.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
     fit: "contain",
   },
   "fisico-quimica": {
     src: "/visuals/fisico-quimica.webp",
     alt: "pHmetros e sensores eletroquímicos genéricos em béqueres sobre bancada de laboratório analítico.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   "optica-fotometria": {
     src: "/visuals/optica-fotometria.webp",
     alt: "Instrumentos ópticos e fotométricos laboratoriais genéricos com cubetas, microplaca e amostras sem rótulo.",
-    caption: generatedCaption,
+    caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
   cliente: {
     src: "/visuals/cliente.webp",
-    alt: "Placeholder fotográfico abstrato para Área do Cliente e histórico operacional.",
-    caption: `${pendingCaption} da Área do Cliente`,
+    alt: "Imagem abstrata discreta para Área do Cliente e gestão de equipamentos.",
+    caption: "Área do Cliente AXION.",
     kind: "placeholder",
   },
   conteudo: {
     src: "/visuals/conteudo.webp",
-    alt: "Placeholder fotográfico abstrato para conteúdo técnico e documentação.",
-    caption: `${pendingCaption} de conteúdo técnico`,
+    alt: "Imagem abstrata discreta para conteúdo técnico e documentação.",
+    caption: "Conteúdo técnico DS Científica.",
     kind: "placeholder",
   },
   "manometro-digital": {
     src: "/visuals/manometro-digital.webp",
     alt: "Imagem ilustrativa de manômetro digital sem marca, com visor desligado e conexão metálica inferior.",
-    caption:
-      "Imagem ilustrativa gerada por IA · não representa equipamento da DS",
+    caption: "Imagem contextual de manômetro digital.",
     kind: "photo",
     fit: "contain",
   },

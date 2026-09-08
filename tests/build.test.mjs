@@ -160,6 +160,14 @@ test("pending integrations have no invented destinations or service page", () =>
 
 test("Home is a clean commercial hub with segment navigation", () => {
   const $ = documents.get("/");
+  assert.equal(
+    $(".home-hero .page-media img[src='/visuals/processo.webp']").length,
+    1,
+  );
+  assert.match(
+    $("#solutions-title").text(),
+    /Precisão e suporte para cada etapa da sua operação/,
+  );
   assert.deepEqual(
     $("#solucoes a")
       .map((_, el) => $(el).attr("href"))
@@ -192,6 +200,19 @@ test("Home is a clean commercial hub with segment navigation", () => {
   );
   assert.doesNotMatch($("main").text(), /CMC|acreditad|CGCRE|Inmetro/i);
   assert.equal($("#axion button[disabled]").length, 1);
+});
+
+test("public pages do not expose internal development language", () => {
+  const forbidden =
+    /Logo oficial pendente|ambiente piloto|piloto DS Científica|URL operacional a confirmar|URL operacional em confirmação|backend|retenção|proteção contra spam|integração futura|integração aprovada|aprovação interna|futura submissão|validação do roteiro|Confirmar revisão sem enviar|não envia|não há envio|Imagem fotográfica original|validar\/substituir|pendência interna|nota para desenvolvedor|conteúdo de teste/i;
+  for (const [route, $] of documents) {
+    assert.doesNotMatch($("body").text(), forbidden, route);
+    assert.doesNotMatch(
+      $("meta[name='description']").attr("content") ?? "",
+      forbidden,
+      route,
+    );
+  }
 });
 
 test("global navigation points to real site sections", () => {

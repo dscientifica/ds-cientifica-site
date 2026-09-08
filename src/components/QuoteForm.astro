@@ -1,33 +1,22 @@
 <section class="section" id="orcamento">
   <div class="container form-layout">
     <div>
-      <p class="eyebrow">Informações para orçamento</p><h2>
-        Monte sua solicitação com todos os equipamentos.
+      <p class="eyebrow">Solicitar orçamento</p><h2>
+        Conte-nos o que você precisa.
       </h2><p class="lead">
-        Informe os dados do cliente uma única vez e adicione cada equipamento
-        que precisa de avaliação.
-      </p><p class="inline-notice" id="form-disclaimer">
-        Este formulário organiza a solicitação neste navegador, mas ainda não
-        envia nem salva dados em sistemas da DS Científica.
-      </p><p class="privacy-note">
-        A política de privacidade, o destino dos dados, o recebimento de anexos
-        por equipamento e o mecanismo de proteção contra spam devem ser
-        definidos antes de habilitar solicitações reais.
+        Adicione os equipamentos que deseja calibrar, manter ou avaliar e
+        organize sua solicitação para a DS Científica.
       </p>
     </div>
     <form
       class="quote-form"
       aria-label="Solicitação de orçamento"
-      aria-describedby="form-disclaimer"
       autocomplete="off"
     >
-      <p class="form-note">
-        * Campos obrigatórios para a validação do roteiro.
-      </p>
+      <p class="form-note">* Campos obrigatórios</p>
       <noscript
         ><p class="noscript">
-          Ative o JavaScript para preencher a solicitação estruturada. Este
-          formulário ainda não realiza envios.
+          Ative o JavaScript para preencher e revisar sua solicitação.
         </p></noscript
       >
       <fieldset
@@ -129,15 +118,11 @@
             <label class="field field-wide"
               >Observações<textarea name="observacoes" rows="4" maxlength="2000"
               ></textarea><small
-                >Condições de uso, pontos de interesse e requisitos. Não inclua
-                informações sensíveis.</small
+                >Informe detalhes da aplicação ou alguma necessidade específica
+                do equipamento, se necessário.</small
               ></label
             >
           </div>
-          <p class="future-note">
-            Estrutura preparada para incluir anexo/foto por equipamento em fase
-            futura, após definição de backend, privacidade e retenção.
-          </p>
           <div class="quote-actions">
             <button type="button" class="button" id="add-equipment" hidden>
               + Adicionar outro equipamento
@@ -163,21 +148,20 @@
       </fieldset>
       <section class="quote-step quote-review" data-step="review" hidden>
         <p class="eyebrow">Revisar solicitação</p><h3>
-          Confira os dados antes da confirmação local.
+          Confira os dados antes de seguir com o atendimento.
         </h3><div class="review-block">
           <h4>Cliente</h4><dl id="review-client"></dl>
         </div><div class="review-block">
           <h4>Equipamentos</h4><ol id="review-equipment"></ol>
         </div><p class="inline-notice">
-          Esta etapa confirma apenas que as informações foram revisadas na
-          interface. Nenhuma solicitação será enviada, salva ou processada nesta
-          fase.
+          Sua solicitação está organizada para conferência. O envio será tratado
+          em uma próxima etapa de atendimento da DS Científica.
         </p><div class="quote-actions">
           <button type="button" class="button button-outline" id="back-to-edit">
             Voltar para editar
           </button>
           <button type="button" class="button" id="confirm-review">
-            Confirmar revisão sem enviar
+            Marcar revisão como pronta
           </button>
         </div>
       </section>
@@ -369,7 +353,7 @@
           equipments.splice(index, 1);
           clearEquipmentForm();
           renderEquipments();
-          setStatus("Equipamento removido da revisão local.");
+          setStatus("Equipamento removido da solicitação.");
         });
         actions.append(edit, remove);
         li.append(copy, actions);
@@ -420,7 +404,7 @@
       else equipments[editingIndex] = item;
       clearEquipmentForm();
       renderEquipments();
-      setStatus("Equipamento adicionado à revisão local.");
+      setStatus("Equipamento adicionado à solicitação.");
     });
 
     cancelButton.addEventListener("click", () => {
@@ -451,7 +435,7 @@
 
     confirmButton.addEventListener("click", () => {
       setStatus(
-        "Revisão confirmada localmente. Nenhuma solicitação foi enviada, salva ou processada.",
+        "Revisão pronta. Confira os dados e prossiga pelo atendimento combinado com a DS Científica.",
       );
     });
 

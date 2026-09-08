@@ -9,7 +9,7 @@ import { pageMedia } from "../data/media";
 
 <BaseLayout
   title="Área do Cliente"
-  description="Área do Cliente da DS Científica preparada para encaminhamento futuro ao AXION quando a URL operacional for confirmada."
+  description="Área do Cliente AXION para gestão de ativos, equipamentos, certificados e histórico de calibrações da DS Científica."
 >
   <Breadcrumbs
     items={[{ label: "Início", href: "/" }, { label: "Área do Cliente" }]}
@@ -17,12 +17,11 @@ import { pageMedia } from "../data/media";
   <section class="container minimal-hub">
     <div class="minimal-hub-heading">
       <div>
-        <p class="eyebrow">Área do Cliente / AXION</p><h1>
-          Certificados, equipamentos e histórico em um ambiente próprio.
+        <p class="eyebrow">AXION / Gestão dos seus ativos</p><h1>
+          Tenha o controle dos seus equipamentos em um só lugar.
         </h1><p class="lead">
-          O site público apresenta o caminho de acesso. As funcionalidades
-          operacionais permanecem no AXION e serão encaminhadas por URL
-          configurada quando o endereço estiver confirmado.
+          Acompanhe certificados, histórico de calibrações, equipamentos e
+          próximas calibrações de forma organizada e centralizada.
         </p>{
           axionUrl ? (
             <a class="button" href={axionUrl}>
@@ -30,7 +29,7 @@ import { pageMedia } from "../data/media";
             </a>
           ) : (
             <button class="button" disabled>
-              URL operacional em confirmação
+              Em breve
             </button>
           )
         }
@@ -38,8 +37,8 @@ import { pageMedia } from "../data/media";
     </div>
   </section>
   <Section
-    eyebrow="Separação correta"
-    title="Site público e AXION têm papéis diferentes."
+    eyebrow="Área do Cliente"
+    title="Um ponto central para organizar informações dos seus equipamentos."
     tone="light"
     ><div class="split">
       <div class="prose">
@@ -49,8 +48,8 @@ import { pageMedia } from "../data/media";
         </p>
       </div><div class="prose">
         <h3>AXION</h3><p>
-          Ambiente operacional autenticado para certificados, equipamentos e
-          histórico, sem duplicar dados sensíveis no site público.
+          Ambiente dedicado à gestão de certificados, equipamentos e histórico
+          de calibrações.
         </p>
       </div>
     </div></Section

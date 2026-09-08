@@ -14,41 +14,46 @@ export const serviceHubs: Record<"manutencao" | "qualificacao", ServiceHub> = {
     key: "manutencao",
     title: "Manutenção",
     description:
-      "Diagnóstico, manutenção preventiva e corretiva para equipamentos de laboratório e instrumentação de processo.",
+      "Diagnóstico técnico, manutenção preventiva e corretiva para equipamentos de laboratório e instrumentação de processo.",
     heading:
-      "Manutenção orientada por aplicação, criticidade e histórico de uso.",
+      "Identificar o problema, avaliar tecnicamente e propor a solução adequada.",
     intro:
-      "A DS Científica organiza a análise de manutenção a partir do equipamento, dos sintomas observados, do impacto operacional e da viabilidade técnica. O objetivo é reduzir incerteza na decisão e indicar o caminho adequado para reparar, calibrar, substituir ou especificar outro instrumento.",
+      "A DS Científica avalia o equipamento, os sintomas observados e as condições de uso para indicar o melhor encaminhamento. O atendimento busca recuperar ou conservar o equipamento quando isso for tecnicamente aplicável, sem assumir capacidades ou resultados antes da análise.",
     topics: [
+      {
+        title: "Diagnóstico técnico",
+        description:
+          "Avaliação do equipamento e identificação da causa provável da falha a partir das informações e condições observadas.",
+      },
+      {
+        title: "Manutenção preventiva",
+        description:
+          "Ações destinadas a conservar o funcionamento e reduzir ocorrências de falhas e paradas.",
+      },
+      {
+        title: "Manutenção corretiva",
+        description:
+          "Avaliação e intervenção em equipamentos com falha ou funcionamento inadequado, conforme viabilidade técnica.",
+      },
       {
         title: "Equipamentos de laboratório",
         description:
-          "Análise de equipamentos usados em preparo, controle, medição e apoio à rotina laboratorial.",
+          "Atendimento a equipamentos laboratoriais conforme necessidade apresentada e avaliação técnica da aplicação.",
       },
       {
         title: "Instrumentação de processo",
         description:
-          "Avaliação de instrumentos instalados em linhas, utilidades, painéis e sistemas auxiliares.",
-      },
-      {
-        title: "Preventiva",
-        description:
-          "Organização de cuidados periódicos conforme criticidade, uso e histórico informado.",
-      },
-      {
-        title: "Corretiva e diagnóstico",
-        description:
-          "Levantamento de falhas, sintomas, condições de instalação e alternativas de encaminhamento técnico.",
+          "Manutenção e diagnóstico de instrumentos utilizados em processos industriais, respeitando o escopo efetivamente avaliado pela DS Científica.",
       },
     ],
     benefits: [
-      "reduz decisões baseadas apenas em tentativa e erro",
-      "organiza evidências de falha e histórico do equipamento",
-      "apoia priorização entre reparar, calibrar, substituir ou especificar outro instrumento",
+      "identifica sintomas e evidências antes de definir o encaminhamento",
+      "apoia a decisão entre recuperar, conservar, calibrar ou substituir o equipamento",
+      "reduz paradas recorrentes quando a manutenção preventiva é tecnicamente aplicável",
     ],
     quoteInfo: [
       "equipamento, fabricante, modelo e identificação",
-      "sintoma observado, frequência e condição de uso",
+      "falha observada, frequência e condição de uso",
       "localização, urgência e restrições de parada",
       "histórico de calibração, manutenção ou intervenções anteriores",
     ],

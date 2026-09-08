@@ -93,11 +93,9 @@ test("client menu reaches the client area from every route on mobile", async ({
       .click();
     await expect(page).toHaveURL("/area-do-cliente");
     await expect(page.locator("h1")).toContainText(
-      "Certificados, equipamentos e histórico",
+      "Tenha o controle dos seus equipamentos",
     );
-    await expect(
-      page.getByRole("button", { name: "URL operacional em confirmação" }),
-    ).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Em breve" })).toBeDisabled();
   }
 });
 
@@ -195,7 +193,7 @@ test("form rejects invalid fields and never sends or persists data", async ({
   await page.getByLabel("Quantidade *").fill("1");
   await add.click();
   await expect(page.getByRole("status")).toContainText(
-    "Equipamento adicionado à revisão local.",
+    "Equipamento adicionado à solicitação.",
   );
   await expect(page.locator(".equipment-list li")).toHaveCount(1);
   await page.getByRole("button", { name: "Revisar solicitação" }).click();
@@ -231,11 +229,9 @@ test("form rejects invalid fields and never sends or persists data", async ({
     "Calibração - Manômetro digital",
   );
   await page
-    .getByRole("button", { name: "Confirmar revisão sem enviar" })
+    .getByRole("button", { name: "Marcar revisão como pronta" })
     .click();
-  await expect(page.getByRole("status")).toContainText(
-    "Nenhuma solicitação foi enviada, salva ou processada.",
-  );
+  await expect(page.getByRole("status")).toContainText("Revisão pronta.");
   expect(requests).toEqual([]);
   expect(
     await page.evaluate(() => [localStorage.length, sessionStorage.length]),

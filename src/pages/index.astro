@@ -4,7 +4,7 @@ import Axion from "../components/Axion.astro";
 import PageMedia from "../components/PageMedia.astro";
 import SegmentLinks from "../components/SegmentLinks.astro";
 import { solutions, principles } from "../data/home";
-import { mediaForKey } from "../data/media";
+import { mediaForKey, pageMedia } from "../data/media";
 import { site, whatsappUrl } from "../config/site";
 import "../styles/home.css";
 ---
@@ -14,18 +14,26 @@ import "../styles/home.css";
   description="Calibração, manutenção, qualificação e instrumentação para laboratórios e processos industriais. Conheça as soluções da DS Científica."
 >
   <section class="home-hero container">
-    <p class="eyebrow">Precisão que gera confiança.</p>
-    <h1>Mais que medições, <span>resultados para o seu negócio.</span></h1>
-    <p class="home-subtitle">
-      Calibração, manutenção, qualificação e instrumentação para laboratórios e
-      processos industriais.
-    </p>
-    <div class="home-actions">
-      <a class="button" href="/contato#orcamento"
-        >Solicitar orçamento <span aria-hidden="true">↗</span></a
-      ><a class="button button-outline" href="/calibracao"
-        >Conheça nossas soluções <span aria-hidden="true">↗</span></a
-      >
+    <div class="home-hero-copy">
+      <p class="eyebrow">Precisão que gera confiança.</p>
+      <h1>Mais que medições, <span>resultados para o seu negócio.</span></h1>
+      <p class="home-subtitle">
+        Calibração, manutenção, qualificação e instrumentação para laboratórios
+        e processos industriais.
+      </p>
+      <div class="home-actions">
+        <a class="button" href="/contato#orcamento"
+          >Solicitar orçamento <span aria-hidden="true">↗</span></a
+        ><a class="button button-outline" href="/calibracao"
+          >Conheça nossas soluções <span aria-hidden="true">↗</span></a
+        >
+      </div>
+    </div>
+    <div
+      class="home-hero-media"
+      aria-label="Laboratório e instrumentação industrial"
+    >
+      <PageMedia media={pageMedia.processo} priority class="home-hero-photo" />
     </div>
   </section>
   <section
@@ -35,7 +43,7 @@ import "../styles/home.css";
   >
     <div class="home-section-heading">
       <p class="eyebrow">Nossas soluções</p><h2 id="solutions-title">
-        Qual é o seu próximo passo?
+        Precisão e suporte para cada etapa da sua operação
       </h2>
     </div>
     <div class="solution-paths">
@@ -103,10 +111,15 @@ import "../styles/home.css";
     aria-labelledby="contact-title"
   >
     <p class="eyebrow">Vamos conversar</p><h2 id="contact-title">
-      Precisa de uma solução específica?
-    </h2><p class="contact-invitation">Fale com a DS Científica.</p>
+      Seu processo exige precisão. A DS Científica entrega a solução.
+    </h2><p class="contact-invitation">
+      Conte o que você precisa medir, calibrar, manter ou qualificar. A DS
+      Científica avalia a aplicação e orienta a solução mais adequada.
+    </p>
     <div class="home-actions">
-      {
+      <a class="button" href="/contato#orcamento"
+        >Solicitar orçamento <span aria-hidden="true">↗</span></a
+      >{
         whatsappUrl && (
           <a class="button" href={whatsappUrl}>
             Conversar pelo WhatsApp ↗
@@ -123,13 +136,5 @@ import "../styles/home.css";
         )
       }
     </div>
-    {
-      !whatsappUrl && !site.contacts.email && (
-        <p class="contact-pending">
-          Canais diretos serão publicados após confirmação da DS. Para iniciar
-          uma demanda, use o roteiro de orçamento estruturado.
-        </p>
-      )
-    }
   </section>
 </BaseLayout>
