@@ -1,0 +1,80 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import CTA from "../components/CTA.astro";
+import QuoteForm from "../components/QuoteForm.astro";
+import type { ProductCategory, ProductType } from "../data/catalog";
+interface Props {
+  category: ProductCategory;
+  type: ProductType;
+}
+const { category, type } = Astro.props;
+---
+
+<BaseLayout title={`${type.title} | Produtos`} description={type.description}>
+  <Breadcrumbs
+    items={[
+      { label: "Início", href: "/" },
+      { label: "Produtos", href: "/produtos" },
+      { label: category.title, href: `/produtos/${category.slug}` },
+      { label: type.title },
+    ]}
+  />
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">Produtos / {category.title}</p><h1>
+          {type.title}
+        </h1><p class="lead">{type.description}</p><p class="hero-note">
+          Configurações e especificações disponíveis conforme a aplicação.
+          Consulte a DS Científica para dimensionamento e seleção.
+        </p><a class="button" href="#orcamento"
+          >Solicitar seleção <span aria-hidden="true">↗</span></a
+        >
+      </div><aside class="topic-panel">
+        <p class="eyebrow">Critérios</p><h2>O que considerar</h2>{
+          type.criteria.map((item) => (
+            <a href="#orcamento">
+              <>
+                <span>{item}</span>
+                <span aria-hidden="true">→</span>
+              </>
+            </a>
+          ))
+        }
+      </aside>
+    </div>
+  </section>
+  <Section
+    eyebrow="Aplicações"
+    title="Onde essa família pode apoiar a operação."
+    ><ul class="check-list">
+      {type.applications.map((item) => <li>{item}</li>)}
+    </ul></Section
+  >
+  {
+    type.relatedServices.length > 0 && (
+      <Section
+        eyebrow="Serviços relacionados"
+        title="Integração com calibração, manutenção ou qualificação."
+        tone="light"
+      >
+        <div class="grid grid-two">
+          {type.relatedServices.map((href) => (
+            <article class="card">
+              <h3>
+                <a href={href}>Serviço relacionado ↗</a>
+              </h3>
+              <p>
+                Use esta conexão para avaliar fornecimento, calibração ou
+                documentação do instrumento no mesmo fluxo comercial.
+              </p>
+            </article>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+  <CTA href="#orcamento" /><QuoteForm />
+</BaseLayout>

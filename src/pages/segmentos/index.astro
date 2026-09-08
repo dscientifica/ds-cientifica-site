@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Section from "../../components/Section.astro";
+import Card from "../../components/Card.astro";
+import CTA from "../../components/CTA.astro";
+import { segments } from "../../data/segments";
+---
+
+<BaseLayout
+  title="Segmentos"
+  description="Segmentos atendidos pela DS Científica com calibração, manutenção, qualificação e produtos definidos por aplicação."
+>
+  <Breadcrumbs
+    items={[{ label: "Início", href: "/" }, { label: "Segmentos" }]}
+  />
+  <section class="container minimal-hub">
+    <p class="eyebrow">Segmentos</p><h1>Soluções por contexto de uso.</h1><p
+      class="lead"
+    >
+      Cada segmento tem requisitos operacionais, críticos e documentais
+      próprios. A DS Científica organiza a demanda a partir da aplicação real,
+      sem assumir claims regulatórios não validados.
+    </p>
+  </section>
+  <Section eyebrow="Navegação" title="Escolha o segmento." tone="light"
+    ><div class="grid">
+      {
+        segments.map((segment) => (
+          <Card
+            title={segment.extendedLabel || segment.title}
+            description={segment.description}
+            href={segment.href}
+          />
+        ))
+      }
+    </div></Section
+  >
+  <CTA />
+</BaseLayout>

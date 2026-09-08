@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import QuoteForm from "../components/QuoteForm.astro";
+---
+
+<BaseLayout
+  title="Contato e orçamento"
+  description="Solicite avaliação comercial para calibração, manutenção, qualificação e produtos da DS Científica."
+>
+  <Breadcrumbs items={[{ label: "Início", href: "/" }, { label: "Contato" }]} />
+  <section class="container minimal-hub">
+    <p class="eyebrow">Contato</p><h1>Fale com a DS Científica.</h1><p
+      class="lead"
+    >
+      Use o formulário para organizar as informações da solicitação.
+      Solicitações reais por este canal dependem da integração aprovada de
+      backend, privacidade, retenção e proteção contra spam.
+    </p>
+  </section>
+  <Section
+    eyebrow="Antes de enviar"
+    title="Quanto melhor a informação, melhor a análise."
+    tone="light"
+    ><ul class="check-list">
+      <li>informe os dados do cliente uma única vez</li><li>
+        adicione todos os equipamentos da mesma solicitação
+      </li><li>revise o resumo consolidado antes da futura submissão</li><li>
+        não inclua dados sensíveis até a política de privacidade estar aprovada
+      </li>
+    </ul></Section
+  >
+  <QuoteForm />
+</BaseLayout>

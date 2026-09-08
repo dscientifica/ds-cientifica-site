@@ -1,0 +1,74 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Card from "../components/Card.astro";
+import CTA from "../components/CTA.astro";
+import { rangeMessage, type CalibrationQuantity } from "../data/catalog";
+interface Props {
+  quantity: CalibrationQuantity;
+}
+const { quantity } = Astro.props;
+---
+
+<BaseLayout
+  title={`Calibração de ${quantity.title}`}
+  description={quantity.description}
+>
+  <Breadcrumbs
+    items={[
+      { label: "Início", href: "/" },
+      { label: "Calibração", href: "/calibracao" },
+      { label: quantity.title },
+    ]}
+  />
+  <Hero
+    eyebrow="Calibração"
+    title={`Calibração de ${quantity.title}`}
+    description={quantity.intro}
+    href="#equipamentos"
+    cta="Ver equipamentos"
+  />
+  <Section
+    id="equipamentos"
+    eyebrow="Equipamentos"
+    title="Escolha o tipo de instrumento."
+    intro="As páginas abaixo explicam aplicações, critérios de especificação e dados necessários para orçamento, sem publicar faixas ou capacidades não confirmadas."
+    tone="light"
+  >
+    <div class="grid">
+      {
+        quantity.equipment.map((item) => (
+          <Card
+            title={item.title}
+            description={item.description}
+            href={`/calibracao/${quantity.slug}/${item.slug}`}
+          />
+        ))
+      }
+    </div>
+  </Section>
+  <Section
+    eyebrow="Análise técnica"
+    title="A aplicação define o melhor caminho."
+  >
+    <div class="split">
+      <div class="prose">
+        <h3>Por que calibrar</h3><p>{quantity.importance}</p><p>
+          A calibração fornece informação metrológica para apoiar decisões. Ela
+          não equivale automaticamente a ajuste, aprovação ou declaração de
+          conformidade.
+        </p>
+      </div><div class="prose">
+        <h3>Antes do orçamento</h3><p>{rangeMessage}</p><p>
+          Informe dados do instrumento, faixa utilizada, quantidade, cidade/UF e
+          requisitos internos para que a DS avalie a solução adequada.
+        </p>
+      </div>
+    </div>
+  </Section>
+  <CTA
+    href={`/calibracao/${quantity.slug}/${quantity.equipment[0].slug}#orcamento`}
+  />
+</BaseLayout>

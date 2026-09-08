@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import QuoteForm from "../components/QuoteForm.astro";
+---
+
+<BaseLayout
+  title="Solicitar orçamento"
+  description="Monte uma solicitação de orçamento para múltiplos equipamentos da DS Científica."
+>
+  <Breadcrumbs
+    items={[
+      { label: "Início", href: "/" },
+      { label: "Contato", href: "/contato" },
+      { label: "Solicitar orçamento" },
+    ]}
+  />
+  <section class="container minimal-hub">
+    <p class="eyebrow">Orçamento</p><h1>Solicitar orçamento</h1><p class="lead">
+      Organize os dados do cliente e inclua todos os equipamentos em uma única
+      solicitação para análise futura da DS Científica.
+    </p>
+  </section>
+  <QuoteForm />
+</BaseLayout>

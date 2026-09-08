@@ -4,6 +4,51 @@ import { readFile, access } from "node:fs/promises";
 import { join } from "node:path";
 import { load } from "cheerio";
 import { resolveAxionUrl } from "../src/config/site.ts";
+import {
+  calibrationQuantities,
+  productCategories,
+} from "../src/data/catalog.ts";
+import { segments } from "../src/data/segments.ts";
+
+const calibrationRoutes = calibrationQuantities.flatMap((quantity) => [
+  `/calibracao/${quantity.slug}`,
+  ...quantity.equipment.map(
+    (equipment) => `/calibracao/${quantity.slug}/${equipment.slug}`,
+  ),
+]);
+const productRoutes = productCategories.flatMap((category) => [
+  `/produtos/${category.slug}`,
+  ...category.types.map((type) => `/produtos/${category.slug}/${type.slug}`),
+]);
+const segmentRoutes = [
+  "/segmentos",
+  ...segments.map((segment) => segment.href),
+];
+const routes = [
+  "/",
+  "/calibracao",
+  ...calibrationRoutes,
+  "/manutencao",
+  "/qualificacao",
+  "/produtos",
+  ...productRoutes,
+  ...segmentRoutes,
+  "/conteudo-tecnico",
+  "/sobre",
+  "/contato",
+  "/orcamento",
+  "/area-do-cliente",
+];
+const fileFor = (route) =>
+  route === "/404" ? "dist/404.html" : join("dist", route, "index.html");
+const documents = new Map(
+  await Promise.all(
+    [...routes, "/404"].map(async (route) => [
+      route,
+      load(await readFile(fileFor(route), "utf8")),
+    ]),
+  ),
+);
 
 test("AXION only accepts a confirmed, valid HTTPS destination", () => {
   for (const value of [
@@ -20,49 +65,31 @@ test("AXION only accepts a confirmed, valid HTTPS destination", () => {
   );
 });
 
-const routes = [
-  "/",
-  "/calibracao",
-  "/calibracao/pressao",
-  "/calibracao/pressao/manometros",
-  "/manutencao",
-  "/qualificacao",
-  "/produtos",
-  "/segmentos/farmaceutico",
-  "/segmentos/quimico",
-  "/segmentos/alimentos-bebidas",
-  "/segmentos/automotivo",
-  "/segmentos/hospitalar",
-  "/segmentos/industrial",
-];
-const fileFor = (route) =>
-  route === "/404" ? "dist/404.html" : join("dist", route, "index.html");
-const documents = new Map(
-  await Promise.all(
-    [...routes, "/404"].map(async (route) => [
-      route,
-      load(await readFile(fileFor(route), "utf8")),
-    ]),
-  ),
-);
-
-test("pilot pages have unique SEO, one h1, Portuguese and noindex", () => {
+test("site pages have unique SEO, one h1, Portuguese and noindex", () => {
   const titles = new Set();
   for (const [route, $] of documents) {
-    assert.equal($("html").attr("lang"), "pt-BR");
+    assert.equal($("html").attr("lang"), "pt-BR", route);
     assert.equal($("h1").length, 1, route);
-    assert.ok($('meta[name="description"]').attr("content")?.length > 30);
-    assert.equal($('meta[name="robots"]').attr("content"), "noindex, nofollow");
+    assert.ok(
+      $("meta[name='description']").attr("content")?.length > 30,
+      route,
+    );
     assert.equal(
-      $('link[rel="canonical"]').attr("href"),
+      $("meta[name='robots']").attr("content"),
+      "noindex, nofollow",
+      route,
+    );
+    assert.equal(
+      $("link[rel='canonical']").attr("href"),
       `https://www.dscientifica.com.br${route}`,
     );
     assert.equal(
-      $('meta[property="og:title"]').attr("content"),
+      $("meta[property='og:title']").attr("content"),
       $("title").text(),
     );
     titles.add($("title").text());
-    for (const image of $("img").toArray()) assert.ok($(image).attr("alt"));
+    for (const image of $("img").toArray())
+      assert.ok($(image).attr("alt"), route);
   }
   assert.equal(titles.size, documents.size);
 });
@@ -83,14 +110,12 @@ test("all internal links, fragments and assets resolve in the static build", asy
             ).length,
             `${route}: ${value}`,
           );
-      } else {
-        await access(join("dist", url.pathname));
-      }
+      } else await access(join("dist", url.pathname));
     }
   }
 });
 
-test("sitemap contains only the authorized routes; preview robots disallows crawling", async () => {
+test("sitemap contains every generated public route while preview robots disallows crawling", async () => {
   const $ = load(await readFile("dist/sitemap-0.xml", "utf8"), { xml: true });
   assert.deepEqual(
     $("loc")
@@ -112,7 +137,7 @@ test("sitemap contains only the authorized routes; preview robots disallows craw
   assert.match(headers, /X-Content-Type-Options: nosniff/);
 });
 
-test("pending integrations and unimplemented categories have no invented destinations", () => {
+test("pending integrations have no invented destinations or service page", () => {
   for (const [, $] of documents) {
     const hrefs = $("a")
       .map((_, el) => $(el).attr("href"))
@@ -130,10 +155,10 @@ test("pending integrations and unimplemented categories have no invented destina
   const $ = documents.get("/calibracao/pressao/manometros");
   assert.equal($("form").attr("action"), undefined);
   assert.equal($("fieldset[disabled]").length, 1);
-  assert.equal($('button[type="submit"]').length, 0);
+  assert.equal($("button[type='submit']").length, 0);
 });
 
-test("Home is a four-path hub and client navigation has a safe fallback", () => {
+test("Home is a clean commercial hub with segment navigation", () => {
   const $ = documents.get("/");
   assert.deepEqual(
     $("#solucoes a")
@@ -143,7 +168,7 @@ test("Home is a four-path hub and client navigation has a safe fallback", () => 
   );
   assert.equal($("#sobre li").length, 3);
   assert.deepEqual(
-    $("#segmentos a")
+    $("#segmentos .segment-links a")
       .map((_, el) => [$(el).text().trim(), $(el).attr("href")])
       .get(),
     [
@@ -165,28 +190,37 @@ test("Home is a four-path hub and client navigation has a safe fallback", () => 
     $("main form, main .instrument-image, main .status-label").length,
     0,
   );
-  assert.doesNotMatch($("main").text(), /manômetros|CMC|rastreabilidade/i);
+  assert.doesNotMatch($("main").text(), /CMC|acreditad|CGCRE|Inmetro/i);
   assert.equal($("#axion button[disabled]").length, 1);
-  for (const [, doc] of documents) {
-    const client = doc("#main-nav a").filter(
-      (_, el) => doc(el).text().trim() === "Área do Cliente",
+});
+
+test("global navigation points to real site sections", () => {
+  for (const [, $] of documents) {
+    const nav = $("#main-nav a")
+      .map((_, el) => [$(el).text().trim(), $(el).attr("href")])
+      .get();
+    assert.ok(nav.includes("Segmentos") && nav.includes("/segmentos"));
+    assert.ok(
+      nav.includes("Conteúdo Técnico") && nav.includes("/conteudo-tecnico"),
     );
-    assert.equal(client.length, 1);
-    assert.equal(client.attr("href"), "/#axion");
+    assert.ok(nav.includes("Sobre a DS") && nav.includes("/sobre"));
+    assert.ok(nav.includes("Contato") && nav.includes("/contato"));
+    assert.ok(
+      nav.includes("Área do Cliente") && nav.includes("/area-do-cliente"),
+    );
   }
 });
 
-test("segment hubs stay minimal and avoid unsupported claims", () => {
-  for (const route of routes.filter((route) =>
-    route.startsWith("/segmentos/"),
-  )) {
-    const $ = documents.get(route);
-    assert.equal($("h1").length, 1);
-    assert.match($("main").text(), /Hub em validação/);
+test("content avoids unsupported accreditation, ranges and supplier references", () => {
+  for (const [route, $] of documents) {
+    const text = $("main").text();
     assert.doesNotMatch(
-      $("main").text(),
-      /acreditad|CGCRE|Inmetro|ISO|NR-13|CMC|incerteza|certifica/i,
+      text,
+      /Aplisens|Endress|QT|Phorp|modelo\s+[A-Z]{2,}[-0-9]|CMC|acreditad[ao]|CGCRE|Inmetro|ISO\/IEC 17025/i,
+      route,
     );
-    assert.equal($("main a[href='/#contato']").length, 1);
+    assert.doesNotMatch(text, /\d+\s*(bar|°C|kg|L\/min|m3\/h)\b/i, route);
   }
 });
+
+export { routes, documents };

@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import { axionUrl } from "../config/site";
+---
+
+<BaseLayout
+  title="Área do Cliente"
+  description="Área do Cliente da DS Científica preparada para encaminhamento futuro ao AXION quando a URL operacional for confirmada."
+>
+  <Breadcrumbs
+    items={[{ label: "Início", href: "/" }, { label: "Área do Cliente" }]}
+  />
+  <section class="container minimal-hub">
+    <p class="eyebrow">Área do Cliente / AXION</p><h1>
+      Certificados, equipamentos e histórico em um ambiente próprio.
+    </h1><p class="lead">
+      O site público apresenta o caminho de acesso. As funcionalidades
+      operacionais permanecem no AXION e serão encaminhadas por URL configurada
+      quando o endereço estiver confirmado.
+    </p>{
+      axionUrl ? (
+        <a class="button" href={axionUrl}>
+          Acessar AXION <span aria-hidden="true">↗</span>
+        </a>
+      ) : (
+        <button class="button" disabled>
+          URL operacional em confirmação
+        </button>
+      )
+    }
+  </section>
+  <Section
+    eyebrow="Separação correta"
+    title="Site público e AXION têm papéis diferentes."
+    tone="light"
+    ><div class="split">
+      <div class="prose">
+        <h3>Site DS Científica</h3><p>
+          Apresenta soluções, produtos, segmentos e formas de iniciar uma
+          solicitação comercial.
+        </p>
+      </div><div class="prose">
+        <h3>AXION</h3><p>
+          Ambiente operacional autenticado para certificados, equipamentos e
+          histórico, sem duplicar dados sensíveis no site público.
+        </p>
+      </div>
+    </div></Section
+  >
+</BaseLayout>

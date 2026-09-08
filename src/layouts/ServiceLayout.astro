@@ -1,11 +1,13 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import CTA from "../components/CTA.astro";
+import QuoteForm from "../components/QuoteForm.astro";
 import SolutionIcon from "../components/SolutionIcon.astro";
-import type { Hub } from "../data/hubs";
-import "../styles/home.css";
+import type { ServiceHub } from "../data/services";
 interface Props {
-  hub: Hub;
+  hub: ServiceHub;
 }
 const { hub } = Astro.props;
 ---
@@ -19,14 +21,15 @@ const { hub } = Astro.props;
           class="lead"
         >
           {hub.description}
-        </p><a class="button" href="/contato#orcamento"
+        </p><a class="button" href="#orcamento"
           >Solicitar orçamento <span aria-hidden="true">↗</span></a
         >
       </div><div class:list={["hub-symbol", hub.key]}>
         <SolutionIcon kind={hub.key} />
       </div>
-    </div>
-    <h2>{hub.heading}</h2><div class="hub-topics">
+    </div><h2>{hub.heading}</h2><p class="lead">{hub.intro}</p><div
+      class="hub-topics"
+    >
       {
         hub.topics.map((topic) => (
           <article>
@@ -38,8 +41,20 @@ const { hub } = Astro.props;
         ))
       }
     </div>
-    <p class="hub-note">{hub.note}</p><a class="text-link" href="/calibracao"
-      >Conheça outras soluções ↗</a
-    >
   </section>
+  <Section
+    eyebrow="Benefícios"
+    title="Decisão técnica com impacto operacional."
+    tone="light"
+    ><ul class="check-list">
+      {hub.benefits.map((item) => <li>{item}</li>)}
+    </ul></Section
+  >
+  <Section eyebrow="Orçamento" title="Informações que aceleram a análise."
+    ><ul class="check-list">
+      {hub.quoteInfo.map((item) => <li>{item}</li>)}
+    </ul></Section
+  >
+  <CTA href="#orcamento" />
+  <QuoteForm />
 </BaseLayout>

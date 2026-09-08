@@ -8,6 +8,7 @@ const routes = [
   "/manutencao",
   "/qualificacao",
   "/produtos",
+  "/segmentos",
   "/segmentos/farmaceutico",
   "/segmentos/quimico",
   "/segmentos/alimentos-bebidas",
@@ -36,7 +37,8 @@ for (const width of [390, 1280]) {
       .locator(".home-hero")
       .getByRole("link", { name: "Conheça nossas soluções" })
       .click();
-    await expect(page.locator("#solucoes")).toBeInViewport();
+    await expect(page).toHaveURL("/calibracao");
+    await page.goto("/");
     for (const [label, path] of [
       ["Calibração", "/calibracao"],
       ["Manutenção", "/manutencao"],
@@ -56,10 +58,8 @@ for (const width of [390, 1280]) {
       .locator(".home-hero")
       .getByRole("link", { name: "Solicitar orçamento" })
       .click();
-    await expect(page.locator("#contato")).toBeInViewport();
-    await expect(page.locator("#contato")).toContainText(
-      "Esta prévia ainda não recebe solicitações.",
-    );
+    await expect(page).toHaveURL("/contato#orcamento");
+    await expect(page.locator("#orcamento")).toBeInViewport();
     await page.goto("/");
     for (const [label, path] of [
       ["Farmacêutico", "/segmentos/farmaceutico"],
@@ -80,7 +80,7 @@ for (const width of [390, 1280]) {
   });
 }
 
-test("client menu reaches the AXION band from every route on mobile", async ({
+test("client menu reaches the client area from every route on mobile", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -91,15 +91,13 @@ test("client menu reaches the AXION band from every route on mobile", async ({
       .getByRole("navigation", { name: "Navegação principal" })
       .getByRole("link", { name: "Área do Cliente", exact: true })
       .click();
-    await expect(page).toHaveURL("/#axion");
-    await expect(page.locator("#axion")).toBeInViewport();
-    await expect(
-      page.locator("#axion").getByRole("button", { name: "Acessar AXION" }),
-    ).toBeDisabled();
-    await expect(page.locator("#axion")).toContainText(
-      "Certificados, equipamentos e histórico de calibrações.",
+    await expect(page).toHaveURL("/area-do-cliente");
+    await expect(page.locator("h1")).toContainText(
+      "Certificados, equipamentos e histórico",
     );
-    await expect(page.locator("#main-nav")).toBeHidden();
+    await expect(
+      page.getByRole("button", { name: "URL operacional em confirmação" }),
+    ).toBeDisabled();
   }
 });
 
@@ -157,9 +155,15 @@ test("mobile navigation, keyboard and complete pilot journey", async ({
   await expect(page).toHaveURL("/calibracao");
   await page.getByRole("link", { name: "Explorar pressão" }).click();
   await expect(page).toHaveURL("/calibracao/pressao");
-  await page.getByRole("link", { name: "Conhecer manômetros" }).click();
+  await page
+    .getByRole("link", { name: /Manômetros/ })
+    .first()
+    .click();
   await expect(page).toHaveURL("/calibracao/pressao/manometros");
-  await page.getByRole("link", { name: "Preparar informações" }).click();
+  await page
+    .getByRole("link", { name: /Solicitar orçamento/ })
+    .first()
+    .click();
   await expect(page.locator("#orcamento")).toBeInViewport();
 });
 

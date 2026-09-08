@@ -1,0 +1,13 @@
+---
+import QuantityLayout from "../../../layouts/QuantityLayout.astro";
+import { calibrationQuantities } from "../../../data/catalog";
+export function getStaticPaths() {
+  return calibrationQuantities.map((quantity) => ({
+    params: { quantity: quantity.slug },
+    props: { quantity },
+  }));
+}
+const { quantity } = Astro.props;
+---
+
+<QuantityLayout quantity={quantity} />

@@ -1,8 +1,9 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import CTA from "../components/CTA.astro";
 import type { Segment } from "../data/segments";
-import "../styles/home.css";
 interface Props {
   segment: Segment;
 }
@@ -11,12 +12,12 @@ const { segment } = Astro.props;
 
 <BaseLayout
   title={`Segmento ${segment.title}`}
-  description={`${segment.description} Página hub mínima para navegação durante a homologação visual.`}
+  description={segment.description}
 >
   <Breadcrumbs
     items={[
       { label: "Início", href: "/" },
-      { label: "Segmentos", href: "/#segmentos" },
+      { label: "Segmentos", href: "/segmentos" },
       { label: segment.title },
     ]}
   />
@@ -25,17 +26,47 @@ const { segment } = Astro.props;
       <div>
         <p class="eyebrow">Segmentos</p><h1>{segment.title}</h1><p class="lead">
           {segment.description}
-        </p><a class="button" href="/#contato"
+        </p><a class="button" href="/contato#orcamento"
           >Solicitar avaliação <span aria-hidden="true">↗</span></a
         >
       </div><div class="segment-symbol" aria-hidden="true">
         <span>{segment.title.charAt(0)}</span>
       </div>
     </div>
-    <h2>Hub em validação.</h2><p class="hub-note">
-      Esta página existe para validar a navegação do site piloto. O conteúdo
-      específico do segmento será definido pela DS Científica antes da expansão,
-      sem incluir informações não confirmadas.
-    </p><a class="text-link" href="/#segmentos">Voltar aos segmentos ↗</a>
   </section>
+  <Section eyebrow="Aplicações" title="Onde a DS pode apoiar." tone="light"
+    ><ul class="check-list">
+      {segment.applications.map((item) => <li>{item}</li>)}
+    </ul></Section
+  >
+  <Section
+    eyebrow="Necessidades frequentes"
+    title="O ponto de partida é a aplicação."
+    ><ul class="check-list">
+      {segment.needs.map((item) => <li>{item}</li>)}
+    </ul></Section
+  >
+  <Section
+    eyebrow="Caminhos relacionados"
+    title="Explore soluções para este segmento."
+    tone="light"
+    ><div class="grid grid-two">
+      {
+        segment.relatedRoutes.map((href) => (
+          <article class="card">
+            <>
+              <h3>
+                <a href={href}>Ver solução relacionada ↗</a>
+              </h3>
+              <p>
+                Use este caminho para conectar necessidade do segmento a
+                calibração, manutenção, qualificação ou produtos.
+              </p>
+            </>
+          </article>
+        ))
+      }
+    </div></Section
+  >
+  <CTA href="/contato#orcamento" />
 </BaseLayout>

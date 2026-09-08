@@ -1,6 +1,45 @@
 ---
-import HubLayout from "../layouts/HubLayout.astro";
-import { hubs } from "../data/hubs";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import Card from "../components/Card.astro";
+import CTA from "../components/CTA.astro";
+import { productCategories } from "../data/catalog";
 ---
 
-<HubLayout hub={hubs.produtos} />
+<BaseLayout
+  title="Produtos"
+  description="Instrumentação e equipamentos para laboratórios e processos industriais, com seleção conforme aplicação."
+>
+  <Breadcrumbs
+    items={[{ label: "Início", href: "/" }, { label: "Produtos" }]}
+  />
+  <section class="container minimal-hub">
+    <p class="eyebrow">Produtos</p><h1>Instrumentação para sua operação.</h1><p
+      class="lead"
+    >
+      A DS Científica apoia a seleção de produtos a partir da variável medida,
+      processo, ambiente e documentação necessária.
+    </p><p class="inline-notice">
+      Configurações e especificações disponíveis conforme a aplicação. Consulte
+      a DS Científica para dimensionamento e seleção.
+    </p>
+  </section>
+  <Section
+    eyebrow="Categorias"
+    title="Escolha a família de produto."
+    tone="light"
+    ><div class="grid">
+      {
+        productCategories.map((category) => (
+          <Card
+            title={category.title}
+            description={category.description}
+            href={`/produtos/${category.slug}`}
+          />
+        ))
+      }
+    </div></Section
+  >
+  <CTA />
+</BaseLayout>

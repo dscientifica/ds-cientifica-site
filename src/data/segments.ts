@@ -5,8 +5,10 @@ export type Segment = {
   extendedLabel?: string;
   href: string;
   description: string;
+  applications: string[];
+  needs: string[];
+  relatedRoutes: string[];
 };
-
 export const segments: Segment[] = [
   {
     slug: "farmaceutico",
@@ -14,7 +16,18 @@ export const segments: Segment[] = [
     navigationLabel: "Farmacêutico",
     href: "/segmentos/farmaceutico",
     description:
-      "Hub inicial para demandas de laboratórios e processos do segmento farmacêutico.",
+      "Soluções para laboratórios, controle de qualidade e processos que dependem de medições documentadas e equipamentos confiáveis.",
+    applications: [
+      "controle de qualidade",
+      "equipamentos térmicos",
+      "instrumentação de processo",
+    ],
+    needs: [
+      "rastreabilidade metrológica adequada ao uso",
+      "documentação clara para análise crítica",
+      "planejamento de calibração, manutenção e qualificação",
+    ],
+    relatedRoutes: ["/calibracao", "/qualificacao", "/manutencao"],
   },
   {
     slug: "quimico",
@@ -22,7 +35,18 @@ export const segments: Segment[] = [
     navigationLabel: "Químico",
     href: "/segmentos/quimico",
     description:
-      "Hub inicial para demandas de laboratórios e processos do segmento químico.",
+      "Atendimento a rotinas de processo, laboratório e utilidades em que pressão, temperatura, vazão e parâmetros analíticos influenciam a operação.",
+    applications: [
+      "reatores e utilidades",
+      "controle analítico",
+      "transferência e dosagem",
+    ],
+    needs: [
+      "instrumentos compatíveis com fluido e processo",
+      "avaliação de sensores e transmissores",
+      "documentação para manutenção e controle",
+    ],
+    relatedRoutes: ["/calibracao/pressao", "/calibracao/vazao", "/produtos"],
   },
   {
     slug: "alimentos-bebidas",
@@ -30,7 +54,22 @@ export const segments: Segment[] = [
     navigationLabel: "Alimentos e Bebidas",
     href: "/segmentos/alimentos-bebidas",
     description:
-      "Hub inicial para demandas de laboratórios e processos de alimentos e bebidas.",
+      "Soluções para medição, controle e apoio técnico em processos térmicos, utilidades, laboratório e controle de qualidade.",
+    applications: [
+      "temperatura de processo",
+      "vazão e utilidades",
+      "controle físico-químico",
+    ],
+    needs: [
+      "seleção adequada de sensores",
+      "calibração de instrumentos críticos",
+      "manutenção de equipamentos de apoio",
+    ],
+    relatedRoutes: [
+      "/calibracao/temperatura",
+      "/calibracao/optica-fotometria",
+      "/produtos/equipamentos-de-laboratorio",
+    ],
   },
   {
     slug: "automotivo",
@@ -38,7 +77,22 @@ export const segments: Segment[] = [
     navigationLabel: "Automotivo",
     href: "/segmentos/automotivo",
     description:
-      "Hub inicial para demandas de laboratórios e processos do segmento automotivo.",
+      "Apoio a áreas de produção, manutenção, laboratório e controle dimensional com instrumentos de medição e processo.",
+    applications: [
+      "controle dimensional",
+      "pressão e utilidades",
+      "pesagem e processo",
+    ],
+    needs: [
+      "instrumentos coerentes com tolerâncias internas",
+      "calibração documentada",
+      "suporte para manutenção e reposição",
+    ],
+    relatedRoutes: [
+      "/calibracao/dimensional",
+      "/calibracao/pressao",
+      "/manutencao",
+    ],
   },
   {
     slug: "hospitalar",
@@ -46,7 +100,18 @@ export const segments: Segment[] = [
     navigationLabel: "Hospitalar",
     href: "/segmentos/hospitalar",
     description:
-      "Hub inicial para demandas de laboratórios e processos do segmento hospitalar.",
+      "Soluções para equipamentos, instrumentos e rotinas de apoio que exigem controle técnico e documentação organizada.",
+    applications: [
+      "equipamentos térmicos",
+      "instrumentos de medição",
+      "rotinas de apoio técnico",
+    ],
+    needs: [
+      "avaliação por aplicação",
+      "documentação clara",
+      "planejamento de manutenção e calibração",
+    ],
+    relatedRoutes: ["/calibracao/temperatura", "/qualificacao", "/manutencao"],
   },
   {
     slug: "industrial",
@@ -55,10 +120,20 @@ export const segments: Segment[] = [
     extendedLabel: "Outros segmentos industriais",
     href: "/segmentos/industrial",
     description:
-      "Hub inicial para demandas de laboratórios e processos industriais.",
+      "Atendimento a operações industriais que utilizam instrumentação de processo, equipamentos de laboratório e medições para tomada de decisão.",
+    applications: [
+      "utilidades",
+      "processos produtivos",
+      "laboratório e manutenção",
+    ],
+    needs: [
+      "especificação por variável medida",
+      "calibração e documentação",
+      "integração entre produto, manutenção e processo",
+    ],
+    relatedRoutes: ["/calibracao", "/produtos", "/manutencao"],
   },
 ];
-
 export const segmentBySlug = Object.fromEntries(
   segments.map((segment) => [segment.slug, segment]),
 ) as Record<string, Segment>;
