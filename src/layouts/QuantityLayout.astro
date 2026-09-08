@@ -5,6 +5,8 @@ import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import Card from "../components/Card.astro";
 import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { mediaForKey } from "../data/media";
 import { rangeMessage, type CalibrationQuantity } from "../data/catalog";
 interface Props {
   quantity: CalibrationQuantity;
@@ -29,7 +31,9 @@ const { quantity } = Astro.props;
     description={quantity.intro}
     href="#equipamentos"
     cta="Ver equipamentos"
-  />
+  >
+    <PageMedia media={mediaForKey(quantity.slug)} priority />
+  </Hero>
   <Section
     id="equipamentos"
     eyebrow="Equipamentos"

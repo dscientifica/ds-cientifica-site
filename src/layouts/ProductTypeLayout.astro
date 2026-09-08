@@ -4,6 +4,8 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
 import QuoteForm from "../components/QuoteForm.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { mediaForKey } from "../data/media";
 import type { ProductCategory, ProductType } from "../data/catalog";
 interface Props {
   category: ProductCategory;
@@ -32,18 +34,21 @@ const { category, type } = Astro.props;
         </p><a class="button" href="#orcamento"
           >Solicitar seleção <span aria-hidden="true">↗</span></a
         >
-      </div><aside class="topic-panel">
-        <p class="eyebrow">Critérios</p><h2>O que considerar</h2>{
-          type.criteria.map((item) => (
-            <a href="#orcamento">
-              <>
-                <span>{item}</span>
-                <span aria-hidden="true">→</span>
-              </>
-            </a>
-          ))
-        }
-      </aside>
+      </div><div class="hero-media-stack">
+        <PageMedia media={mediaForKey(category.slug)} priority />
+        <aside class="topic-panel topic-panel-compact">
+          <p class="eyebrow">O que considerar</p>{
+            type.criteria.map((item) => (
+              <a href="#orcamento">
+                <>
+                  <span>{item}</span>
+                  <span aria-hidden="true">→</span>
+                </>
+              </a>
+            ))
+          }
+        </aside>
+      </div>
     </div>
   </section>
   <Section

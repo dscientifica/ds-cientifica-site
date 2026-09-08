@@ -223,4 +223,39 @@ test("content avoids unsupported accreditation, ranges and supplier references",
   }
 });
 
+test("page visuals use controlled photographic media instead of large generic icons", () => {
+  const visualRoutes = [
+    "/",
+    "/calibracao",
+    "/calibracao/pressao",
+    "/calibracao/pressao/manometros",
+    "/manutencao",
+    "/qualificacao",
+    "/produtos",
+    "/produtos/pressao",
+    "/produtos/pressao/manometros",
+    "/segmentos",
+    "/segmentos/farmaceutico",
+    "/conteudo-tecnico",
+    "/sobre",
+    "/contato",
+    "/area-do-cliente",
+  ];
+  for (const route of visualRoutes) {
+    const $ = documents.get(route);
+    assert.ok($(".page-media img").length >= 1, route);
+    for (const image of $(".page-media img").toArray()) {
+      assert.equal($(image).attr("width"), "1200", route);
+      assert.equal($(image).attr("height"), "800", route);
+      assert.ok($(image).attr("alt")?.length > 25, route);
+      assert.match($(image).attr("src") ?? "", /^\/visuals\//, route);
+    }
+    assert.equal(
+      $(".hub-symbol, .segment-symbol, .solution-icon").length,
+      0,
+      route,
+    );
+  }
+});
+
 export { routes, documents };

@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Axion from "../components/Axion.astro";
-import SolutionIcon from "../components/SolutionIcon.astro";
+import PageMedia from "../components/PageMedia.astro";
 import SegmentLinks from "../components/SegmentLinks.astro";
 import { solutions, principles } from "../data/home";
+import { mediaForKey } from "../data/media";
 import { site, whatsappUrl } from "../config/site";
 import "../styles/home.css";
 ---
@@ -45,11 +46,11 @@ import "../styles/home.css";
             href={solution.href}
             aria-labelledby={`solution-${solution.key}`}
           >
-            <div class="solution-art" aria-hidden="true">
-              <>
-                <SolutionIcon kind={solution.key} />
-                <span class="solution-arrow">↗</span>
-              </>
+            <div class="solution-art">
+              <PageMedia media={mediaForKey(solution.key)} compact />
+              <span class="solution-arrow" aria-hidden="true">
+                ↗
+              </span>
             </div>
             <div class="solution-copy">
               <>

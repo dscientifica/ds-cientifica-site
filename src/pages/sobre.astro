@@ -3,6 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { pageMedia } from "../data/media";
 ---
 
 <BaseLayout
@@ -13,14 +15,18 @@ import CTA from "../components/CTA.astro";
     items={[{ label: "Início", href: "/" }, { label: "Sobre a DS" }]}
   />
   <section class="container minimal-hub">
-    <p class="eyebrow">Sobre a DS</p><h1>Precisão que gera confiança.</h1><p
-      class="lead"
-    >
-      A DS Científica atua na interface entre metrologia, laboratório e
-      instrumentação industrial, apoiando clientes na seleção, calibração,
-      manutenção e qualificação de equipamentos conforme a necessidade da
-      aplicação.
-    </p>
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Sobre a DS</p><h1>Precisão que gera confiança.</h1><p
+          class="lead"
+        >
+          A DS Científica atua na interface entre metrologia, laboratório e
+          instrumentação industrial, apoiando clientes na seleção, calibração,
+          manutenção e qualificação de equipamentos conforme a necessidade da
+          aplicação.
+        </p>
+      </div><PageMedia media={pageMedia.laboratorio} priority />
+    </div>
   </section>
   <Section eyebrow="Atuação" title="Medição, processo e decisão técnica."
     ><div class="split">

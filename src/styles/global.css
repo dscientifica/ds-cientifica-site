@@ -1040,3 +1040,130 @@ summary:focus-visible {
 [hidden] {
   display: none !important;
 }
+
+.page-media {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #e9edf0;
+  box-shadow: 0 16px 34px #102a4312;
+}
+.page-media img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  max-height: 320px;
+  object-fit: cover;
+}
+.page-media figcaption {
+  padding: 10px 14px;
+  background: #edf1f4;
+  color: #526474;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+.page-media-placeholder img {
+  filter: saturate(0.92) contrast(0.98);
+}
+.hero-media-stack {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.topic-panel-compact {
+  padding: 22px;
+}
+.topic-panel-compact .eyebrow {
+  margin-bottom: 4px;
+}
+.hero-steps {
+  margin-top: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  background: white;
+  max-width: 520px;
+}
+.hero-steps .eyebrow {
+  margin-bottom: 10px;
+}
+.hero-steps h2 {
+  font-size: 1.25rem;
+  max-width: none;
+  margin-bottom: 8px;
+}
+.hero-steps a {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+.hero-steps p {
+  font-size: 0.875rem;
+  margin-top: 14px;
+}
+@media (max-width: 760px) {
+  .page-media img {
+    max-height: 240px;
+  }
+  .hero-steps {
+    padding: 18px;
+  }
+}
+
+.minimal-hub {
+  padding-block: 36px 64px;
+}
+.minimal-hub-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+  gap: 56px;
+  align-items: center;
+  margin-bottom: 48px;
+}
+.minimal-hub-heading .button {
+  margin-top: 28px;
+}
+.minimal-hub-heading .page-media {
+  width: min(100%, 520px);
+  justify-self: end;
+}
+.minimal-hub > h2 {
+  font-size: 1.8rem;
+  max-width: none;
+  margin-bottom: 28px;
+}
+.hub-topics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 36px;
+}
+.hub-topics article {
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+.hub-topics h3 {
+  margin-bottom: 12px;
+}
+.hub-note {
+  margin-top: 40px;
+  max-width: 80ch;
+  font-size: 0.9375rem;
+}
+@media (max-width: 760px) {
+  .minimal-hub-heading {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 36px;
+  }
+  .minimal-hub-heading .page-media {
+    width: 100%;
+    justify-self: stretch;
+  }
+  .hub-topics {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}

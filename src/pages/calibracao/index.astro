@@ -5,6 +5,8 @@ import Hero from "../../components/Hero.astro";
 import Section from "../../components/Section.astro";
 import Card from "../../components/Card.astro";
 import CTA from "../../components/CTA.astro";
+import PageMedia from "../../components/PageMedia.astro";
+import { pageMedia } from "../../data/media";
 import { quantities } from "../../data/catalog";
 ---
 
@@ -22,14 +24,15 @@ import { quantities } from "../../data/catalog";
     href="/calibracao/pressao"
     cta="Explorar pressão"
   >
-    <aside class="topic-panel">
+    <PageMedia media={pageMedia.calibracao} priority />
+    <div slot="after" class="hero-steps">
       <p class="eyebrow">Por onde começar</p><h2>
         Da grandeza ao equipamento.
       </h2><a href="#grandezas">01 <span>Escolha a grandeza</span> ↓</a><a
         href="/calibracao/pressao">02 <span>Encontre o instrumento</span> ↗</a
       ><a href="/contato#orcamento">03 <span>Prepare as informações</span> ↗</a
       ><p>Escolha a grandeza e siga para o equipamento correspondente.</p>
-    </aside>
+    </div>
   </Hero>
   <Section
     id="grandezas"

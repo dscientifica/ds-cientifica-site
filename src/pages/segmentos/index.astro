@@ -4,6 +4,8 @@ import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Section from "../../components/Section.astro";
 import Card from "../../components/Card.astro";
 import CTA from "../../components/CTA.astro";
+import PageMedia from "../../components/PageMedia.astro";
+import { pageMedia } from "../../data/media";
 import { segments } from "../../data/segments";
 ---
 
@@ -15,13 +17,17 @@ import { segments } from "../../data/segments";
     items={[{ label: "Início", href: "/" }, { label: "Segmentos" }]}
   />
   <section class="container minimal-hub">
-    <p class="eyebrow">Segmentos</p><h1>Soluções por contexto de uso.</h1><p
-      class="lead"
-    >
-      Cada segmento tem requisitos operacionais, críticos e documentais
-      próprios. A DS Científica organiza a demanda a partir da aplicação real,
-      sem assumir claims regulatórios não validados.
-    </p>
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Segmentos</p><h1>Soluções por contexto de uso.</h1><p
+          class="lead"
+        >
+          Cada segmento tem requisitos operacionais, críticos e documentais
+          próprios. A DS Científica organiza a demanda a partir da aplicação
+          real, sem assumir claims regulatórios não validados.
+        </p>
+      </div><PageMedia media={pageMedia.segmentos} priority />
+    </div>
   </section>
   <Section eyebrow="Navegação" title="Escolha o segmento." tone="light"
     ><div class="grid">

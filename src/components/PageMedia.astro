@@ -1,0 +1,30 @@
+---
+import type { PageMedia } from "../data/media";
+interface Props {
+  media: PageMedia;
+  priority?: boolean;
+  compact?: boolean;
+  class?: string;
+}
+const { media, priority = false, compact = false } = Astro.props;
+---
+
+<figure
+  class:list={[
+    "page-media",
+    compact && "page-media-compact",
+    media.kind === "placeholder" && "page-media-placeholder",
+    Astro.props.class,
+  ]}
+>
+  <img
+    src={media.src}
+    alt={media.alt}
+    width="1200"
+    height="800"
+    loading={priority ? "eager" : "lazy"}
+    decoding="async"
+    fetchpriority={priority ? "high" : "auto"}
+  />
+  <figcaption>{media.caption}</figcaption>
+</figure>

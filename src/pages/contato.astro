@@ -3,6 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import QuoteForm from "../components/QuoteForm.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { pageMedia } from "../data/media";
 ---
 
 <BaseLayout
@@ -11,13 +13,17 @@ import QuoteForm from "../components/QuoteForm.astro";
 >
   <Breadcrumbs items={[{ label: "Início", href: "/" }, { label: "Contato" }]} />
   <section class="container minimal-hub">
-    <p class="eyebrow">Contato</p><h1>Fale com a DS Científica.</h1><p
-      class="lead"
-    >
-      Use o formulário para organizar as informações da solicitação.
-      Solicitações reais por este canal dependem da integração aprovada de
-      backend, privacidade, retenção e proteção contra spam.
-    </p>
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Contato</p><h1>Fale com a DS Científica.</h1><p
+          class="lead"
+        >
+          Use o formulário para organizar as informações da solicitação.
+          Solicitações reais por este canal dependem da integração aprovada de
+          backend, privacidade, retenção e proteção contra spam.
+        </p>
+      </div><PageMedia media={pageMedia.processo} priority />
+    </div>
   </section>
   <Section
     eyebrow="Antes de enviar"

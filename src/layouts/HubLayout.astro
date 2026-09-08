@@ -1,7 +1,8 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
-import SolutionIcon from "../components/SolutionIcon.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { mediaForKey } from "../data/media";
 import type { Hub } from "../data/hubs";
 import "../styles/home.css";
 interface Props {
@@ -22,9 +23,7 @@ const { hub } = Astro.props;
         </p><a class="button" href="/contato#orcamento"
           >Solicitar orçamento <span aria-hidden="true">↗</span></a
         >
-      </div><div class:list={["hub-symbol", hub.key]}>
-        <SolutionIcon kind={hub.key} />
-      </div>
+      </div><PageMedia media={mediaForKey(hub.key)} priority />
     </div>
     <h2>{hub.heading}</h2><div class="hub-topics">
       {

@@ -3,6 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { pageMedia } from "../data/media";
 const articles = [
   {
     title: "Como preparar informações para solicitar calibração",
@@ -33,13 +35,17 @@ const articles = [
     items={[{ label: "Início", href: "/" }, { label: "Conteúdo Técnico" }]}
   />
   <section class="container minimal-hub">
-    <p class="eyebrow">Conteúdo Técnico</p><h1>
-      Informação para especificar melhor.
-    </h1><p class="lead">
-      Esta área organiza guias e conteúdos de apoio para transformar dúvidas
-      técnicas em solicitações mais completas. Os artigos completos serão
-      publicados após revisão editorial e técnica da DS.
-    </p>
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Conteúdo Técnico</p><h1>
+          Informação para especificar melhor.
+        </h1><p class="lead">
+          Esta área organiza guias e conteúdos de apoio para transformar dúvidas
+          técnicas em solicitações mais completas. Os artigos completos serão
+          publicados após revisão editorial e técnica da DS.
+        </p>
+      </div><PageMedia media={pageMedia.conteudo} priority />
+    </div>
   </section>
   <Section eyebrow="Guias iniciais" title="Comece por estes temas." tone="light"
     ><div class="grid">

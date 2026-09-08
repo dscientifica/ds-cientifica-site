@@ -5,6 +5,8 @@ import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
 import QuoteForm from "../components/QuoteForm.astro";
 import SegmentLinks from "../components/SegmentLinks.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { mediaForEquipment } from "../data/media";
 import {
   quoteInfo,
   rangeMessage,
@@ -43,20 +45,24 @@ const title = `Calibração de ${equipment.title}`;
           href="#orcamento"
           >Solicitar orçamento <span aria-hidden="true">↗</span></a
         >
-      </div><aside class="topic-panel">
-        <p class="eyebrow">Critérios de especificação</p><h2>
-          O que informar
-        </h2>{
-          equipment.criteria.map((item) => (
-            <a href="#orcamento">
-              <>
-                <span>{item}</span>
-                <span aria-hidden="true">→</span>
-              </>
-            </a>
-          ))
-        }
-      </aside>
+      </div><div class="hero-media-stack">
+        <PageMedia
+          media={mediaForEquipment(quantity.slug, equipment.slug)}
+          priority
+        />
+        <aside class="topic-panel topic-panel-compact">
+          <p class="eyebrow">O que informar</p>{
+            equipment.criteria.map((item) => (
+              <a href="#orcamento">
+                <>
+                  <span>{item}</span>
+                  <span aria-hidden="true">→</span>
+                </>
+              </a>
+            ))
+          }
+        </aside>
+      </div>
     </div>
   </section>
   <Section eyebrow="Equipamento" title="O que é e onde entra no processo."

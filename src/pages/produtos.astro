@@ -4,6 +4,8 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import Card from "../components/Card.astro";
 import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { pageMedia } from "../data/media";
 import { productCategories } from "../data/catalog";
 ---
 
@@ -15,15 +17,19 @@ import { productCategories } from "../data/catalog";
     items={[{ label: "Início", href: "/" }, { label: "Produtos" }]}
   />
   <section class="container minimal-hub">
-    <p class="eyebrow">Produtos</p><h1>Instrumentação para sua operação.</h1><p
-      class="lead"
-    >
-      A DS Científica apoia a seleção de produtos a partir da variável medida,
-      processo, ambiente e documentação necessária.
-    </p><p class="inline-notice">
-      Configurações e especificações disponíveis conforme a aplicação. Consulte
-      a DS Científica para dimensionamento e seleção.
-    </p>
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Produtos</p><h1>
+          Instrumentação para sua operação.
+        </h1><p class="lead">
+          A DS Científica apoia a seleção de produtos a partir da variável
+          medida, processo, ambiente e documentação necessária.
+        </p><p class="inline-notice">
+          Configurações e especificações disponíveis conforme a aplicação.
+          Consulte a DS Científica para dimensionamento e seleção.
+        </p>
+      </div><PageMedia media={pageMedia.produtos} priority />
+    </div>
   </section>
   <Section
     eyebrow="Categorias"
