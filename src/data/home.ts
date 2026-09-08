@@ -36,11 +36,3 @@ export const principles = [
   "Análise técnica de cada demanda",
   "Laboratório e processo na mesma conversa",
 ];
-export const homeSegments = [
-  { title: "Farmacêutico", href: "/segmentos/farmaceutico" },
-  { title: "Químico", href: "/segmentos/quimico" },
-  { title: "Alimentos e Bebidas", href: "/segmentos/alimentos-bebidas" },
-  { title: "Automotivo", href: "/segmentos/automotivo" },
-  { title: "Hospitalar", href: "/segmentos/hospitalar" },
-  { title: "Industrial", href: "/segmentos/industrial" },
-];

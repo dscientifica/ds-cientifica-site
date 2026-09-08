@@ -70,14 +70,6 @@ export const pressureInstruments: CardData[] = [
       "Avaliação técnica específica da aplicação. Conteúdo sujeito à revisão da DS.",
   },
 ];
-export const segments = [
-  "Farmacêutico",
-  "Químico",
-  "Alimentos e Bebidas",
-  "Automotivo",
-  "Hospitalar",
-  "Outros segmentos industriais",
-];
 export const gauge = {
   slug: "manometros",
   title: "Calibração de manômetros",

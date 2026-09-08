@@ -5,7 +5,7 @@ import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
 import QuoteForm from "../components/QuoteForm.astro";
-import { segments } from "../data/catalog";
+import SegmentLinks from "../components/SegmentLinks.astro";
 interface Props {
   equipment: {
     title: string;
@@ -122,9 +122,7 @@ const { equipment } = Astro.props;
     eyebrow="Segmentos"
     title="Atenção aos requisitos de cada aplicação."
     tone="light"
-    ><div class="chips">
-      {segments.map((segment) => <span>{segment}</span>)}
-    </div></Section
+    ><SegmentLinks variant="chips" industrialLabel="extended" /></Section
   >
   <CTA href="#orcamento" />
   <QuoteForm />
