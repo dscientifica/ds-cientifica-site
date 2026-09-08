@@ -4,7 +4,7 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
 import PageMedia from "../components/PageMedia.astro";
-import { pageMedia } from "../data/media";
+import { mediaForSegment } from "../data/media";
 import type { Segment } from "../data/segments";
 interface Props {
   segment: Segment;
@@ -31,7 +31,7 @@ const { segment } = Astro.props;
         </p><a class="button" href="/contato#orcamento"
           >Solicitar avaliação <span aria-hidden="true">↗</span></a
         >
-      </div><PageMedia media={pageMedia.segmentos} priority />
+      </div><PageMedia media={mediaForSegment(segment.slug)} priority />
     </div>
   </section>
   <Section eyebrow="Aplicações" title="Onde a DS pode apoiar." tone="light"

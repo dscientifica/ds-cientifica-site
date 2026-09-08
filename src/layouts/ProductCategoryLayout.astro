@@ -6,7 +6,7 @@ import Card from "../components/Card.astro";
 import CTA from "../components/CTA.astro";
 import QuoteForm from "../components/QuoteForm.astro";
 import PageMedia from "../components/PageMedia.astro";
-import { mediaForKey } from "../data/media";
+import { mediaForProduct } from "../data/media";
 import type { ProductCategory } from "../data/catalog";
 interface Props {
   category: ProductCategory;
@@ -34,7 +34,7 @@ const { category } = Astro.props;
           Configurações e especificações disponíveis conforme a aplicação.
           Consulte a DS Científica para dimensionamento e seleção.
         </p>
-      </div><PageMedia media={mediaForKey(category.slug)} priority />
+      </div><PageMedia media={mediaForProduct(category.slug)} priority />
     </div>
   </section>
   <Section

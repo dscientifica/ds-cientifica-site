@@ -5,7 +5,7 @@ import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
 import QuoteForm from "../components/QuoteForm.astro";
 import PageMedia from "../components/PageMedia.astro";
-import { mediaForKey } from "../data/media";
+import { mediaForProduct } from "../data/media";
 import type { ProductCategory, ProductType } from "../data/catalog";
 interface Props {
   category: ProductCategory;
@@ -35,7 +35,7 @@ const { category, type } = Astro.props;
           >Solicitar seleção <span aria-hidden="true">↗</span></a
         >
       </div><div class="hero-media-stack">
-        <PageMedia media={mediaForKey(category.slug)} priority />
+        <PageMedia media={mediaForProduct(category.slug, type.slug)} priority />
         <aside class="topic-panel topic-panel-compact">
           <p class="eyebrow">O que considerar</p>{
             type.criteria.map((item) => (

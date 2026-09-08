@@ -1,5 +1,31 @@
 # Origem dos recursos visuais
 
+## Imagens fotográficas contextuais geradas para esta fase
+
+- Geradas em 08/09/2026 com a ferramenta integrada ImageGen, sem imagens de referência e sem copiar fotografias de fabricantes, fornecedores, bancos externos ou clientes.
+- Uso: apoio visual contextual para a pré-produção do site DS Científica enquanto não houver acervo fotográfico próprio aprovado.
+- As imagens foram convertidas para WebP 960 × 640, proporção 3:2, com peso controlado para uso em páginas estáticas.
+- Não contêm logotipos, marcas concorrentes, modelos específicos, unidades, certificados, contatos, URL do AXION ou identificação de clientes. Quando houver mostradores ou escalas genéricas na própria fotografia, elas não devem ser tratadas como dado técnico, faixa de serviço ou especificação da DS.
+- Não representam equipamentos próprios da DS Científica nem autorização de fabricantes. São imagens originais ilustrativas e devem ser validadas visualmente pela DS.
+
+Arquivos contextuais atuais:
+
+- `calibracao.webp`: técnico em montagem genérica de calibração em laboratório.
+- `pressao.webp`: técnico e montagem genérica de calibração de pressão.
+- `manutencao.webp`: manutenção técnica em equipamento laboratorial genérico.
+- `qualificacao.webp`: equipamento térmico instrumentado com sensores/data logger.
+- `produtos.webp`: composição de instrumentos industriais e laboratoriais genéricos.
+- `temperatura.webp`: sensores, termopares, transmissores e equipamento térmico.
+- `vazao.webp`: medidores de vazão e trechos de tubulação genéricos.
+- `nivel.webp`: instrumentos de nível em tanque demonstrativo genérico.
+- `massa.webp`: balanças e pesos padrão genéricos em bancada metrológica.
+- `dimensional.webp`: paquímetro, micrômetro, relógio comparador e padrões dimensionais.
+- `fisico-quimica.webp`: pHmetros e sensores eletroquímicos genéricos.
+- `optica-fotometria.webp`: instrumentos ópticos/fotométricos, cubetas e microplaca.
+- `laboratorio.webp`: ambiente laboratorial com equipamentos térmicos e de apoio.
+- `processo.webp`: bancada de instrumentação de processo baseada em medidores de vazão.
+- `segmentos.webp`: ambiente laboratorial amplo para a página-hub de segmentos.
+
 ## `src/assets/manometro-digital.png` e `public/visuals/manometro-digital.webp`
 
 - Gerado em 07/09/2026 com a ferramenta integrada ImageGen, sem imagem de referência.
@@ -12,32 +38,21 @@ Prompt utilizado:
 
 > Create one refined photorealistic editorial product illustration for a Brazilian industrial calibration website. Landscape 3:2. A single unbranded digital pressure gauge, brushed stainless steel round body with dark navy protective rim, rectangular LCD screen switched off completely blank (no digits, no units, no specification, no letters), understated buttons without text, metal threaded bottom connection. Gauge angled very slightly, fully visible on the right-center of a pale cool gray studio surface, natural subtle shadow, precision industrial photography, generous empty space around it. No logo, no typography, no brand, no watermark, no analog dial, no extra tools, no laboratory facility. This is an explicitly illustrative generic instrument and must not imply real company equipment.
 
-## `public/visuals/*.webp`
+## Placeholders ainda pendentes
 
-- Placeholders fotográficos abstratos gerados localmente para esta fase pré-produção.
-- Não usam imagens de fabricantes, fornecedores, catálogos, bancos externos ou clientes.
-- Não contêm logotipos, números de faixa, unidades, modelos, marcas, certificados, ambientes reais ou dados operacionais.
-- Uso: ocupar a estrutura visual final com proporção, altura, legenda e `alt` controlados até a DS fornecer fotos licenciadas/autorizadas.
-- Substituição futura deve preservar nome, proporção 3:2, texto alternativo adequado e documentação de licença/autorização.
+Os arquivos abaixo permanecem como placeholders porque ainda dependem de fotografia autorizada ou definição institucional específica:
 
-Arquivos atuais:
+- `cliente.webp`: Área do Cliente/AXION, dependente de decisão visual sem expor telas, dados ou URL operacional.
+- `conteudo.webp`: Conteúdo técnico/documentação, dependente de direção editorial e visual específica.
 
-- `calibracao.webp`
-- `manutencao.webp`
-- `qualificacao.webp`
-- `produtos.webp`
-- `segmentos.webp`
-- `laboratorio.webp`
-- `processo.webp`
-- `pressao.webp`
-- `temperatura.webp`
-- `massa.webp`
-- `vazao.webp`
-- `dimensional.webp`
-- `fisico-quimica.webp`
-- `optica-fotometria.webp`
-- `cliente.webp`
-- `conteudo.webp`
+## Regras para substituição futura
+
+- Preservar proporção 3:2 e dimensões equivalentes às imagens atuais.
+- Manter ou revisar `alt` descritivo em `src/data/media.ts`.
+- Registrar a origem, licença/autorização e escopo de uso neste arquivo.
+- Não usar imagem de fabricante, fornecedor, catálogo ou banco externo sem licença compatível para uso comercial.
+- Não mostrar marcas concorrentes, logotipos de terceiros ou modelos específicos como se fossem produtos próprios da DS.
+- Não inferir ou publicar características técnicas, faixas, CMC, incertezas, acreditações ou certificações a partir das fotografias.
 
 ## Marca e tipografia
 

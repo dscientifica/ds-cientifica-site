@@ -1054,6 +1054,10 @@ summary:focus-visible {
   max-height: 320px;
   object-fit: cover;
 }
+.page-media-contain img {
+  object-fit: contain;
+  background: #eef2f5;
+}
 .page-media figcaption {
   padding: 10px 14px;
   background: #edf1f4;

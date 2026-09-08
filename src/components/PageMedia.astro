@@ -13,6 +13,7 @@ const { media, priority = false, compact = false } = Astro.props;
   class:list={[
     "page-media",
     compact && "page-media-compact",
+    media.fit === "contain" && "page-media-contain",
     media.kind === "placeholder" && "page-media-placeholder",
     Astro.props.class,
   ]}
@@ -20,8 +21,8 @@ const { media, priority = false, compact = false } = Astro.props;
   <img
     src={media.src}
     alt={media.alt}
-    width="1200"
-    height="800"
+    width="960"
+    height="640"
     loading={priority ? "eager" : "lazy"}
     decoding="async"
     fetchpriority={priority ? "high" : "auto"}

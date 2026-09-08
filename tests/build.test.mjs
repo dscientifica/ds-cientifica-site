@@ -224,29 +224,39 @@ test("content avoids unsupported accreditation, ranges and supplier references",
 });
 
 test("page visuals use controlled photographic media instead of large generic icons", () => {
-  const visualRoutes = [
-    "/",
-    "/calibracao",
-    "/calibracao/pressao",
-    "/calibracao/pressao/manometros",
-    "/manutencao",
-    "/qualificacao",
-    "/produtos",
-    "/produtos/pressao",
-    "/produtos/pressao/manometros",
-    "/segmentos",
-    "/segmentos/farmaceutico",
-    "/conteudo-tecnico",
-    "/sobre",
-    "/contato",
-    "/area-do-cliente",
-  ];
-  for (const route of visualRoutes) {
+  const routeMedia = {
+    "/": ["/visuals/calibracao.webp", "/visuals/manutencao.webp"],
+    "/calibracao": ["/visuals/calibracao.webp"],
+    "/calibracao/pressao": ["/visuals/pressao.webp"],
+    "/calibracao/pressao/manometros": ["/visuals/manometro-digital.webp"],
+    "/calibracao/temperatura/autoclaves": ["/visuals/qualificacao.webp"],
+    "/calibracao/fisico-quimica/phmetros": ["/visuals/fisico-quimica.webp"],
+    "/manutencao": ["/visuals/manutencao.webp"],
+    "/qualificacao": ["/visuals/qualificacao.webp"],
+    "/produtos": ["/visuals/produtos.webp"],
+    "/produtos/pressao": ["/visuals/pressao.webp"],
+    "/produtos/pressao/manometros": ["/visuals/manometro-digital.webp"],
+    "/produtos/vazao/medidores-de-vazao": ["/visuals/vazao.webp"],
+    "/produtos/nivel/instrumentos-de-nivel": ["/visuals/nivel.webp"],
+    "/segmentos": ["/visuals/segmentos.webp"],
+    "/segmentos/farmaceutico": ["/visuals/laboratorio.webp"],
+    "/segmentos/industrial": ["/visuals/processo.webp"],
+    "/conteudo-tecnico": ["/visuals/conteudo.webp"],
+    "/sobre": ["/visuals/laboratorio.webp"],
+    "/contato": ["/visuals/processo.webp"],
+    "/area-do-cliente": ["/visuals/cliente.webp"],
+  };
+  for (const [route, expectedSources] of Object.entries(routeMedia)) {
     const $ = documents.get(route);
     assert.ok($(".page-media img").length >= 1, route);
+    const actualSources = $(".page-media img")
+      .map((_, image) => $(image).attr("src"))
+      .get();
+    for (const expected of expectedSources)
+      assert.ok(actualSources.includes(expected), `${route}: ${expected}`);
     for (const image of $(".page-media img").toArray()) {
-      assert.equal($(image).attr("width"), "1200", route);
-      assert.equal($(image).attr("height"), "800", route);
+      assert.equal($(image).attr("width"), "960", route);
+      assert.equal($(image).attr("height"), "640", route);
       assert.ok($(image).attr("alt")?.length > 25, route);
       assert.match($(image).attr("src") ?? "", /^\/visuals\//, route);
     }
@@ -255,6 +265,32 @@ test("page visuals use controlled photographic media instead of large generic ic
       0,
       route,
     );
+  }
+});
+
+test("contextual photos are used before falling back to pending placeholders", () => {
+  for (const route of [
+    "/calibracao",
+    "/calibracao/pressao",
+    "/calibracao/temperatura",
+    "/calibracao/massa",
+    "/calibracao/vazao",
+    "/calibracao/dimensional",
+    "/calibracao/fisico-quimica",
+    "/calibracao/optica-fotometria",
+    "/manutencao",
+    "/qualificacao",
+    "/produtos",
+    "/produtos/nivel",
+    "/segmentos/farmaceutico",
+    "/segmentos/automotivo",
+  ]) {
+    const $ = documents.get(route);
+    assert.equal($(".page-media-placeholder").length, 0, route);
+  }
+  for (const route of ["/conteudo-tecnico", "/area-do-cliente"]) {
+    const $ = documents.get(route);
+    assert.ok($(".page-media-placeholder").length >= 1, route);
   }
 });
 

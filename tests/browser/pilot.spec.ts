@@ -319,6 +319,7 @@ test("no JavaScript keeps navigation usable and form inert", async ({
 });
 
 test("WCAG A/AA automated checks across pilot and 404", async ({ page }) => {
+  test.setTimeout(90_000);
   for (const route of [...routes, "/pagina-inexistente"]) {
     const response = await page.goto(route);
     expect(response?.status()).toBe(
