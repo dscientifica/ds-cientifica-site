@@ -254,6 +254,72 @@ test("Home is a clean commercial hub with segment navigation", () => {
   assert.equal($("#axion button[disabled]").length, 1);
 });
 
+test("segment pages connect applications, solutions and catalog items", () => {
+  const expectations = {
+    "/segmentos/farmaceutico": [
+      "/calibracao/temperatura",
+      "/qualificacao",
+      "/calibracao/temperatura/autoclaves",
+      "/calibracao/fisico-quimica/phmetros",
+    ],
+    "/segmentos/quimico": [
+      "/calibracao/pressao/transmissores-de-pressao-diferencial",
+      "/produtos/nivel/instrumentos-de-nivel",
+      "/calibracao/fisico-quimica/orp",
+    ],
+    "/segmentos/alimentos-bebidas": [
+      "/calibracao/vazao/eletromagneticos",
+      "/calibracao/massa/balancas-analiticas",
+      "/calibracao/optica-fotometria/refratometros",
+    ],
+    "/segmentos/automotivo": [
+      "/calibracao/dimensional/paquimetros",
+      "/calibracao/dimensional/micrometros",
+      "/calibracao/massa/balancas-digitais",
+    ],
+    "/segmentos/hospitalar": [
+      "/calibracao/temperatura/registradores-data-loggers",
+      "/calibracao/temperatura/incubadoras",
+      "/produtos/equipamentos-de-laboratorio/equipamentos-termicos-e-de-apoio",
+    ],
+    "/segmentos/industrial": [
+      "/calibracao/pressao/transmissores-de-pressao",
+      "/calibracao/vazao/eletromagneticos",
+      "/produtos/nivel/instrumentos-de-nivel",
+    ],
+  };
+
+  for (const [route, expectedLinks] of Object.entries(expectations)) {
+    const $ = documents.get(route);
+    assert.ok($(".segment-application-list li").length >= 4, route);
+    assert.ok($(".segment-solution-grid .card").length >= 5, route);
+    assert.ok($(".segment-relation-group").length >= 2, route);
+    assert.ok($(".segment-equipment-card").length >= 8, route);
+    assert.equal(
+      $('main form[aria-label="Solicitação de orçamento"]').length,
+      0,
+      route,
+    );
+    assert.ok($('main a[href="/contato#orcamento"]').length >= 2, route);
+    assert.equal($('main a[href="#orcamento"]').length, 0, route);
+    for (const href of expectedLinks)
+      assert.ok($(`main a[href="${href}"]`).length >= 1, `${route}: ${href}`);
+  }
+
+  assert.match(
+    documents.get("/segmentos/farmaceutico")("main").text(),
+    /controle e monitoramento de temperatura/,
+  );
+  assert.match(
+    documents.get("/segmentos/quimico")("main").text(),
+    /Pressão diferencial|Transmissores de pressão diferencial/,
+  );
+  assert.match(
+    documents.get("/segmentos/industrial")("main").text(),
+    /Instrumentação de processo/,
+  );
+});
+
 test("service hubs use client-facing maintenance and qualification copy", () => {
   const maintenance = documents.get("/manutencao");
   assert.match(

@@ -1,3 +1,8 @@
+export type SegmentRelationGroup = {
+  title: string;
+  description: string;
+  routes: string[];
+};
 export type Segment = {
   slug: string;
   title: string;
@@ -6,8 +11,8 @@ export type Segment = {
   href: string;
   description: string;
   applications: string[];
-  needs: string[];
-  relatedRoutes: string[];
+  solutionRoutes: string[];
+  relatedGroups: SegmentRelationGroup[];
 };
 export const segments: Segment[] = [
   {
@@ -16,18 +21,48 @@ export const segments: Segment[] = [
     navigationLabel: "Farmacêutico",
     href: "/segmentos/farmaceutico",
     description:
-      "Soluções para laboratórios, controle de qualidade e processos que dependem de medições documentadas e equipamentos confiáveis.",
+      "Medições, equipamentos térmicos e documentação técnica apoiam laboratórios, controle de qualidade, utilidades e processos com rotina controlada.",
     applications: [
-      "controle de qualidade",
-      "equipamentos térmicos",
-      "instrumentação de processo",
+      "controle e monitoramento de temperatura em equipamentos térmicos",
+      "instrumentos de pressão, vazão e utilidades do processo",
+      "análises físico-químicas em laboratório e água de processo",
+      "organização de evidências para decisões técnicas sobre equipamentos",
     ],
-    needs: [
-      "rastreabilidade metrológica adequada ao uso",
-      "documentação clara para análise crítica",
-      "planejamento de calibração, manutenção e qualificação",
+    solutionRoutes: [
+      "/calibracao/temperatura",
+      "/calibracao/pressao",
+      "/calibracao/fisico-quimica",
+      "/qualificacao",
+      "/manutencao",
+      "/produtos/equipamentos-de-laboratorio",
     ],
-    relatedRoutes: ["/calibracao", "/qualificacao", "/manutencao"],
+    relatedGroups: [
+      {
+        title: "Temperatura e equipamentos térmicos",
+        description:
+          "Instrumentos e equipamentos usados em rotinas térmicas de laboratório e processo.",
+        routes: [
+          "/calibracao/temperatura/termometros-digitais-e-analogicos",
+          "/calibracao/temperatura/pt100-rtd",
+          "/calibracao/temperatura/termopares",
+          "/calibracao/temperatura/registradores-data-loggers",
+          "/calibracao/temperatura/autoclaves",
+          "/calibracao/temperatura/estufas",
+        ],
+      },
+      {
+        title: "Pressão, utilidades e laboratório analítico",
+        description:
+          "Medições que ajudam a acompanhar utilidades, processo e parâmetros físico-químicos.",
+        routes: [
+          "/calibracao/pressao/manometros",
+          "/calibracao/pressao/transmissores-de-pressao",
+          "/calibracao/vazao/eletromagneticos",
+          "/calibracao/fisico-quimica/phmetros",
+          "/calibracao/fisico-quimica/condutivimetros",
+        ],
+      },
+    ],
   },
   {
     slug: "quimico",
@@ -35,18 +70,49 @@ export const segments: Segment[] = [
     navigationLabel: "Químico",
     href: "/segmentos/quimico",
     description:
-      "Atendimento a rotinas de processo, laboratório e utilidades em que pressão, temperatura, vazão e parâmetros analíticos influenciam a operação.",
+      "Processos químicos dependem de instrumentação para pressão, temperatura, vazão, nível e parâmetros analíticos acompanhados de documentação clara.",
     applications: [
-      "reatores e utilidades",
-      "controle analítico",
-      "transferência e dosagem",
+      "linhas de processo, reatores, tanques e utilidades",
+      "monitoramento de pressão, pressão diferencial, temperatura e vazão",
+      "tratamento ou acompanhamento de água e soluções quando pertinente",
+      "seleção de instrumentos conforme fluido, instalação e objetivo da medição",
     ],
-    needs: [
-      "instrumentos compatíveis com fluido e processo",
-      "avaliação de sensores e transmissores",
-      "documentação para manutenção e controle",
+    solutionRoutes: [
+      "/calibracao/pressao",
+      "/calibracao/temperatura",
+      "/calibracao/vazao",
+      "/produtos/nivel",
+      "/calibracao/fisico-quimica",
+      "/manutencao",
+      "/produtos",
     ],
-    relatedRoutes: ["/calibracao/pressao", "/calibracao/vazao", "/produtos"],
+    relatedGroups: [
+      {
+        title: "Instrumentação de processo",
+        description:
+          "Instrumentos relacionados a malhas, linhas, tanques e utilidades.",
+        routes: [
+          "/calibracao/pressao/manometros",
+          "/calibracao/pressao/transmissores-de-pressao",
+          "/calibracao/pressao/transmissores-de-pressao-diferencial",
+          "/calibracao/temperatura/transmissores-de-temperatura",
+          "/produtos/nivel/instrumentos-de-nivel",
+        ],
+      },
+      {
+        title: "Vazão e análises",
+        description:
+          "Medições utilizadas em transferência, dosagem, utilidades e acompanhamento analítico.",
+        routes: [
+          "/calibracao/vazao/eletromagneticos",
+          "/calibracao/vazao/coriolis",
+          "/calibracao/fisico-quimica/phmetros",
+          "/calibracao/fisico-quimica/condutivimetros",
+          "/calibracao/fisico-quimica/orp",
+          "/calibracao/fisico-quimica/oxigenio-dissolvido",
+        ],
+      },
+    ],
   },
   {
     slug: "alimentos-bebidas",
@@ -54,21 +120,50 @@ export const segments: Segment[] = [
     navigationLabel: "Alimentos e Bebidas",
     href: "/segmentos/alimentos-bebidas",
     description:
-      "Soluções para medição, controle e apoio técnico em processos térmicos, utilidades, laboratório e controle de qualidade.",
+      "Temperatura, vazão, pressão, massa e análises apoiam produção, armazenamento, utilidades, água de processo e controle de qualidade.",
     applications: [
-      "temperatura de processo",
-      "vazão e utilidades",
-      "controle físico-químico",
+      "controle de temperatura em processo, armazenamento e equipamentos térmicos",
+      "vazão, pressão e nível em linhas, tanques e utilidades",
+      "pesagem, preparo e rotinas de laboratório",
+      "análises físico-químicas e ópticas quando relacionadas ao controle da rotina",
     ],
-    needs: [
-      "seleção adequada de sensores",
-      "calibração de instrumentos críticos",
-      "manutenção de equipamentos de apoio",
-    ],
-    relatedRoutes: [
+    solutionRoutes: [
       "/calibracao/temperatura",
+      "/calibracao/vazao",
+      "/calibracao/pressao",
+      "/calibracao/massa",
+      "/calibracao/fisico-quimica",
       "/calibracao/optica-fotometria",
+      "/qualificacao",
       "/produtos/equipamentos-de-laboratorio",
+    ],
+    relatedGroups: [
+      {
+        title: "Processo, utilidades e temperatura",
+        description:
+          "Instrumentos ligados a controle térmico, circulação, tanques e linhas de processo.",
+        routes: [
+          "/calibracao/temperatura/termometros-digitais-e-analogicos",
+          "/calibracao/temperatura/pt100-rtd",
+          "/calibracao/temperatura/transmissores-de-temperatura",
+          "/calibracao/vazao/eletromagneticos",
+          "/calibracao/pressao/manometros",
+          "/produtos/nivel/instrumentos-de-nivel",
+        ],
+      },
+      {
+        title: "Laboratório e controle de qualidade",
+        description:
+          "Equipamentos e medições utilizados em preparo, acompanhamento e análise da rotina.",
+        routes: [
+          "/calibracao/massa/balancas-analiticas",
+          "/calibracao/fisico-quimica/phmetros",
+          "/calibracao/fisico-quimica/condutivimetros",
+          "/calibracao/optica-fotometria/turbidimetros",
+          "/calibracao/optica-fotometria/refratometros",
+          "/calibracao/temperatura/estufas",
+        ],
+      },
     ],
   },
   {
@@ -77,21 +172,47 @@ export const segments: Segment[] = [
     navigationLabel: "Automotivo",
     href: "/segmentos/automotivo",
     description:
-      "Apoio a áreas de produção, manutenção, laboratório e controle dimensional com instrumentos de medição e processo.",
+      "Produção, manutenção, utilidades e controle de qualidade utilizam medições de pressão, temperatura, vazão, massa e dimensional.",
     applications: [
-      "controle dimensional",
-      "pressão e utilidades",
-      "pesagem e processo",
+      "linhas de produção, utilidades e monitoramento de processo",
+      "controle dimensional em inspeção, manutenção e qualidade",
+      "instrumentos de pressão, temperatura e vazão usados na operação",
+      "pesagem e medições de apoio para rotinas técnicas",
     ],
-    needs: [
-      "instrumentos coerentes com tolerâncias internas",
-      "calibração documentada",
-      "suporte para manutenção e reposição",
-    ],
-    relatedRoutes: [
-      "/calibracao/dimensional",
+    solutionRoutes: [
       "/calibracao/pressao",
+      "/calibracao/temperatura",
+      "/calibracao/vazao",
+      "/calibracao/dimensional",
+      "/calibracao/massa",
       "/manutencao",
+      "/produtos",
+    ],
+    relatedGroups: [
+      {
+        title: "Processo e utilidades",
+        description:
+          "Instrumentos de campo e bancada relacionados a linhas, utilidades e monitoramento.",
+        routes: [
+          "/calibracao/pressao/manometros",
+          "/calibracao/pressao/transmissores-de-pressao",
+          "/calibracao/temperatura/pt100-rtd",
+          "/calibracao/temperatura/termopares",
+          "/calibracao/vazao/eletromagneticos",
+        ],
+      },
+      {
+        title: "Dimensional e massa",
+        description:
+          "Instrumentos utilizados em inspeção, ajuste, controle de peças e rotinas de apoio.",
+        routes: [
+          "/calibracao/dimensional/paquimetros",
+          "/calibracao/dimensional/micrometros",
+          "/calibracao/dimensional/relogios-comparadores",
+          "/calibracao/dimensional/medidores-e-padroes-de-espessura",
+          "/calibracao/massa/balancas-digitais",
+        ],
+      },
     ],
   },
   {
@@ -100,18 +221,47 @@ export const segments: Segment[] = [
     navigationLabel: "Hospitalar",
     href: "/segmentos/hospitalar",
     description:
-      "Soluções para equipamentos, instrumentos e rotinas de apoio que exigem controle técnico e documentação organizada.",
+      "Ambientes técnicos e laboratoriais utilizam equipamentos térmicos, instrumentos de medição e documentação organizada para apoiar a rotina operacional.",
     applications: [
-      "equipamentos térmicos",
-      "instrumentos de medição",
-      "rotinas de apoio técnico",
+      "equipamentos térmicos e monitoramento de temperatura",
+      "instrumentos de medição usados em rotinas técnicas e laboratoriais",
+      "pesagem, registro e acompanhamento de equipamentos",
+      "qualificação térmica quando a aplicação e os critérios forem definidos",
     ],
-    needs: [
-      "avaliação por aplicação",
-      "documentação clara",
-      "planejamento de manutenção e calibração",
+    solutionRoutes: [
+      "/calibracao/temperatura",
+      "/calibracao/pressao",
+      "/calibracao/massa",
+      "/produtos/equipamentos-de-laboratorio",
+      "/qualificacao",
+      "/manutencao",
     ],
-    relatedRoutes: ["/calibracao/temperatura", "/qualificacao", "/manutencao"],
+    relatedGroups: [
+      {
+        title: "Temperatura e qualificação térmica",
+        description:
+          "Equipamentos e instrumentos associados a controle, registro e avaliação térmica.",
+        routes: [
+          "/calibracao/temperatura/termometros-digitais-e-analogicos",
+          "/calibracao/temperatura/registradores-data-loggers",
+          "/calibracao/temperatura/autoclaves",
+          "/calibracao/temperatura/estufas",
+          "/calibracao/temperatura/incubadoras",
+          "/qualificacao",
+        ],
+      },
+      {
+        title: "Laboratório e instrumentos de apoio",
+        description:
+          "Medições e equipamentos relacionados à rotina técnica e ao controle interno.",
+        routes: [
+          "/calibracao/massa/balancas-analiticas",
+          "/calibracao/pressao/manometros",
+          "/calibracao/fisico-quimica/phmetros",
+          "/produtos/equipamentos-de-laboratorio/equipamentos-termicos-e-de-apoio",
+        ],
+      },
+    ],
   },
   {
     slug: "industrial",
@@ -120,18 +270,52 @@ export const segments: Segment[] = [
     extendedLabel: "Outros segmentos industriais",
     href: "/segmentos/industrial",
     description:
-      "Atendimento a operações industriais que utilizam instrumentação de processo, equipamentos de laboratório e medições para tomada de decisão.",
+      "Operações industriais reúnem instrumentação de processo, utilidades, medição em laboratório e documentação para decisões de manutenção e controle.",
     applications: [
-      "utilidades",
-      "processos produtivos",
-      "laboratório e manutenção",
+      "processos industriais, utilidades, tanques e linhas de produção",
+      "medição de pressão, pressão diferencial, temperatura, vazão e nível",
+      "massa, dimensional e análises em laboratórios industriais",
+      "integração entre calibração, manutenção, qualificação e seleção de produtos",
     ],
-    needs: [
-      "especificação por variável medida",
-      "calibração e documentação",
-      "integração entre produto, manutenção e processo",
+    solutionRoutes: [
+      "/calibracao",
+      "/calibracao/pressao",
+      "/calibracao/temperatura",
+      "/calibracao/vazao",
+      "/produtos/nivel",
+      "/calibracao/massa",
+      "/calibracao/dimensional",
+      "/calibracao/fisico-quimica",
+      "/manutencao",
+      "/produtos",
     ],
-    relatedRoutes: ["/calibracao", "/produtos", "/manutencao"],
+    relatedGroups: [
+      {
+        title: "Instrumentação de processo",
+        description:
+          "Instrumentos relacionados a variáveis medidas em linhas, tanques, utilidades e sistemas de medição.",
+        routes: [
+          "/calibracao/pressao/manometros",
+          "/calibracao/pressao/transmissores-de-pressao",
+          "/calibracao/pressao/transmissores-de-pressao-diferencial",
+          "/calibracao/temperatura/transmissores-de-temperatura",
+          "/calibracao/vazao/eletromagneticos",
+          "/produtos/nivel/instrumentos-de-nivel",
+        ],
+      },
+      {
+        title: "Laboratório, massa e dimensional",
+        description:
+          "Medições usadas em controle, inspeção, manutenção e análise de rotina industrial.",
+        routes: [
+          "/calibracao/massa/balancas-digitais",
+          "/calibracao/dimensional/paquimetros",
+          "/calibracao/dimensional/micrometros",
+          "/calibracao/fisico-quimica/phmetros",
+          "/calibracao/optica-fotometria/turbidimetros",
+        ],
+      },
+    ],
   },
 ];
 export const segmentBySlug = Object.fromEntries(

@@ -4,12 +4,117 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
 import PageMedia from "../components/PageMedia.astro";
-import { mediaForSegment } from "../data/media";
+import {
+  calibrationEquipmentByRoute,
+  calibrationQuantityBySlug,
+  productCategoryBySlug,
+  productTypeByRoute,
+} from "../data/catalog";
+import {
+  mediaForEquipment,
+  mediaForProduct,
+  mediaForSegment,
+} from "../data/media";
+import { serviceHubs } from "../data/services";
+import type { PageMedia as PageMediaData } from "../data/media";
 import type { Segment } from "../data/segments";
 interface Props {
   segment: Segment;
 }
+type ResolvedRoute = {
+  href: string;
+  title: string;
+  description: string;
+  category: string;
+  media?: PageMediaData;
+};
 const { segment } = Astro.props;
+const genericRoutes: Record<string, Omit<ResolvedRoute, "href">> = {
+  "/calibracao": {
+    title: "Calibração",
+    description:
+      "Grandezas e instrumentos organizados por aplicação, sem publicar faixas ou capacidades não confirmadas.",
+    category: "Solução",
+  },
+  "/produtos": {
+    title: "Produtos",
+    description:
+      "Instrumentos e equipamentos selecionados conforme aplicação, instalação e documentação necessária.",
+    category: "Solução",
+  },
+};
+function resolveRoute(href: string): ResolvedRoute | undefined {
+  if (genericRoutes[href]) return { href, ...genericRoutes[href] };
+  if (href === "/manutencao" || href === "/qualificacao") {
+    const key = href.slice(1) as "manutencao" | "qualificacao";
+    const hub = serviceHubs[key];
+    return {
+      href,
+      title: hub.title,
+      description: hub.description,
+      category: "Solução",
+    };
+  }
+  const calibrationEquipment = href.match(/^\/calibracao\/([^/]+)\/([^/]+)$/);
+  if (calibrationEquipment) {
+    const [, quantitySlug, equipmentSlug] = calibrationEquipment;
+    const record =
+      calibrationEquipmentByRoute[`${quantitySlug}/${equipmentSlug}`];
+    if (!record) return undefined;
+    return {
+      href,
+      title: record.equipment.title,
+      description: record.equipment.description,
+      category: record.quantity.title,
+      media: mediaForEquipment(quantitySlug, equipmentSlug),
+    };
+  }
+  const calibrationQuantity = href.match(/^\/calibracao\/([^/]+)$/);
+  if (calibrationQuantity) {
+    const quantity = calibrationQuantityBySlug[calibrationQuantity[1]];
+    if (!quantity) return undefined;
+    return {
+      href,
+      title: quantity.title,
+      description: quantity.description,
+      category: "Calibração",
+    };
+  }
+  const productType = href.match(/^\/produtos\/([^/]+)\/([^/]+)$/);
+  if (productType) {
+    const [, categorySlug, typeSlug] = productType;
+    const record = productTypeByRoute[`${categorySlug}/${typeSlug}`];
+    if (!record) return undefined;
+    return {
+      href,
+      title: record.type.title,
+      description: record.type.description,
+      category: `Produtos / ${record.category.title}`,
+      media: mediaForProduct(categorySlug, typeSlug),
+    };
+  }
+  const productCategory = href.match(/^\/produtos\/([^/]+)$/);
+  if (productCategory) {
+    const category = productCategoryBySlug[productCategory[1]];
+    if (!category) return undefined;
+    return {
+      href,
+      title: category.title,
+      description: category.description,
+      category: "Produtos",
+    };
+  }
+  return undefined;
+}
+const solutionCards = segment.solutionRoutes
+  .map((href) => resolveRoute(href))
+  .filter(Boolean) as ResolvedRoute[];
+const relationGroups = segment.relatedGroups.map((group) => ({
+  ...group,
+  items: group.routes
+    .map((href) => resolveRoute(href))
+    .filter(Boolean) as ResolvedRoute[],
+}));
 ---
 
 <BaseLayout
@@ -29,44 +134,74 @@ const { segment } = Astro.props;
         <p class="eyebrow">Segmentos</p><h1>{segment.title}</h1><p class="lead">
           {segment.description}
         </p><a class="button" href="/contato#orcamento"
-          >Solicitar avaliação <span aria-hidden="true">↗</span></a
+          >Solicitar orçamento <span aria-hidden="true">↗</span></a
         >
       </div><PageMedia media={mediaForSegment(segment.slug)} priority />
     </div>
   </section>
-  <Section eyebrow="Aplicações" title="Onde a DS pode apoiar." tone="light"
-    ><ul class="check-list">
-      {segment.applications.map((item) => <li>{item}</li>)}
-    </ul></Section
-  >
   <Section
-    eyebrow="Necessidades frequentes"
-    title="O ponto de partida é a aplicação."
-    ><ul class="check-list">
-      {segment.needs.map((item) => <li>{item}</li>)}
-    </ul></Section
-  >
-  <Section
-    eyebrow="Caminhos relacionados"
-    title="Explore soluções para este segmento."
+    eyebrow="Necessidades e aplicações"
+    title="O que costuma orientar a demanda."
     tone="light"
-    ><div class="grid grid-two">
+  >
+    <ul class="segment-application-list">
+      {segment.applications.map((item) => <li>{item}</li>)}
+    </ul>
+  </Section>
+  <Section eyebrow="Soluções DS" title="Caminhos para explorar no site.">
+    <div class="grid segment-solution-grid">
       {
-        segment.relatedRoutes.map((href) => (
-          <article class="card">
-            <>
-              <h3>
-                <a href={href}>Ver solução relacionada ↗</a>
-              </h3>
-              <p>
-                Use este caminho para conectar necessidade do segmento a
-                calibração, manutenção, qualificação ou produtos.
-              </p>
-            </>
+        solutionCards.map((item) => (
+          <article class="card segment-card">
+            <p class="segment-card-category">{item.category}</p>
+            <h3>
+              <a href={item.href}>
+                {item.title}
+                <span aria-hidden="true">↗</span>
+              </a>
+            </h3>
+            <p>{item.description}</p>
           </article>
         ))
       }
-    </div></Section
+    </div>
+  </Section>
+  <Section
+    eyebrow="Instrumentos e equipamentos"
+    title="Itens relacionados do catálogo existente."
+    intro="Os links abaixo levam para páginas já existentes. A seleção final depende da aplicação, das características do instrumento e da avaliação da DS Científica."
+    tone="light"
   >
-  <CTA href="/contato#orcamento" />
+    <div class="segment-relation-stack">
+      {
+        relationGroups.map((group) => (
+          <article class="segment-relation-group">
+            <div class="section-heading segment-group-heading">
+              <h3>{group.title}</h3>
+              <p>{group.description}</p>
+            </div>
+            <div class="grid segment-equipment-grid">
+              {group.items.map((item) => (
+                <article class="card segment-equipment-card">
+                  {item.media && <PageMedia media={item.media} compact />}
+                  <p class="segment-card-category">{item.category}</p>
+                  <h3>
+                    <a href={item.href}>
+                      {item.title}
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  </h3>
+                  <p>{item.description}</p>
+                </article>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+  <CTA
+    title={`Precisa de orçamento para aplicações do segmento ${segment.title}?`}
+    context={`Segmentos / ${segment.title}`}
+  />
 </BaseLayout>

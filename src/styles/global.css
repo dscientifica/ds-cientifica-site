@@ -336,6 +336,61 @@ summary:focus-visible {
 .card .instrument-image figcaption {
   font-size: 0.75rem;
 }
+.segment-application-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 24px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.segment-application-list li {
+  border-left: 3px solid var(--magenta);
+  background: white;
+  padding: 16px 18px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.segment-solution-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.segment-card-category {
+  margin: 0 0 10px;
+  color: var(--blue);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.segment-relation-stack {
+  display: grid;
+  gap: 42px;
+}
+.segment-relation-group {
+  min-width: 0;
+}
+.segment-group-heading {
+  margin-bottom: 20px;
+}
+.segment-group-heading h3 {
+  font-size: 1.45rem;
+}
+.segment-group-heading p {
+  max-width: 68ch;
+  margin-top: 10px;
+}
+.segment-equipment-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.segment-equipment-card .page-media {
+  margin: -12px -12px 18px;
+}
+.segment-equipment-card .page-media img {
+  aspect-ratio: 16 / 10;
+}
+.segment-equipment-card .page-media figcaption {
+  display: none;
+}
 .solutions {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -831,7 +886,10 @@ summary:focus-visible {
   .solutions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .grid {
+  .grid,
+  .segment-solution-grid,
+  .segment-equipment-grid,
+  .segment-application-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .steps {
@@ -997,7 +1055,10 @@ summary:focus-visible {
   .grid,
   .solutions,
   .steps,
-  .form-grid {
+  .form-grid,
+  .segment-solution-grid,
+  .segment-equipment-grid,
+  .segment-application-list {
     grid-template-columns: 1fr;
   }
   .card {

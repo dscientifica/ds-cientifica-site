@@ -197,6 +197,50 @@ test("quote CTAs point to the central contact budget flow", async ({
   }
 });
 
+test("segment pages expose commercial paths and catalog links on desktop and mobile", async ({
+  page,
+}) => {
+  for (const width of [390, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const route of [
+      "/segmentos/farmaceutico",
+      "/segmentos/quimico",
+      "/segmentos/alimentos-bebidas",
+      "/segmentos/automotivo",
+      "/segmentos/hospitalar",
+      "/segmentos/industrial",
+    ]) {
+      await page.goto(route);
+      await expect(page.locator(".segment-application-list li")).toHaveCount(4);
+      await expect(
+        page.locator(".segment-solution-grid .card").first(),
+      ).toBeVisible();
+      await expect(
+        page.locator(".segment-equipment-card").first(),
+      ).toBeVisible();
+      await expect(
+        page.locator('main form[aria-label="Solicitação de orçamento"]'),
+      ).toHaveCount(0);
+      await expect(page.locator('main a[href="#orcamento"]')).toHaveCount(0);
+      await expect(
+        page.locator('main a[href="/contato#orcamento"]').first(),
+      ).toBeVisible();
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+      await page.locator(".segment-equipment-card a").first().click();
+      await expect(page.locator("h1")).toBeVisible();
+      expect(page.url()).not.toContain("/segmentos/");
+      await page.goto(route);
+      await page.locator('main a[href="/contato#orcamento"]').first().click();
+      await expect(page).toHaveURL("/contato#orcamento");
+      await expect(page.locator("#orcamento")).toBeInViewport();
+    }
+  }
+});
+
 test("form rejects invalid fields and never sends or persists data", async ({
   page,
 }) => {
