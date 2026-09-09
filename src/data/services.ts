@@ -1,4 +1,5 @@
 import type { SolutionKind } from "./home";
+
 export type ServiceHub = {
   key: SolutionKind;
   title: string;
@@ -9,47 +10,47 @@ export type ServiceHub = {
   benefits: string[];
   quoteInfo: string[];
 };
+
 export const serviceHubs: Record<"manutencao" | "qualificacao", ServiceHub> = {
   manutencao: {
     key: "manutencao",
     title: "Manutenção",
     description:
       "Diagnóstico técnico, manutenção preventiva e corretiva para equipamentos de laboratório e instrumentação de processo.",
-    heading:
-      "Identificar o problema, avaliar tecnicamente e propor a solução adequada.",
+    heading: "Do diagnóstico à solução: suporte técnico para manter sua operação funcionando.",
     intro:
-      "A DS Científica avalia o equipamento, os sintomas observados e as condições de uso para indicar o melhor encaminhamento. O atendimento busca recuperar ou conservar o equipamento quando isso for tecnicamente aplicável, sem assumir capacidades ou resultados antes da análise.",
+      "Falhas, instabilidade e desgaste podem comprometer medições e interromper a rotina. A DS Científica avalia o equipamento e as condições de uso para identificar o problema e definir o encaminhamento técnico mais adequado.",
     topics: [
       {
         title: "Diagnóstico técnico",
         description:
-          "Avaliação do equipamento e identificação da causa provável da falha a partir das informações e condições observadas.",
+          "Avaliação dos sintomas, condições de funcionamento e possíveis causas da falha para orientar a intervenção.",
       },
       {
         title: "Manutenção preventiva",
         description:
-          "Ações destinadas a conservar o funcionamento e reduzir ocorrências de falhas e paradas.",
+          "Ações planejadas para conservar o equipamento, reduzir ocorrências de falhas e aumentar a previsibilidade da operação.",
       },
       {
         title: "Manutenção corretiva",
         description:
-          "Avaliação e intervenção em equipamentos com falha ou funcionamento inadequado, conforme viabilidade técnica.",
+          "Avaliação e intervenção em equipamentos com falha ou funcionamento inadequado, de acordo com a condição encontrada e a viabilidade técnica.",
       },
       {
         title: "Equipamentos de laboratório",
         description:
-          "Atendimento a equipamentos laboratoriais conforme necessidade apresentada e avaliação técnica da aplicação.",
+          "Suporte técnico para equipamentos utilizados na rotina laboratorial, com avaliação individual da necessidade e da aplicação.",
       },
       {
         title: "Instrumentação de processo",
         description:
-          "Manutenção e diagnóstico de instrumentos utilizados em processos industriais, respeitando o escopo efetivamente avaliado pela DS Científica.",
+          "Diagnóstico e manutenção de instrumentos utilizados em processos industriais, com avaliação técnica de cada aplicação.",
       },
     ],
     benefits: [
-      "identifica sintomas e evidências antes de definir o encaminhamento",
-      "apoia a decisão entre recuperar, conservar, calibrar ou substituir o equipamento",
-      "reduz paradas recorrentes quando a manutenção preventiva é tecnicamente aplicável",
+      "identificação técnica do problema antes da intervenção",
+      "apoio à decisão entre manutenção, calibração ou substituição do equipamento",
+      "maior previsibilidade da rotina com ações preventivas quando aplicáveis",
     ],
     quoteInfo: [
       "equipamento, fabricante, modelo e identificação",
@@ -62,37 +63,36 @@ export const serviceHubs: Record<"manutencao" | "qualificacao", ServiceHub> = {
     key: "qualificacao",
     title: "Qualificação",
     description:
-      "Qualificação de equipamentos e avaliação de desempenho térmico conforme aplicação e requisitos informados.",
-    heading:
-      "Evidência organizada para equipamentos críticos de processo e laboratório.",
+      "Avaliação documentada do desempenho de equipamentos utilizados em laboratório e processo.",
+    heading: "Evidências para conhecer o desempenho do equipamento nas condições de uso.",
     intro:
-      "A qualificação começa pela finalidade do equipamento, carga de uso, pontos críticos, rotina operacional e critérios internos do cliente. A DS Científica trata o escopo como análise técnica e não assume requisitos não confirmados.",
+      "A qualificação considera a finalidade do equipamento, sua condição de operação e os critérios definidos para a aplicação. O objetivo é produzir informações organizadas que apoiem a análise do desempenho e as decisões do processo.",
     topics: [
       {
         title: "Qualificação térmica",
         description:
-          "Aplicável a autoclaves, estufas, incubadoras, banhos-maria, banhos termostáticos e equipamentos térmicos, conforme escopo definido.",
+          "Avaliação de equipamentos térmicos como autoclaves, estufas, incubadoras, banhos-maria e banhos termostáticos, de acordo com o escopo definido para a aplicação.",
       },
       {
-        title: "Mapeamento e uso real",
+        title: "Mapeamento térmico",
         description:
-          "A avaliação considera carga, distribuição, pontos críticos e forma de operação informada pelo cliente.",
+          "Avaliação da distribuição de temperatura e dos pontos de interesse nas condições estabelecidas para o estudo.",
       },
       {
         title: "Capelas de exaustão",
         description:
-          "Conteúdo e escopo sujeitos à validação técnica da DS antes de publicação detalhada.",
+          "Avaliação definida conforme as características do equipamento, a aplicação e os requisitos informados pelo cliente.",
       },
       {
-        title: "Documentação",
+        title: "Documentação dos resultados",
         description:
-          "Resultados devem ser apresentados de forma coerente com objetivo, critérios definidos e condições observadas.",
+          "Organização dos resultados e das condições avaliadas para facilitar análise técnica, rastreabilidade e tomada de decisão.",
       },
     ],
     benefits: [
-      "melhora a compreensão sobre desempenho do equipamento em uso",
-      "apoia análise crítica de pontos críticos e critérios internos",
-      "organiza informações para auditorias e decisões de processo",
+      "amplia a compreensão sobre o desempenho do equipamento em uso",
+      "apoia a identificação e análise de pontos críticos",
+      "organiza evidências para decisões técnicas e rotinas de qualidade",
     ],
     quoteInfo: [
       "tipo de equipamento, volume útil e finalidade",
