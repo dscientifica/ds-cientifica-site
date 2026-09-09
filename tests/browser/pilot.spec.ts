@@ -162,13 +162,45 @@ test("mobile navigation, keyboard and complete pilot journey", async ({
     .getByRole("link", { name: /Solicitar orçamento/ })
     .first()
     .click();
+  await expect(page).toHaveURL("/contato#orcamento");
   await expect(page.locator("#orcamento")).toBeInViewport();
+});
+
+test("quote CTAs point to the central contact budget flow", async ({
+  page,
+}) => {
+  for (const route of [
+    "/calibracao/pressao/manometros",
+    "/manutencao",
+    "/qualificacao",
+    "/produtos/pressao/manometros",
+    "/segmentos/industrial",
+    "/orcamento",
+  ]) {
+    await page.goto(route);
+    const quoteLinks = page.locator(
+      'main a[href="/contato#orcamento"], main a[href="#orcamento"]',
+    );
+    await expect(quoteLinks.first()).toBeVisible();
+    await expect(
+      page.locator('main form[aria-label="Solicitação de orçamento"]'),
+    ).toHaveCount(route === "/contato" ? 1 : 0);
+    const localAnchors = await page
+      .locator('main a[href="#orcamento"]')
+      .count();
+    expect(localAnchors, route).toBe(0);
+    await quoteLinks.first().click();
+    await expect(page).toHaveURL("/contato#orcamento");
+    await expect(
+      page.locator('form[aria-label="Solicitação de orçamento"]'),
+    ).toBeVisible();
+  }
 });
 
 test("form rejects invalid fields and never sends or persists data", async ({
   page,
 }) => {
-  await page.goto("/calibracao/pressao/manometros");
+  await page.goto("/contato#orcamento");
   await expect(page.locator("#add-equipment")).toBeVisible();
   const requests: string[] = [];
   page.on("request", (req) => {
@@ -236,13 +268,13 @@ test("form rejects invalid fields and never sends or persists data", async ({
   expect(
     await page.evaluate(() => [localStorage.length, sessionStorage.length]),
   ).toEqual([0, 0]);
-  await expect(page).toHaveURL("/calibracao/pressao/manometros");
+  await expect(page).toHaveURL("/contato#orcamento");
 });
 
 test("quote form handles multiple equipment items with edit and removal", async ({
   page,
 }) => {
-  await page.goto("/calibracao/pressao/manometros");
+  await page.goto("/contato#orcamento");
   await page.getByLabel("Empresa *").fill("Empresa teste");
   await page.getByLabel("Nome *").fill("Teste");
   await page.getByLabel("E-mail *").fill("teste@example.test");
@@ -307,10 +339,10 @@ test("no JavaScript keeps navigation usable and form inert", async ({
     viewport: { width: 320, height: 800 },
   });
   const page = await context.newPage();
-  await page.goto("/calibracao/pressao/manometros");
+  await page.goto("/contato#orcamento");
   await expect(page.locator("#main-nav")).toBeVisible();
   await expect(page.getByLabel("Empresa *")).toBeDisabled();
-  await expect(page.locator("#validate-quote")).toBeHidden();
+  await expect(page.locator("#add-equipment")).toBeHidden();
   await context.close();
 });
 

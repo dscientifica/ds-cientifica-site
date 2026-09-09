@@ -3,7 +3,6 @@ import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
-import QuoteForm from "../components/QuoteForm.astro";
 import PageMedia from "../components/PageMedia.astro";
 import { mediaForProduct } from "../data/media";
 import type { ProductCategory, ProductType } from "../data/catalog";
@@ -31,7 +30,7 @@ const { category, type } = Astro.props;
         </h1><p class="lead">{type.description}</p><p class="hero-note">
           Configurações e especificações disponíveis conforme a aplicação.
           Consulte a DS Científica para dimensionamento e seleção.
-        </p><a class="button" href="#orcamento"
+        </p><a class="button" href="/contato#orcamento"
           >Solicitar seleção <span aria-hidden="true">↗</span></a
         >
       </div><div class="hero-media-stack">
@@ -39,12 +38,9 @@ const { category, type } = Astro.props;
         <aside class="topic-panel topic-panel-compact">
           <p class="eyebrow">O que considerar</p>{
             type.criteria.map((item) => (
-              <a href="#orcamento">
-                <>
-                  <span>{item}</span>
-                  <span aria-hidden="true">→</span>
-                </>
-              </a>
+              <div class="topic-item">
+                <span>{item}</span>
+              </div>
             ))
           }
         </aside>
@@ -81,5 +77,8 @@ const { category, type } = Astro.props;
       </Section>
     )
   }
-  <CTA href="#orcamento" /><QuoteForm />
+  <CTA
+    title={`Precisa de orçamento para ${type.title}?`}
+    context={`Produtos / ${category.title} / ${type.title}`}
+  />
 </BaseLayout>

@@ -73,6 +73,7 @@ const { quantity } = Astro.props;
     </div>
   </Section>
   <CTA
-    href={`/calibracao/${quantity.slug}/${quantity.equipment[0].slug}#orcamento`}
+    title={`Precisa de orçamento para calibração de ${quantity.title}?`}
+    context={`Calibração / ${quantity.title}`}
   />
 </BaseLayout>

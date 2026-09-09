@@ -4,7 +4,6 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import Card from "../components/Card.astro";
 import CTA from "../components/CTA.astro";
-import QuoteForm from "../components/QuoteForm.astro";
 import PageMedia from "../components/PageMedia.astro";
 import { mediaForProduct } from "../data/media";
 import type { ProductCategory } from "../data/catalog";
@@ -53,5 +52,8 @@ const { category } = Astro.props;
       }
     </div></Section
   >
-  <CTA href="#orcamento" /><QuoteForm />
+  <CTA
+    title={`Precisa de orçamento para produtos de ${category.title}?`}
+    context={`Produtos / ${category.title}`}
+  />
 </BaseLayout>

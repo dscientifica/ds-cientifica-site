@@ -3,7 +3,6 @@ import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
-import QuoteForm from "../components/QuoteForm.astro";
 import PageMedia from "../components/PageMedia.astro";
 import { mediaForKey } from "../data/media";
 import type { ServiceHub } from "../data/services";
@@ -22,7 +21,7 @@ const { hub } = Astro.props;
           class="lead"
         >
           {hub.description}
-        </p><a class="button" href="#orcamento"
+        </p><a class="button" href="/contato#orcamento"
           >Solicitar orçamento <span aria-hidden="true">↗</span></a
         >
       </div><PageMedia media={mediaForKey(hub.key)} priority />
@@ -54,6 +53,5 @@ const { hub } = Astro.props;
       {hub.quoteInfo.map((item) => <li>{item}</li>)}
     </ul></Section
   >
-  <CTA href="#orcamento" />
-  <QuoteForm />
+  <CTA context={`/${hub.key}`} />
 </BaseLayout>

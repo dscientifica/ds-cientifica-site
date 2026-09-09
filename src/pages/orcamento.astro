@@ -1,12 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
-import QuoteForm from "../components/QuoteForm.astro";
+import CTA from "../components/CTA.astro";
 ---
 
 <BaseLayout
   title="Solicitar orçamento"
-  description="Organize uma solicitação de orçamento para múltiplos equipamentos da DS Científica."
+  description="Acesse o fluxo central de solicitação de orçamento da DS Científica."
 >
   <Breadcrumbs
     items={[
@@ -15,6 +15,19 @@ import QuoteForm from "../components/QuoteForm.astro";
       { label: "Solicitar orçamento" },
     ]}
   />
-  <h1 class="sr-only">Solicitar orçamento</h1>
-  <QuoteForm />
+  <section class="container minimal-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Orçamento DS Científica</p><h1>
+          Solicite orçamento pelo fluxo central.
+        </h1><p class="lead">
+          O formulário de orçamento está concentrado na página de contato para
+          manter a solicitação organizada em um único lugar.
+        </p><a class="button" href="/contato#orcamento"
+          >Ir para o orçamento <span aria-hidden="true">↗</span></a
+        >
+      </div>
+    </div>
+  </section>
+  <CTA />
 </BaseLayout>

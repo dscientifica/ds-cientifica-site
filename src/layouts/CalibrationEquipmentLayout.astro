@@ -3,7 +3,6 @@ import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
-import QuoteForm from "../components/QuoteForm.astro";
 import SegmentLinks from "../components/SegmentLinks.astro";
 import PageMedia from "../components/PageMedia.astro";
 import { mediaForEquipment } from "../data/media";
@@ -42,7 +41,7 @@ const title = `Calibração de ${equipment.title}`;
           {equipment.description}
         </p><p class="hero-note">{rangeMessage}</p><a
           class="button"
-          href="#orcamento"
+          href="/contato#orcamento"
           >Solicitar orçamento <span aria-hidden="true">↗</span></a
         >
       </div><div class="hero-media-stack">
@@ -53,12 +52,9 @@ const title = `Calibração de ${equipment.title}`;
         <aside class="topic-panel topic-panel-compact">
           <p class="eyebrow">O que informar</p>{
             equipment.criteria.map((item) => (
-              <a href="#orcamento">
-                <>
-                  <span>{item}</span>
-                  <span aria-hidden="true">→</span>
-                </>
-              </a>
+              <div class="topic-item">
+                <span>{item}</span>
+              </div>
             ))
           }
         </aside>
@@ -114,6 +110,8 @@ const title = `Calibração de ${equipment.title}`;
     tone="light"
     ><SegmentLinks variant="chips" industrialLabel="extended" /></Section
   >
-  <CTA href="#orcamento" />
-  <QuoteForm />
+  <CTA
+    title={`Precisa de orçamento para calibração de ${equipment.title}?`}
+    context={`Calibração / ${quantity.title} / ${equipment.title}`}
+  />
 </BaseLayout>

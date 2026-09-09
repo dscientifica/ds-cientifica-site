@@ -1,21 +1,30 @@
 ---
-import { rangeMessage } from "../data/catalog";
 import { whatsappUrl } from "../config/site";
 interface Props {
   href?: string;
+  title?: string;
+  description?: string;
+  buttonLabel?: string;
+  context?: string;
 }
-const { href = "/contato#orcamento" } = Astro.props;
+const {
+  href = "/contato#orcamento",
+  title = "Precisa de orçamento para este serviço?",
+  description = "Informe seus equipamentos e solicite uma avaliação da DS Científica.",
+  buttonLabel = "Solicitar orçamento",
+  context,
+} = Astro.props;
 ---
 
-<section class="cta-section">
+<section class="cta-section" data-quote-context={context}>
   <div class="container cta-box">
     <div>
-      <p class="eyebrow">Sua aplicação é o ponto de partida</p><h2>
-        Vamos entender o que você precisa medir?
-      </h2><p>{rangeMessage}</p>
+      <p class="eyebrow">Orçamento DS Científica</p><h2>{title}</h2><p>
+        {description}
+      </p>
     </div><div class="cta-actions">
       <a class="button" href={href}
-        >Preparar orçamento <span aria-hidden="true">↗</span></a
+        >{buttonLabel} <span aria-hidden="true">↗</span></a
       >{
         whatsappUrl && (
           <a class="text-link" href={whatsappUrl} rel="noopener noreferrer">

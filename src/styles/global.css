@@ -537,13 +537,17 @@ summary:focus-visible {
 .topic-panel .eyebrow {
   margin-bottom: 16px;
 }
-.topic-panel a {
+.topic-panel a,
+.topic-panel .topic-item {
   display: flex;
   justify-content: space-between;
   padding: 14px 0;
   border-bottom: 1px solid var(--line);
   font-size: 1rem;
   font-weight: 600;
+}
+.topic-panel .topic-item {
+  color: var(--navy);
 }
 .topic-panel p {
   font-size: 0.875rem;

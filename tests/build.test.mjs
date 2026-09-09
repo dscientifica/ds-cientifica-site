@@ -152,10 +152,51 @@ test("pending integrations have no invented destinations or service page", () =>
     );
     assert.ok(!hrefs.includes("/servicos"));
   }
-  const $ = documents.get("/calibracao/pressao/manometros");
-  assert.equal($("form").attr("action"), undefined);
-  assert.equal($("fieldset[disabled]").length, 1);
-  assert.equal($("button[type='submit']").length, 0);
+  const contact = documents.get("/contato");
+  assert.equal(contact("form").attr("action"), undefined);
+  assert.equal(contact("fieldset[disabled]").length, 1);
+  assert.equal(contact("button[type='submit']").length, 0);
+});
+
+test("quote form is centralized on contact and budget CTAs resolve there", () => {
+  const formRoutes = [];
+  for (const [route, $] of documents) {
+    if ($('form[aria-label="Solicitação de orçamento"]').length)
+      formRoutes.push(route);
+  }
+  assert.deepEqual(formRoutes, ["/contato"]);
+
+  for (const [route, $] of documents) {
+    if (route === "/contato") continue;
+    assert.equal($('main a[href="#orcamento"]').length, 0, route);
+  }
+
+  for (const route of [
+    "/calibracao/pressao/manometros",
+    "/manutencao",
+    "/qualificacao",
+    "/produtos/pressao/manometros",
+    "/segmentos/industrial",
+    "/orcamento",
+  ]) {
+    const $ = documents.get(route);
+    assert.ok($('main a[href="/contato#orcamento"]').length >= 1, route);
+  }
+
+  const contexts = [];
+  for (const [route, $] of documents) {
+    for (const el of $(".cta-section[data-quote-context]").toArray()) {
+      const context = $(el).attr("data-quote-context");
+      if (context) contexts.push([route, context]);
+    }
+  }
+  assert.ok(
+    contexts.some(
+      ([route, context]) =>
+        route === "/calibracao/pressao/manometros" &&
+        context === "Calibração / Pressão / Manômetros digitais e analógicos",
+    ),
+  );
 });
 
 test("Home is a clean commercial hub with segment navigation", () => {

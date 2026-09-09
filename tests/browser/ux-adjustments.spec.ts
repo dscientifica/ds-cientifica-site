@@ -37,7 +37,7 @@ for (const width of [390, 1280]) {
     page,
   }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto("/calibracao/pressao/manometros");
+    await page.goto("/contato#orcamento");
     await page.getByLabel("Empresa *").fill("Empresa teste");
     await page.getByLabel("Nome *").fill("Teste");
     await page.getByLabel("E-mail *").fill("teste@example.test");

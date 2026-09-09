@@ -4,7 +4,6 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Hero from "../components/Hero.astro";
 import Section from "../components/Section.astro";
 import CTA from "../components/CTA.astro";
-import QuoteForm from "../components/QuoteForm.astro";
 import SegmentLinks from "../components/SegmentLinks.astro";
 interface Props {
   equipment: {
@@ -31,7 +30,7 @@ const { equipment } = Astro.props;
     eyebrow="Calibração / Pressão / Manômetros"
     title={equipment.title}
     description={equipment.introduction}
-    href="#orcamento"
+    href="/contato#orcamento"
     cta="Preparar informações"><slot name="image" /></Hero
   >
   <Section
@@ -124,8 +123,10 @@ const { equipment } = Astro.props;
     tone="light"
     ><SegmentLinks variant="chips" industrialLabel="extended" /></Section
   >
-  <CTA href="#orcamento" />
-  <QuoteForm />
+  <CTA
+    title={`Precisa de orçamento para ${equipment.title}?`}
+    context={`Calibração / Pressão / ${equipment.title}`}
+  />
   <Section eyebrow="Continue explorando" title="Outros caminhos em calibração."
     ><div class="grid grid-two">
       <article class="card">
