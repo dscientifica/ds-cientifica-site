@@ -1094,7 +1094,7 @@ summary:focus-visible {
   font-size: 0.75rem;
   line-height: 1.45;
 }
-.page-media-placeholder img {
+.page-media-pending img {
   filter: saturate(0.92) contrast(0.98);
 }
 .hero-media-stack {

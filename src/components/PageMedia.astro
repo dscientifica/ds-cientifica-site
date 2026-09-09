@@ -14,7 +14,7 @@ const { media, priority = false, compact = false } = Astro.props;
     "page-media",
     compact && "page-media-compact",
     media.fit === "contain" && "page-media-contain",
-    media.kind === "placeholder" && "page-media-placeholder",
+    media.kind === "pending" && "page-media-pending",
     Astro.props.class,
   ]}
 >

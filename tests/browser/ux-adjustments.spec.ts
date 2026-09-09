@@ -52,7 +52,7 @@ for (const width of [390, 1280]) {
       .fill("Modelo industrial com identificação longa");
     await page
       .getByLabel("Faixa utilizada/unidade")
-      .fill("Faixa e unidade a confirmar pela aplicação");
+      .fill("Faixa e unidade informadas pela aplicação");
     await page.getByLabel("Quantidade *").fill("12");
     await page
       .getByLabel("Observações")

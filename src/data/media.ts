@@ -1,4 +1,4 @@
-export type MediaKind = "photo" | "placeholder";
+export type MediaKind = "photo" | "pending";
 export type MediaFit = "cover" | "contain";
 export type PageMedia = {
   src: string;
@@ -108,13 +108,13 @@ export const pageMedia = {
     src: "/visuals/cliente.webp",
     alt: "Imagem abstrata discreta para Área do Cliente e gestão de equipamentos.",
     caption: "Área do Cliente AXION.",
-    kind: "placeholder",
+    kind: "pending",
   },
   conteudo: {
     src: "/visuals/conteudo.webp",
     alt: "Imagem abstrata discreta para conteúdo técnico e documentação.",
     caption: "Conteúdo técnico DS Científica.",
-    kind: "placeholder",
+    kind: "pending",
   },
   "manometro-digital": {
     src: "/visuals/manometro-digital.webp",

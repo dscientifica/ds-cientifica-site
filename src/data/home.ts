@@ -16,7 +16,8 @@ export const solutions: {
   {
     key: "manutencao",
     title: "Manutenção",
-    description: "Diagnóstico e cuidado técnico para manter sua operação funcionando.",
+    description:
+      "Diagnóstico e cuidado técnico para manter sua operação funcionando.",
     href: "/manutencao",
   },
   {

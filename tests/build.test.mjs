@@ -174,6 +174,17 @@ test("Home is a clean commercial hub with segment navigation", () => {
       .get(),
     ["/calibracao", "/manutencao", "/qualificacao", "/produtos"],
   );
+  assert.deepEqual(
+    $("#solucoes .solution-copy p")
+      .map((_, el) => $(el).text().trim())
+      .get(),
+    [
+      "Confiança para suas medições e decisões de processo.",
+      "Diagnóstico e cuidado técnico para manter sua operação funcionando.",
+      "Evidências para avaliar o desempenho dos seus equipamentos.",
+      "Instrumentação selecionada de acordo com a sua aplicação.",
+    ],
+  );
   assert.equal($("#sobre li").length, 3);
   assert.deepEqual(
     $("#segmentos .segment-links a")
@@ -202,9 +213,39 @@ test("Home is a clean commercial hub with segment navigation", () => {
   assert.equal($("#axion button[disabled]").length, 1);
 });
 
+test("service hubs use client-facing maintenance and qualification copy", () => {
+  const maintenance = documents.get("/manutencao");
+  assert.match(
+    maintenance("main").text(),
+    /Do diagnóstico à solução: suporte técnico para manter sua operação funcionando\./,
+  );
+  for (const term of [
+    "Diagnóstico técnico",
+    "Manutenção preventiva",
+    "Manutenção corretiva",
+    "Equipamentos de laboratório",
+    "Instrumentação de processo",
+  ])
+    assert.match(maintenance("main").text(), new RegExp(term));
+
+  const qualification = documents.get("/qualificacao");
+  for (const term of [
+    "Qualificação térmica",
+    "Mapeamento térmico",
+    "Desempenho dos equipamentos",
+    "Documentação",
+    "Evidências para decisão técnica",
+  ])
+    assert.match(qualification("main").text(), new RegExp(term));
+  assert.doesNotMatch(
+    qualification("main").text(),
+    /conteúdo e escopo sujeitos|validação técnica da DS antes de publicação detalhada/i,
+  );
+});
+
 test("public pages do not expose internal development language", () => {
   const forbidden =
-    /Logo oficial pendente|ambiente piloto|piloto DS Científica|URL operacional a confirmar|URL operacional em confirmação|backend|retenção|proteção contra spam|integração futura|integração aprovada|aprovação interna|futura submissão|validação do roteiro|Confirmar revisão sem enviar|não envia|não há envio|Imagem fotográfica original|validar\/substituir|pendência interna|nota para desenvolvedor|conteúdo de teste/i;
+    /Logo oficial pendente|ambiente piloto|piloto DS Científica|URL operacional a confirmar|URL operacional em confirmação|backend|retenção|proteção contra spam|integração futura|integração aprovada|aprovação interna|futura submissão|validação do roteiro|Confirmar revisão sem enviar|não envia|não há envio|Imagem fotográfica original|validar\/substituir|pendência interna|nota para desenvolvedor|conteúdo de teste|sem assumir capacidades|resultados antes da análise/i;
   for (const [route, $] of documents) {
     assert.doesNotMatch($("body").text(), forbidden, route);
     assert.doesNotMatch(
@@ -289,7 +330,7 @@ test("page visuals use controlled photographic media instead of large generic ic
   }
 });
 
-test("contextual photos are used before falling back to pending placeholders", () => {
+test("contextual photos are used before falling back to pending media", () => {
   for (const route of [
     "/calibracao",
     "/calibracao/pressao",
@@ -307,11 +348,11 @@ test("contextual photos are used before falling back to pending placeholders", (
     "/segmentos/automotivo",
   ]) {
     const $ = documents.get(route);
-    assert.equal($(".page-media-placeholder").length, 0, route);
+    assert.equal($(".page-media-pending").length, 0, route);
   }
   for (const route of ["/conteudo-tecnico", "/area-do-cliente"]) {
     const $ = documents.get(route);
-    assert.ok($(".page-media-placeholder").length >= 1, route);
+    assert.ok($(".page-media-pending").length >= 1, route);
   }
 });
 

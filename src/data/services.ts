@@ -17,7 +17,8 @@ export const serviceHubs: Record<"manutencao" | "qualificacao", ServiceHub> = {
     title: "Manutenção",
     description:
       "Diagnóstico técnico, manutenção preventiva e corretiva para equipamentos de laboratório e instrumentação de processo.",
-    heading: "Do diagnóstico à solução: suporte técnico para manter sua operação funcionando.",
+    heading:
+      "Do diagnóstico à solução: suporte técnico para manter sua operação funcionando.",
     intro:
       "Falhas, instabilidade e desgaste podem comprometer medições e interromper a rotina. A DS Científica avalia o equipamento e as condições de uso para identificar o problema e definir o encaminhamento técnico mais adequado.",
     topics: [
@@ -48,8 +49,8 @@ export const serviceHubs: Record<"manutencao" | "qualificacao", ServiceHub> = {
       },
     ],
     benefits: [
-      "identificação técnica do problema antes da intervenção",
-      "apoio à decisão entre manutenção, calibração ou substituição do equipamento",
+      "organiza o caminho entre problema, diagnóstico, avaliação técnica e solução",
+      "apoia a decisão entre manutenção, calibração ou substituição do equipamento",
       "maior previsibilidade da rotina com ações preventivas quando aplicáveis",
     ],
     quoteInfo: [
@@ -63,36 +64,42 @@ export const serviceHubs: Record<"manutencao" | "qualificacao", ServiceHub> = {
     key: "qualificacao",
     title: "Qualificação",
     description:
-      "Avaliação documentada do desempenho de equipamentos utilizados em laboratório e processo.",
-    heading: "Evidências para conhecer o desempenho do equipamento nas condições de uso.",
+      "Qualificação térmica, mapeamento térmico e avaliação de desempenho de equipamentos conforme aplicação e critérios definidos.",
+    heading:
+      "Evidências sobre desempenho térmico para decisões técnicas mais seguras.",
     intro:
-      "A qualificação considera a finalidade do equipamento, sua condição de operação e os critérios definidos para a aplicação. O objetivo é produzir informações organizadas que apoiem a análise do desempenho e as decisões do processo.",
+      "A qualificação organiza informações sobre finalidade do equipamento, condição de uso, carga, distribuição térmica, pontos críticos e documentação necessária. O resultado é apoiar a análise do desempenho em operação e a tomada de decisão do cliente.",
     topics: [
       {
         title: "Qualificação térmica",
         description:
-          "Avaliação de equipamentos térmicos como autoclaves, estufas, incubadoras, banhos-maria e banhos termostáticos, de acordo com o escopo definido para a aplicação.",
+          "Avaliação de equipamentos térmicos conforme finalidade, condição de uso e critérios definidos para a aplicação.",
       },
       {
         title: "Mapeamento térmico",
         description:
-          "Avaliação da distribuição de temperatura e dos pontos de interesse nas condições estabelecidas para o estudo.",
+          "Levantamento da distribuição de temperatura para entender comportamento, uniformidade e pontos de atenção durante a operação.",
       },
       {
-        title: "Capelas de exaustão",
+        title: "Desempenho dos equipamentos",
         description:
-          "Avaliação definida conforme as características do equipamento, a aplicação e os requisitos informados pelo cliente.",
+          "Análise do comportamento observado em relação à rotina de uso e aos critérios informados pelo cliente.",
       },
       {
-        title: "Documentação dos resultados",
+        title: "Documentação",
         description:
-          "Organização dos resultados e das condições avaliadas para facilitar análise técnica, rastreabilidade e tomada de decisão.",
+          "Registro organizado das condições avaliadas, resultados observados e informações necessárias para análise do processo.",
+      },
+      {
+        title: "Evidências para decisão técnica",
+        description:
+          "Informações estruturadas para apoiar ajustes, liberação de uso, investigação de desvio ou planejamento de manutenção.",
       },
     ],
     benefits: [
-      "amplia a compreensão sobre o desempenho do equipamento em uso",
-      "apoia a identificação e análise de pontos críticos",
-      "organiza evidências para decisões técnicas e rotinas de qualidade",
+      "melhora a compreensão sobre o desempenho do equipamento em uso",
+      "apoia a análise de pontos críticos, distribuição térmica e critérios internos",
+      "organiza evidências para decisões técnicas e documentação do processo",
     ],
     quoteInfo: [
       "tipo de equipamento, volume útil e finalidade",
