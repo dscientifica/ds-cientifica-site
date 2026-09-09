@@ -1,5 +1,6 @@
 export type SolutionKind =
   "calibracao" | "manutencao" | "qualificacao" | "produtos";
+
 export const solutions: {
   key: SolutionKind;
   title: string;
@@ -9,30 +10,31 @@ export const solutions: {
   {
     key: "calibracao",
     title: "Calibração",
-    description: "Conheça suas medições.",
+    description: "Confiança para suas medições e decisões de processo.",
     href: "/calibracao",
   },
   {
     key: "manutencao",
     title: "Manutenção",
-    description: "Cuidado com seus equipamentos.",
+    description: "Diagnóstico e cuidado técnico para manter sua operação funcionando.",
     href: "/manutencao",
   },
   {
     key: "qualificacao",
     title: "Qualificação",
-    description: "Atenção às condições da sua aplicação.",
+    description: "Evidências para avaliar o desempenho dos seus equipamentos.",
     href: "/qualificacao",
   },
   {
     key: "produtos",
     title: "Produtos",
-    description: "Instrumentação para sua operação.",
+    description: "Instrumentação selecionada de acordo com a sua aplicação.",
     href: "/produtos",
   },
 ];
+
 export const principles = [
-  "Foco na sua aplicação",
-  "Análise técnica de cada demanda",
-  "Laboratório e processo na mesma conversa",
+  "Soluções orientadas à aplicação",
+  "Avaliação técnica de cada demanda",
+  "Laboratório e processo em uma única parceria",
 ];
