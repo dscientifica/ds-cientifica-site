@@ -146,7 +146,6 @@ const calibrationEquipmentMedia = {
 const productTypeMedia = {
   "pressao/manometros": "manometro-digital",
   "pressao/transmissores-de-pressao": "pressao",
-  "pressao/pressostatos": "pressao",
   "temperatura/sensores-de-temperatura": "temperatura",
   "temperatura/transmissores-de-temperatura": "temperatura",
   "vazao/medidores-de-vazao": "vazao",

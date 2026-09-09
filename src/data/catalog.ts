@@ -681,14 +681,6 @@ export const productCategories: ProductCategory[] = [
         ["sinal", "configuração", "instalação"],
         ["/calibracao/pressao/transmissores-de-pressao"],
       ),
-      p(
-        "pressostatos",
-        "Pressostatos",
-        "Comutação por ponto de pressão definido.",
-        ["alarmes", "intertravamentos", "controle"],
-        ["atuação", "contato", "conexão"],
-        ["/calibracao/pressao/pressostatos"],
-      ),
     ],
   },
   {
