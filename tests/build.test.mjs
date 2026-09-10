@@ -36,7 +36,6 @@ const routes = [
   "/conteudo-tecnico",
   "/sobre",
   "/contato",
-  "/orcamento",
   "/area-do-cliente",
 ];
 const fileFor = (route) =>
@@ -137,6 +136,11 @@ test("sitemap contains every generated public route while preview robots disallo
   assert.match(headers, /X-Content-Type-Options: nosniff/);
 });
 
+test("legacy quote route redirects permanently to the central contact flow", async () => {
+  const redirects = await readFile("dist/_redirects", "utf8");
+  assert.match(redirects, /^\/orcamento\s+\/contato#orcamento\s+301$/m);
+});
+
 test("pending integrations have no invented destinations or service page", () => {
   for (const [, $] of documents) {
     const hrefs = $("a")
@@ -177,7 +181,6 @@ test("quote form is centralized on contact and budget CTAs resolve there", () =>
     "/qualificacao",
     "/produtos/pressao/manometros",
     "/segmentos/industrial",
-    "/orcamento",
   ]) {
     const $ = documents.get(route);
     assert.ok($('main a[href="/contato#orcamento"]').length >= 1, route);

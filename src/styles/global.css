@@ -113,16 +113,6 @@ summary:focus-visible {
 .skip-link:focus {
   top: 12px;
 }
-.pilot-bar {
-  background: var(--navy);
-  color: #fff;
-  font-size: 0.875rem;
-  text-align: center;
-  padding: 7px 16px;
-}
-.pilot-bar span {
-  color: #cddce7;
-}
 .site-header {
   border-bottom: 1px solid var(--line);
   background: white;
@@ -906,9 +896,6 @@ summary:focus-visible {
 @media (max-width: 760px) {
   .container {
     width: calc(100% - 36px);
-  }
-  .pilot-bar span {
-    display: none;
   }
   .header-main {
     padding-block: 18px;

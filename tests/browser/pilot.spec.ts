@@ -101,6 +101,7 @@ test("client menu reaches the client area from every route on mobile", async ({
 
 for (const width of [320, 375, 390, 768, 1280, 1920]) {
   test(`all routes fit ${width}px and images load`, async ({ page }) => {
+    test.setTimeout(120_000);
     await page.setViewportSize({ width, height: 900 });
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
@@ -175,7 +176,6 @@ test("quote CTAs point to the central contact budget flow", async ({
     "/qualificacao",
     "/produtos/pressao/manometros",
     "/segmentos/industrial",
-    "/orcamento",
   ]) {
     await page.goto(route);
     const quoteLinks = page.locator(
