@@ -1,0 +1,28 @@
+---
+import type { CardData } from "../data/catalog";
+interface Props extends CardData {}
+const { title, description, href, number } = Astro.props;
+---
+
+<article class:list={["card", { "card-active": href }]}>
+  {
+    number && (
+      <span class="card-number" aria-hidden="true">
+        {number}
+      </span>
+    )
+  }
+  <slot /><h3>
+    {
+      href ? (
+        <a href={href}>
+          {title}
+          <span aria-hidden="true">↗</span>
+        </a>
+      ) : (
+        title
+      )
+    }
+  </h3><p>{description}</p>
+  {!href && <span class="status-label">Detalhamento em preparação</span>}
+</article>

@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { pageMedia } from "../data/media";
+---
+
+<BaseLayout
+  title="Sobre a DS"
+  description="Conheça a atuação da DS Científica em metrologia, instrumentação e soluções para laboratórios e processos industriais."
+>
+  <Breadcrumbs
+    items={[{ label: "Início", href: "/" }, { label: "Sobre a DS" }]}
+  />
+  <section class="container minimal-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Sobre a DS</p><h1>Precisão que gera confiança.</h1><p
+          class="lead"
+        >
+          A DS Científica atua na interface entre metrologia, laboratório e
+          instrumentação industrial, apoiando clientes na seleção, calibração,
+          manutenção e qualificação de equipamentos conforme a necessidade da
+          aplicação.
+        </p>
+      </div><PageMedia media={pageMedia.laboratorio} priority />
+    </div>
+  </section>
+  <Section eyebrow="Atuação" title="Medição, processo e decisão técnica."
+    ><div class="split">
+      <div class="prose">
+        <h3>Como trabalhamos</h3><p>
+          A demanda começa pelo entendimento do instrumento, do processo e do
+          uso pretendido. Essa abordagem evita promessas genéricas e permite
+          orientar a proposta com base no contexto informado pelo cliente.
+        </p>
+      </div><div class="prose">
+        <h3>Compromisso técnico</h3><p>
+          Cada demanda é analisada considerando o equipamento, a aplicação e as
+          condições do processo, para orientar a solução de forma coerente com a
+          necessidade do cliente.
+        </p>
+      </div>
+    </div></Section
+  >
+  <Section eyebrow="Soluções" title="Um portfólio conectado." tone="light"
+    ><div class="grid grid-two">
+      <article class="card">
+        <h3><a href="/calibracao">Calibração ↗</a></h3><p>
+          Grandezas e equipamentos organizados por aplicação.
+        </p>
+      </article><article class="card">
+        <h3><a href="/produtos">Produtos ↗</a></h3><p>
+          Instrumentação e equipamentos selecionados conforme processo.
+        </p>
+      </article>
+    </div></Section
+  >
+  <CTA href="/contato#orcamento" />
+</BaseLayout>

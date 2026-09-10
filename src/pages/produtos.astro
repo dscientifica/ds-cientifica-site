@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import Card from "../components/Card.astro";
+import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { pageMedia } from "../data/media";
+import { productCategories } from "../data/catalog";
+---
+
+<BaseLayout
+  title="Produtos"
+  description="Instrumentação e equipamentos para laboratórios e processos industriais, com seleção conforme aplicação."
+>
+  <Breadcrumbs
+    items={[{ label: "Início", href: "/" }, { label: "Produtos" }]}
+  />
+  <section class="container minimal-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Produtos</p><h1>
+          Instrumentos e equipamentos selecionados para a sua aplicação.
+        </h1><p class="lead">
+          A DS Científica apoia a escolha de produtos considerando variável
+          medida, processo, ambiente de uso e documentação necessária.
+        </p><p class="inline-notice">
+          Configurações e especificações dependem da aplicação. Consulte a DS
+          Científica para seleção adequada.
+        </p>
+      </div><PageMedia media={pageMedia.produtos} priority />
+    </div>
+  </section>
+  <Section
+    eyebrow="Categorias"
+    title="Escolha a família de produto."
+    tone="light"
+    ><div class="grid">
+      {
+        productCategories.map((category) => (
+          <Card
+            title={category.title}
+            description={category.description}
+            href={`/produtos/${category.slug}`}
+          />
+        ))
+      }
+    </div></Section
+  >
+  <CTA />
+</BaseLayout>

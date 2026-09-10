@@ -1,0 +1,59 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import Card from "../components/Card.astro";
+import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { mediaForProduct } from "../data/media";
+import type { ProductCategory } from "../data/catalog";
+interface Props {
+  category: ProductCategory;
+}
+const { category } = Astro.props;
+---
+
+<BaseLayout
+  title={`Produtos para ${category.title}`}
+  description={category.description}
+>
+  <Breadcrumbs
+    items={[
+      { label: "Início", href: "/" },
+      { label: "Produtos", href: "/produtos" },
+      { label: category.title },
+    ]}
+  />
+  <section class="container minimal-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Produtos</p><h1>{category.title}</h1><p class="lead">
+          {category.description}
+        </p><p>{category.intro}</p><p class="inline-notice">
+          Configurações e especificações disponíveis conforme a aplicação.
+          Consulte a DS Científica para dimensionamento e seleção.
+        </p>
+      </div><PageMedia media={mediaForProduct(category.slug)} priority />
+    </div>
+  </section>
+  <Section
+    eyebrow="Tipos de produto"
+    title="Selecione a família comercial."
+    tone="light"
+    ><div class="grid">
+      {
+        category.types.map((type) => (
+          <Card
+            title={type.title}
+            description={type.description}
+            href={`/produtos/${category.slug}/${type.slug}`}
+          />
+        ))
+      }
+    </div></Section
+  >
+  <CTA
+    title={`Precisa de orçamento para produtos de ${category.title}?`}
+    context={`Produtos / ${category.title}`}
+  />
+</BaseLayout>

@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { pageMedia } from "../data/media";
+const articles = [
+  {
+    title: "Como preparar informações para solicitar calibração",
+    href: "/calibracao",
+    summary:
+      "Dados mínimos sobre instrumento, faixa usada, quantidade e aplicação reduzem retrabalho na análise técnica.",
+  },
+  {
+    title: "Escolha de instrumentação começa pela variável medida",
+    href: "/produtos",
+    summary:
+      "Processo, fluido, ambiente, sinal e documentação orientam a seleção de tecnologia.",
+  },
+  {
+    title: "Qualificação térmica depende do uso real do equipamento",
+    href: "/qualificacao",
+    summary:
+      "Carga, pontos críticos, rotina e critério interno precisam ser definidos antes do escopo.",
+  },
+];
+---
+
+<BaseLayout
+  title="Conteúdo Técnico"
+  description="Conteúdo técnico da DS Científica sobre metrologia, instrumentação, calibração, manutenção e qualificação."
+>
+  <Breadcrumbs
+    items={[{ label: "Início", href: "/" }, { label: "Conteúdo Técnico" }]}
+  />
+  <section class="container minimal-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Conteúdo Técnico</p><h1>
+          Informação para especificar melhor.
+        </h1><p class="lead">
+          Esta área reúne guias objetivos para ajudar na preparação de
+          solicitações e na escolha de caminhos técnicos dentro do site.
+        </p>
+      </div><PageMedia media={pageMedia.conteudo} priority />
+    </div>
+  </section>
+  <Section eyebrow="Guias iniciais" title="Comece por estes temas." tone="light"
+    ><div class="grid">
+      {
+        articles.map((article) => (
+          <article class="card">
+            <>
+              <h3>
+                <a href={article.href}>{article.title} ↗</a>
+              </h3>
+              <p>{article.summary}</p>
+            </>
+          </article>
+        ))
+      }
+    </div></Section
+  >
+  <CTA href="/contato#orcamento" />
+</BaseLayout>

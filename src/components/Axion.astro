@@ -1,0 +1,40 @@
+---
+import { axionUrl } from "../config/site";
+---
+
+<section id="axion" class="client-band" aria-labelledby="axion-title">
+  <div class="container client-band-inner">
+    <div>
+      <p class="eyebrow">AXION / Gestão dos seus ativos</p><h2 id="axion-title">
+        Tenha o controle dos seus equipamentos em um só lugar.
+      </h2><p>
+        Acompanhe certificados, histórico de calibrações, equipamentos e
+        próximas calibrações de forma organizada e centralizada.
+      </p>
+    </div>
+    <div class="client-band-action">
+      {
+        axionUrl ? (
+          <a class="button" href={axionUrl}>
+            Acessar AXION <span aria-hidden="true">↗</span>
+          </a>
+        ) : (
+          <>
+            <button
+              class="button"
+              type="button"
+              disabled
+              aria-describedby="axion-pending"
+            >
+              Em breve
+            </button>
+            <p id="axion-pending">
+              Estamos preparando a nova Área do Cliente AXION. Em breve
+              disponível.
+            </p>
+          </>
+        )
+      }
+    </div>
+  </div>
+</section>
