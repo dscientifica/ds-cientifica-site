@@ -1,0 +1,15 @@
+---
+import ProductTypeLayout from "../../../layouts/ProductTypeLayout.astro";
+import { productCategories } from "../../../data/catalog";
+export function getStaticPaths() {
+  return productCategories.flatMap((category) =>
+    category.types.map((type) => ({
+      params: { category: category.slug, type: type.slug },
+      props: { category, type },
+    })),
+  );
+}
+const { category, type } = Astro.props;
+---
+
+<ProductTypeLayout category={category} type={type} />

@@ -1,0 +1,4 @@
+name = "ds-cientifica-site-preview"
+pages_build_output_dir = "./dist"
+# Keep Cloudflare Pages on the static Astro output and preserve the custom 404 page.
+not_found_handling = "404-page"

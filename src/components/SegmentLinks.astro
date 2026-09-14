@@ -1,0 +1,76 @@
+---
+import { segments } from "../data/segments";
+
+interface Props {
+  variant?: "home" | "chips";
+  industrialLabel?: "short" | "extended";
+}
+
+const { variant = "chips", industrialLabel = "short" } = Astro.props;
+const items = segments.map((segment) => ({
+  label:
+    industrialLabel === "extended" && segment.extendedLabel
+      ? segment.extendedLabel
+      : segment.navigationLabel,
+  href: segment.href,
+}));
+---
+
+<ul class:list={["segment-links", `segment-links-${variant}`]}>
+  {
+    items.map((segment) => (
+      <li>
+        <a href={segment.href}>{segment.label}</a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .segment-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .segment-links a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 11px 18px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: white;
+    color: var(--navy);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 5px;
+  }
+  .segment-links a:hover,
+  .segment-links a:focus-visible {
+    border-color: var(--magenta);
+    color: var(--magenta);
+    text-decoration-color: currentcolor;
+  }
+  .segment-links-home {
+    justify-content: center;
+    gap: 12px 28px;
+    margin-top: 24px;
+    color: var(--muted);
+  }
+  .segment-links-home a {
+    min-height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+  }
+  .segment-links-home a:hover,
+  .segment-links-home a:focus-visible {
+    color: var(--magenta);
+  }
+</style>

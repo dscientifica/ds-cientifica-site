@@ -1,0 +1,84 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { mediaForProduct } from "../data/media";
+import type { ProductCategory, ProductType } from "../data/catalog";
+interface Props {
+  category: ProductCategory;
+  type: ProductType;
+}
+const { category, type } = Astro.props;
+---
+
+<BaseLayout title={`${type.title} | Produtos`} description={type.description}>
+  <Breadcrumbs
+    items={[
+      { label: "Início", href: "/" },
+      { label: "Produtos", href: "/produtos" },
+      { label: category.title, href: `/produtos/${category.slug}` },
+      { label: type.title },
+    ]}
+  />
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">Produtos / {category.title}</p><h1>
+          {type.title}
+        </h1><p class="lead">{type.description}</p><p class="hero-note">
+          Configurações e especificações disponíveis conforme a aplicação.
+          Consulte a DS Científica para dimensionamento e seleção.
+        </p><a class="button" href="/contato#orcamento"
+          >Solicitar seleção <span aria-hidden="true">↗</span></a
+        >
+      </div><div class="hero-media-stack">
+        <PageMedia media={mediaForProduct(category.slug, type.slug)} priority />
+        <aside class="topic-panel topic-panel-compact">
+          <p class="eyebrow">O que considerar</p>{
+            type.criteria.map((item) => (
+              <div class="topic-item">
+                <span>{item}</span>
+              </div>
+            ))
+          }
+        </aside>
+      </div>
+    </div>
+  </section>
+  <Section
+    eyebrow="Aplicações"
+    title="Onde essa família pode apoiar a operação."
+    ><ul class="check-list">
+      {type.applications.map((item) => <li>{item}</li>)}
+    </ul></Section
+  >
+  {
+    type.relatedServices.length > 0 && (
+      <Section
+        eyebrow="Serviços relacionados"
+        title="Integração com calibração, manutenção ou qualificação."
+        tone="light"
+      >
+        <div class="grid grid-two">
+          {type.relatedServices.map((href) => (
+            <article class="card">
+              <h3>
+                <a href={href}>Serviço relacionado ↗</a>
+              </h3>
+              <p>
+                Use esta conexão para avaliar fornecimento, calibração ou
+                documentação do instrumento no mesmo fluxo comercial.
+              </p>
+            </article>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+  <CTA
+    title={`Precisa de orçamento para ${type.title}?`}
+    context={`Produtos / ${category.title} / ${type.title}`}
+  />
+</BaseLayout>

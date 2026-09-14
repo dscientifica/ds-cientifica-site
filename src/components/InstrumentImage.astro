@@ -1,0 +1,22 @@
+---
+import { Image } from "astro:assets";
+import gaugeImage from "../assets/manometro-digital.png";
+interface Props {
+  priority?: boolean;
+}
+const { priority = false } = Astro.props;
+---
+
+<figure class="instrument-image">
+  <Image
+    src={gaugeImage}
+    alt="Ilustração de manômetro digital sem marca, com visor desligado e conexão metálica inferior."
+    widths={[400, 800, 1200]}
+    sizes="(max-width: 760px) 100vw, 50vw"
+    format="webp"
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : "auto"}
+  /><figcaption>
+    Imagem ilustrativa gerada por IA · não representa equipamento da DS
+  </figcaption>
+</figure>

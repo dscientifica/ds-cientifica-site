@@ -1,0 +1,15 @@
+---
+import CalibrationEquipmentLayout from "../../../layouts/CalibrationEquipmentLayout.astro";
+import { calibrationQuantities } from "../../../data/catalog";
+export function getStaticPaths() {
+  return calibrationQuantities.flatMap((quantity) =>
+    quantity.equipment.map((equipment) => ({
+      params: { quantity: quantity.slug, equipment: equipment.slug },
+      props: { quantity, equipment },
+    })),
+  );
+}
+const { quantity, equipment } = Astro.props;
+---
+
+<CalibrationEquipmentLayout quantity={quantity} equipment={equipment} />

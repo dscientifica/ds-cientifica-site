@@ -1,0 +1,117 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import CTA from "../components/CTA.astro";
+import SegmentLinks from "../components/SegmentLinks.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { mediaForEquipment } from "../data/media";
+import {
+  quoteInfo,
+  rangeMessage,
+  type CalibrationEquipment,
+  type CalibrationQuantity,
+} from "../data/catalog";
+interface Props {
+  quantity: CalibrationQuantity;
+  equipment: CalibrationEquipment;
+}
+const { quantity, equipment } = Astro.props;
+const title = `Calibração de ${equipment.title}`;
+---
+
+<BaseLayout
+  title={title}
+  description={`${equipment.description} Consulte a DS Científica para avaliação da faixa e características da aplicação.`}
+>
+  <Breadcrumbs
+    items={[
+      { label: "Início", href: "/" },
+      { label: "Calibração", href: "/calibracao" },
+      { label: quantity.title, href: `/calibracao/${quantity.slug}` },
+      { label: equipment.title },
+    ]}
+  />
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">Calibração / {quantity.title}</p><h1>{title}</h1><p
+          class="lead"
+        >
+          {equipment.description}
+        </p><p class="hero-note">{rangeMessage}</p><a
+          class="button"
+          href="/contato#orcamento"
+          >Solicitar orçamento <span aria-hidden="true">↗</span></a
+        >
+      </div><div class="hero-media-stack">
+        <PageMedia
+          media={mediaForEquipment(quantity.slug, equipment.slug)}
+          priority
+        />
+        <aside class="topic-panel topic-panel-compact">
+          <p class="eyebrow">O que informar</p>{
+            equipment.criteria.map((item) => (
+              <div class="topic-item">
+                <span>{item}</span>
+              </div>
+            ))
+          }
+        </aside>
+      </div>
+    </div>
+  </section>
+  <Section eyebrow="Equipamento" title="O que é e onde entra no processo."
+    ><div class="split">
+      <div class="prose">
+        <h3>Função</h3><p>{equipment.family}.</p><p>{equipment.principle}.</p>
+      </div><div class="prose">
+        <h3>Aplicações comuns</h3><ul>
+          {equipment.applications.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div></Section
+  >
+  <Section
+    eyebrow="Calibração"
+    title="Resultado útil para decisão."
+    tone="light"
+    ><div class="split">
+      <div class="prose">
+        <h3>O que a calibração ajuda a resolver</h3><p>
+          Ajuda a identificar desvios de indicação, comparar comportamento com
+          requisitos internos e documentar informações necessárias para análise
+          crítica da medição.
+        </p>
+      </div><div class="prose">
+        <h3>Rastreabilidade e conformidade</h3><p>
+          Os resultados devem ser interpretados com a incerteza de medição,
+          condições do serviço e critério de aceitação definido, quando
+          aplicável. Quando aplicável, critérios de aceitação e regras de
+          decisão devem ser definidos para a avaliação de conformidade.
+        </p>
+      </div>
+    </div>{
+      equipment.caution && <p class="inline-notice">{equipment.caution}</p>
+    }</Section
+  >
+  <Section eyebrow="Orçamento" title="Informações necessárias"
+    ><ul class="check-list">
+      {
+        (equipment.slug === "manometros" ? quoteInfo : quoteInfo).map(
+          (item) => <li>{item}</li>,
+        )
+      }
+    </ul></Section
+  >
+  <Section
+    eyebrow="Segmentos"
+    title="Atendimento orientado pela aplicação."
+    tone="light"
+    ><SegmentLinks variant="chips" industrialLabel="extended" /></Section
+  >
+  <CTA
+    title={`Precisa de orçamento para calibração de ${equipment.title}?`}
+    context={`Calibração / ${quantity.title} / ${equipment.title}`}
+  />
+</BaseLayout>

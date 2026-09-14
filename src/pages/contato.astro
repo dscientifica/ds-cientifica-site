@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import QuoteForm from "../components/QuoteForm.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { pageMedia } from "../data/media";
+---
+
+<BaseLayout
+  title="Contato e orçamento"
+  description="Solicite avaliação comercial para calibração, manutenção, qualificação e produtos da DS Científica."
+>
+  <Breadcrumbs items={[{ label: "Início", href: "/" }, { label: "Contato" }]} />
+  <section class="container minimal-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Vamos conversar</p><h1>
+          Seu processo exige precisão. A DS Científica entrega a solução.
+        </h1><p class="lead">
+          Conte o que você precisa medir, calibrar, manter ou qualificar. A DS
+          Científica avalia a aplicação e orienta a solução mais adequada.
+        </p><a class="button" href="#orcamento">Solicitar orçamento ↗</a>
+      </div><PageMedia media={pageMedia.processo} priority />
+    </div>
+  </section>
+  <QuoteForm />
+</BaseLayout>

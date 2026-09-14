@@ -1,0 +1,57 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import CTA from "../components/CTA.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { mediaForKey } from "../data/media";
+import type { ServiceHub } from "../data/services";
+interface Props {
+  hub: ServiceHub;
+}
+const { hub } = Astro.props;
+---
+
+<BaseLayout title={hub.title} description={hub.description}>
+  <Breadcrumbs items={[{ label: "Início", href: "/" }, { label: hub.title }]} />
+  <section class="container minimal-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Soluções DS Científica</p><h1>{hub.title}</h1><p
+          class="lead"
+        >
+          {hub.description}
+        </p><a class="button" href="/contato#orcamento"
+          >Solicitar orçamento <span aria-hidden="true">↗</span></a
+        >
+      </div><PageMedia media={mediaForKey(hub.key)} priority />
+    </div><h2>{hub.heading}</h2><p class="lead">{hub.intro}</p><div
+      class="hub-topics"
+    >
+      {
+        hub.topics.map((topic) => (
+          <article>
+            <>
+              <h3>{topic.title}</h3>
+              <p>{topic.description}</p>
+            </>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+  <Section
+    eyebrow="Benefícios"
+    title="Decisão técnica com impacto operacional."
+    tone="light"
+    ><ul class="check-list">
+      {hub.benefits.map((item) => <li>{item}</li>)}
+    </ul></Section
+  >
+  <Section eyebrow="Orçamento" title="Informações que aceleram a análise."
+    ><ul class="check-list">
+      {hub.quoteInfo.map((item) => <li>{item}</li>)}
+    </ul></Section
+  >
+  <CTA context={`/${hub.key}`} />
+</BaseLayout>

@@ -1,0 +1,140 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Axion from "../components/Axion.astro";
+import PageMedia from "../components/PageMedia.astro";
+import SegmentLinks from "../components/SegmentLinks.astro";
+import { solutions, principles } from "../data/home";
+import { mediaForKey, pageMedia } from "../data/media";
+import { site, whatsappUrl } from "../config/site";
+import "../styles/home.css";
+---
+
+<BaseLayout
+  title="Metrologia e instrumentação industrial"
+  description="Calibração, manutenção, qualificação e instrumentação para laboratórios e processos industriais. Conheça as soluções da DS Científica."
+>
+  <section class="home-hero container">
+    <div class="home-hero-copy">
+      <p class="eyebrow">Precisão que gera confiança.</p>
+      <h1>Mais que medições, <span>resultados para o seu negócio.</span></h1>
+      <p class="home-subtitle">
+        Calibração, manutenção, qualificação e instrumentação para laboratórios
+        e processos industriais.
+      </p>
+      <div class="home-actions">
+        <a class="button" href="/contato#orcamento"
+          >Solicitar orçamento <span aria-hidden="true">↗</span></a
+        ><a class="button button-outline" href="/calibracao"
+          >Conheça nossas soluções <span aria-hidden="true">↗</span></a
+        >
+      </div>
+    </div>
+    <div
+      class="home-hero-media"
+      aria-label="Laboratório e instrumentação industrial"
+    >
+      <PageMedia media={pageMedia.processo} priority class="home-hero-photo" />
+    </div>
+  </section>
+  <section
+    class="home-solutions container"
+    id="solucoes"
+    aria-labelledby="solutions-title"
+  >
+    <div class="home-section-heading">
+      <p class="eyebrow">Nossas soluções</p><h2 id="solutions-title">
+        Precisão e suporte para cada etapa da sua operação
+      </h2>
+    </div>
+    <div class="solution-paths">
+      {
+        solutions.map((solution) => (
+          <a
+            class:list={["solution-path", solution.key]}
+            href={solution.href}
+            aria-labelledby={`solution-${solution.key}`}
+          >
+            <div class="solution-art">
+              <PageMedia media={mediaForKey(solution.key)} compact />
+              <span class="solution-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </div>
+            <div class="solution-copy">
+              <>
+                <h3 id={`solution-${solution.key}`}>{solution.title}</h3>
+                <p>{solution.description}</p>
+              </>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+  <section
+    class="home-principles container"
+    id="sobre"
+    aria-labelledby="why-title"
+  >
+    <div class="home-section-heading">
+      <p class="eyebrow">Por que DS Científica</p><h2 id="why-title">
+        Atenção ao que importa.
+      </h2>
+    </div><ul>
+      {
+        principles.map((item, index) => (
+          <li>
+            <>
+              <span aria-hidden="true">0{index + 1}</span>
+              <h3>{item}</h3>
+            </>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  <section
+    class="home-segments"
+    id="segmentos"
+    aria-labelledby="segments-title"
+  >
+    <div class="container">
+      <h2 id="segments-title">
+        Da rotina do laboratório ao processo industrial.
+      </h2><SegmentLinks variant="home" />
+    </div>
+  </section>
+  <Axion />
+  <section
+    class="home-contact container"
+    id="contato"
+    aria-labelledby="contact-title"
+  >
+    <p class="eyebrow">Vamos conversar</p><h2 id="contact-title">
+      Seu processo exige precisão. A DS Científica entrega a solução.
+    </h2><p class="contact-invitation">
+      Conte o que você precisa medir, calibrar, manter ou qualificar. A DS
+      Científica avalia a aplicação e orienta a solução mais adequada.
+    </p>
+    <div class="home-actions">
+      <a class="button" href="/contato#orcamento"
+        >Solicitar orçamento <span aria-hidden="true">↗</span></a
+      >{
+        whatsappUrl && (
+          <a class="button" href={whatsappUrl}>
+            Conversar pelo WhatsApp ↗
+          </a>
+        )
+      }{
+        site.contacts.email && (
+          <a
+            class="button button-outline"
+            href={`mailto:${site.contacts.email}`}
+          >
+            Enviar e-mail ↗
+          </a>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

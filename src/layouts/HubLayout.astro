@@ -1,0 +1,44 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { mediaForKey } from "../data/media";
+import type { Hub } from "../data/hubs";
+import "../styles/home.css";
+interface Props {
+  hub: Hub;
+}
+const { hub } = Astro.props;
+---
+
+<BaseLayout title={hub.title} description={hub.description}>
+  <Breadcrumbs items={[{ label: "Início", href: "/" }, { label: hub.title }]} />
+  <section class="container minimal-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">Soluções DS Científica</p><h1>{hub.title}</h1><p
+          class="lead"
+        >
+          {hub.description}
+        </p><a class="button" href="/contato#orcamento"
+          >Solicitar orçamento <span aria-hidden="true">↗</span></a
+        >
+      </div><PageMedia media={mediaForKey(hub.key)} priority />
+    </div>
+    <h2>{hub.heading}</h2><div class="hub-topics">
+      {
+        hub.topics.map((topic) => (
+          <article>
+            <>
+              <h3>{topic.title}</h3>
+              <p>{topic.description}</p>
+            </>
+          </article>
+        ))
+      }
+    </div>
+    <p class="hub-note">{hub.note}</p><a class="text-link" href="/calibracao"
+      >Conheça outras soluções ↗</a
+    >
+  </section>
+</BaseLayout>

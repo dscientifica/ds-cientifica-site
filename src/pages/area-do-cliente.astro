@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Section from "../components/Section.astro";
+import PageMedia from "../components/PageMedia.astro";
+import { axionUrl } from "../config/site";
+import { pageMedia } from "../data/media";
+---
+
+<BaseLayout
+  title="Área do Cliente"
+  description="Área do Cliente AXION para gestão de ativos, equipamentos, certificados e histórico de calibrações da DS Científica."
+>
+  <Breadcrumbs
+    items={[{ label: "Início", href: "/" }, { label: "Área do Cliente" }]}
+  />
+  <section class="container minimal-hub">
+    <div class="minimal-hub-heading">
+      <div>
+        <p class="eyebrow">AXION / Gestão dos seus ativos</p><h1>
+          Tenha o controle dos seus equipamentos em um só lugar.
+        </h1><p class="lead">
+          Acompanhe certificados, histórico de calibrações, equipamentos e
+          próximas calibrações de forma organizada e centralizada.
+        </p>{
+          axionUrl ? (
+            <a class="button" href={axionUrl}>
+              Acessar AXION <span aria-hidden="true">↗</span>
+            </a>
+          ) : (
+            <button class="button" disabled>
+              Em breve
+            </button>
+          )
+        }
+      </div><PageMedia media={pageMedia.cliente} priority />
+    </div>
+  </section>
+  <Section
+    eyebrow="Área do Cliente"
+    title="Um ponto central para organizar informações dos seus equipamentos."
+    tone="light"
+    ><div class="split">
+      <div class="prose">
+        <h3>Site DS Científica</h3><p>
+          Apresenta soluções, produtos, segmentos e formas de iniciar uma
+          solicitação comercial.
+        </p>
+      </div><div class="prose">
+        <h3>AXION</h3><p>
+          Ambiente dedicado à gestão de certificados, equipamentos e histórico
+          de calibrações.
+        </p>
+      </div>
+    </div></Section
+  >
+</BaseLayout>

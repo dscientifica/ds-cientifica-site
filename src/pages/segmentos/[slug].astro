@@ -1,0 +1,16 @@
+---
+import SegmentLayout from "../../layouts/SegmentLayout.astro";
+import { segmentBySlug, segments } from "../../data/segments";
+
+export function getStaticPaths() {
+  return segments.map((segment) => ({
+    params: { slug: segment.slug },
+    props: { segment },
+  }));
+}
+
+const { slug } = Astro.params;
+const segment = Astro.props.segment ?? segmentBySlug[slug ?? ""];
+---
+
+<SegmentLayout segment={segment} />
