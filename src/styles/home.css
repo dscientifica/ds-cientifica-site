@@ -88,6 +88,9 @@
   line-height: 1.42;
   color: #5a6b78;
 }
+.home-subtitle span {
+  display: block;
+}
 .home-hero-proof {
   position: relative;
   max-width: 15ch;
@@ -99,6 +102,9 @@
   line-height: 1.35;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+.home-hero-proof span {
+  display: block;
 }
 .home-hero-proof::before {
   content: "";
@@ -475,17 +481,23 @@
     font-size: clamp(2.6rem, 12.8vw, 4.2rem);
   }
   .home-subtitle {
-    max-width: 22ch;
+    max-width: calc(100vw - 44px);
     margin-top: 20px;
-    font-size: clamp(1.02rem, 4.8vw, 1.35rem);
-    line-height: 1.42;
+    font-size: clamp(0.78rem, 3.35vw, 1.05rem);
+    line-height: 1.35;
+  }
+  .home-subtitle span {
+    white-space: nowrap;
   }
   .home-hero-proof {
-    max-width: 17ch;
+    max-width: calc(100vw - 86px);
     margin-top: 48px;
     padding-left: 18px;
-    font-size: 0.66rem;
+    font-size: 0.68rem;
     letter-spacing: 0.1em;
+  }
+  .home-hero-proof span {
+    white-space: nowrap;
   }
   .home-hero-highlights {
     grid-template-columns: repeat(4, minmax(0, 1fr));
