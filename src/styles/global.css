@@ -378,9 +378,6 @@ summary:focus-visible {
 .segment-equipment-card .page-media img {
   aspect-ratio: 16 / 10;
 }
-.segment-equipment-card .page-media figcaption {
-  display: none;
-}
 .solutions {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1138,13 +1135,6 @@ summary:focus-visible {
 .page-media-contain img {
   object-fit: contain;
   background: #eef2f5;
-}
-.page-media figcaption {
-  padding: 10px 14px;
-  background: #edf1f4;
-  color: #526474;
-  font-size: 0.75rem;
-  line-height: 1.45;
 }
 .page-media-pending img {
   filter: saturate(0.92) contrast(0.98);

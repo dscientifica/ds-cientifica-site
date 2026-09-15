@@ -430,6 +430,12 @@ test("page visuals use controlled photographic media instead of large generic ic
   for (const [route, expectedSources] of Object.entries(routeMedia)) {
     const $ = documents.get(route);
     assert.ok($(".page-media img").length >= 1, route);
+    assert.equal($(".page-media figcaption").length, 0, route);
+    assert.doesNotMatch(
+      $(".page-media").text(),
+      /Imagem contextual para apoio à navegação/i,
+      route,
+    );
     const actualSources = $(".page-media img")
       .map((_, image) => $(image).attr("src"))
       .get();
