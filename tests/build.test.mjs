@@ -266,6 +266,27 @@ test("Home is a clean commercial hub with segment navigation", () => {
   assert.equal($("#axion button[disabled]").length, 1);
 });
 
+test("product pages use contextual visual cards and solution-oriented footer copy", () => {
+  const products = documents.get("/produtos");
+  assert.equal(
+    products(".card .card-media img").length,
+    productCategories.length,
+  );
+  assert.doesNotMatch(
+    products(".site-footer").text(),
+    /Metrologia e instrumentação|Metrologia, instrumentação/i,
+  );
+  assert.match(
+    products(".site-footer").text(),
+    /Soluções para laboratórios e processos industriais/,
+  );
+
+  for (const category of productCategories) {
+    const $ = documents.get(`/produtos/${category.slug}`);
+    assert.equal($(".card .card-media img").length, category.types.length);
+  }
+});
+
 test("segment pages connect applications, solutions and catalog items", () => {
   const expectations = {
     "/segmentos/farmaceutico": [

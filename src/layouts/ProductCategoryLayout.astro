@@ -47,7 +47,13 @@ const { category } = Astro.props;
             title={type.title}
             description={type.description}
             href={`/produtos/${category.slug}/${type.slug}`}
-          />
+          >
+            <PageMedia
+              media={mediaForProduct(category.slug, type.slug)}
+              compact
+              class="card-media"
+            />
+          </Card>
         ))
       }
     </div></Section

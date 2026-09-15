@@ -5,7 +5,7 @@ import Section from "../components/Section.astro";
 import Card from "../components/Card.astro";
 import CTA from "../components/CTA.astro";
 import PageMedia from "../components/PageMedia.astro";
-import { pageMedia } from "../data/media";
+import { mediaForProduct, pageMedia } from "../data/media";
 import { productCategories } from "../data/catalog";
 ---
 
@@ -42,7 +42,13 @@ import { productCategories } from "../data/catalog";
             title={category.title}
             description={category.description}
             href={`/produtos/${category.slug}`}
-          />
+          >
+            <PageMedia
+              media={mediaForProduct(category.slug)}
+              compact
+              class="card-media"
+            />
+          </Card>
         ))
       }
     </div></Section
