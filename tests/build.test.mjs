@@ -419,7 +419,7 @@ test("page visuals use controlled photographic media instead of large generic ic
     "/produtos/pressao/manometros": ["/visuals/manometro-digital.webp"],
     "/produtos/vazao/medidores-de-vazao": ["/visuals/vazao.webp"],
     "/produtos/nivel/instrumentos-de-nivel": ["/visuals/nivel.webp"],
-    "/segmentos": ["/visuals/segmentos.webp"],
+    "/segmentos": ["/visuals/processo.webp"],
     "/segmentos/farmaceutico": ["/visuals/laboratorio.webp"],
     "/segmentos/industrial": ["/visuals/processo.webp"],
     "/conteudo-tecnico": ["/visuals/conteudo.webp"],

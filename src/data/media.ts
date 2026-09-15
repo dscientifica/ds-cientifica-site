@@ -35,8 +35,8 @@ export const pageMedia = {
     fit: "contain",
   },
   segmentos: {
-    src: "/visuals/segmentos.webp",
-    alt: "Ambiente laboratorial com equipamentos de apoio e bancada técnica, sem marcas ou identificação de cliente.",
+    src: "/visuals/processo.webp",
+    alt: "Bancada de instrumentação de processo em ambiente técnico industrial e laboratorial, sem marcas ou identificação de cliente.",
     caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
