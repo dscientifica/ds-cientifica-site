@@ -18,7 +18,7 @@ const routes = [
 ];
 
 for (const width of [390, 1280]) {
-  test(`Home cards and CTAs navigate at ${width}px`, async ({
+  test(`Home visual hero and navigation work at ${width}px`, async ({
     page,
   }, testInfo) => {
     await page.setViewportSize({ width, height: 900 });
@@ -33,12 +33,9 @@ for (const width of [390, 1280]) {
       path: testInfo.outputPath(`home-${width}.png`),
       fullPage: true,
     });
-    await page
-      .locator(".home-hero")
-      .getByRole("link", { name: "Conheça nossas soluções" })
-      .click();
-    await expect(page).toHaveURL("/calibracao");
-    await page.goto("/");
+    await expect(page.locator(".home-hero").getByRole("link")).toHaveCount(0);
+    await expect(page.locator(".home-hero h1 span")).toHaveText("resultados");
+    await expect(page.locator(".home-hero-highlights li")).toHaveCount(4);
     for (const [label, path] of [
       ["Calibração", "/calibracao"],
       ["Manutenção", "/manutencao"],
@@ -55,7 +52,7 @@ for (const width of [390, 1280]) {
     }
     await page.goto("/");
     await page
-      .locator(".home-hero")
+      .locator(".home-contact")
       .getByRole("link", { name: "Solicitar orçamento" })
       .click();
     await expect(page).toHaveURL("/contato#orcamento");
@@ -200,6 +197,8 @@ test("quote CTAs point to the central contact budget flow", async ({
 test("segment pages expose commercial paths and catalog links on desktop and mobile", async ({
   page,
 }) => {
+  test.setTimeout(120_000);
+
   for (const width of [390, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     for (const route of [

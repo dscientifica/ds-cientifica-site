@@ -13,27 +13,53 @@ import "../styles/home.css";
   title="Metrologia e instrumentação industrial"
   description="Calibração, manutenção, qualificação e instrumentação para laboratórios e processos industriais. Conheça as soluções da DS Científica."
 >
-  <section class="home-hero container">
-    <div class="home-hero-copy">
-      <p class="eyebrow">Precisão que gera confiança.</p>
-      <h1>Mais que medições, <span>resultados para o seu negócio.</span></h1>
-      <p class="home-subtitle">
-        Calibração, manutenção, qualificação e instrumentação para laboratórios
-        e processos industriais.
-      </p>
-      <div class="home-actions">
-        <a class="button" href="/contato#orcamento"
-          >Solicitar orçamento <span aria-hidden="true">↗</span></a
-        ><a class="button button-outline" href="/calibracao"
-          >Conheça nossas soluções <span aria-hidden="true">↗</span></a
-        >
+  <section class="home-hero" aria-labelledby="home-title">
+    <div class="home-hero-inner container">
+      <div class="home-hero-copy">
+        <p class="eyebrow">Precisão que gera confiança.</p>
+        <h1 id="home-title">
+          Mais que medições, <span>resultados</span> para o seu negócio.
+        </h1>
+        <p class="home-subtitle">
+          Calibração, manutenção, qualificação e instrumentação para
+          laboratórios e processos industriais.
+        </p>
       </div>
-    </div>
-    <div
-      class="home-hero-media"
-      aria-label="Laboratório e instrumentação industrial"
-    >
-      <PageMedia media={pageMedia.processo} priority class="home-hero-photo" />
+      <div
+        class="home-hero-media"
+        aria-label="Instrumentação industrial em ambiente técnico limpo"
+      >
+        <PageMedia
+          media={pageMedia.processo}
+          priority
+          class="home-hero-photo"
+        />
+      </div>
+      <ul
+        class="home-hero-highlights"
+        aria-label="Diferenciais da DS Científica"
+      >
+        <li>
+          <span aria-hidden="true">◎</span><strong>Confiabilidade</strong><em
+            >nos resultados</em
+          >
+        </li>
+        <li>
+          <span aria-hidden="true">⚙</span><strong>Suporte técnico</strong><em
+            >especializado</em
+          >
+        </li>
+        <li>
+          <span aria-hidden="true">◇</span><strong>Soluções</strong><em
+            >sob medida</em
+          >
+        </li>
+        <li>
+          <span aria-hidden="true">↔</span><strong>Parceria</strong><em
+            >para o seu negócio</em
+          >
+        </li>
+      </ul>
     </div>
   </section>
   <section

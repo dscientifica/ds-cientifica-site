@@ -212,6 +212,15 @@ test("Home is a clean commercial hub with segment navigation", () => {
     $("#solutions-title").text(),
     /Precisão e suporte para cada etapa da sua operação/,
   );
+  assert.equal($(".home-hero h1 span").text().trim(), "resultados");
+  assert.equal($(".home-hero a").length, 0);
+  assert.deepEqual(
+    $(".home-hero-highlights strong")
+      .map((_, el) => $(el).text().trim())
+      .get(),
+    ["Confiabilidade", "Suporte técnico", "Soluções", "Parceria"],
+  );
+  assert.equal($(".home-contact a[href='/contato#orcamento']").length, 1);
   assert.deepEqual(
     $("#solucoes a")
       .map((_, el) => $(el).attr("href"))
