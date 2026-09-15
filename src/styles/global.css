@@ -1160,41 +1160,9 @@ summary:focus-visible {
 .topic-panel-compact .eyebrow {
   margin-bottom: 4px;
 }
-.hero-steps {
-  margin-top: 28px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 22px;
-  background: white;
-  max-width: 520px;
-}
-.hero-steps .eyebrow {
-  margin-bottom: 10px;
-}
-.hero-steps h2 {
-  font-size: 1.25rem;
-  max-width: none;
-  margin-bottom: 8px;
-}
-.hero-steps a {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: 0.9375rem;
-  font-weight: 700;
-}
-.hero-steps p {
-  font-size: 0.875rem;
-  margin-top: 14px;
-}
 @media (max-width: 760px) {
   .page-media img {
     max-height: 240px;
-  }
-  .hero-steps {
-    padding: 18px;
   }
 }
 
