@@ -304,6 +304,12 @@ test("segment pages connect applications, solutions and catalog items", () => {
   for (const [route, expectedLinks] of Object.entries(expectations)) {
     const $ = documents.get(route);
     assert.ok($(".segment-application-list li").length >= 4, route);
+    assert.ok(
+      $(".minimal-hub-heading .page-media img")
+        .attr("src")
+        ?.startsWith("/visuals/segmento-"),
+      route,
+    );
     assert.ok($(".segment-solution-grid .card").length >= 5, route);
     assert.ok($(".segment-relation-group").length >= 2, route);
     assert.ok($(".segment-equipment-card").length >= 8, route);
@@ -419,9 +425,23 @@ test("page visuals use controlled photographic media instead of large generic ic
     "/produtos/pressao/manometros": ["/visuals/manometro-digital.webp"],
     "/produtos/vazao/medidores-de-vazao": ["/visuals/vazao.webp"],
     "/produtos/nivel/instrumentos-de-nivel": ["/visuals/nivel.webp"],
-    "/segmentos": ["/visuals/processo.webp"],
-    "/segmentos/farmaceutico": ["/visuals/laboratorio.webp"],
-    "/segmentos/industrial": ["/visuals/processo.webp"],
+    "/segmentos": [
+      "/visuals/processo.webp",
+      "/visuals/segmento-farmaceutico.webp",
+      "/visuals/segmento-quimico.webp",
+      "/visuals/segmento-alimentos-bebidas.webp",
+      "/visuals/segmento-automotivo.webp",
+      "/visuals/segmento-hospitalar.webp",
+      "/visuals/segmento-industrial.webp",
+    ],
+    "/segmentos/farmaceutico": ["/visuals/segmento-farmaceutico.webp"],
+    "/segmentos/quimico": ["/visuals/segmento-quimico.webp"],
+    "/segmentos/alimentos-bebidas": [
+      "/visuals/segmento-alimentos-bebidas.webp",
+    ],
+    "/segmentos/automotivo": ["/visuals/segmento-automotivo.webp"],
+    "/segmentos/hospitalar": ["/visuals/segmento-hospitalar.webp"],
+    "/segmentos/industrial": ["/visuals/segmento-industrial.webp"],
     "/conteudo-tecnico": ["/visuals/conteudo.webp"],
     "/sobre": ["/visuals/laboratorio.webp"],
     "/contato": ["/visuals/processo.webp"],

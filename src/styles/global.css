@@ -344,6 +344,19 @@ summary:focus-visible {
 .segment-solution-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+.segment-navigation-card {
+  overflow: hidden;
+}
+.segment-navigation-card .page-media {
+  margin: -28px -28px 22px;
+  border: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  box-shadow: none;
+}
+.segment-navigation-card .page-media img {
+  aspect-ratio: 16 / 9;
+  max-height: 190px;
+}
 .segment-card-category {
   margin: 0 0 10px;
   color: var(--blue);

@@ -40,6 +40,42 @@ export const pageMedia = {
     caption: "Imagem contextual para apoio à navegação.",
     kind: "photo",
   },
+  "segmento-farmaceutico": {
+    src: "/visuals/segmento-farmaceutico.webp",
+    alt: "Linha produtiva farmacêutica em ambiente limpo com equipamentos em aço inox, instrumentos de processo e frascos sem marca.",
+    caption: "Imagem contextual para segmento farmacêutico.",
+    kind: "photo",
+  },
+  "segmento-quimico": {
+    src: "/visuals/segmento-quimico.webp",
+    alt: "Área de processo químico limpa com reatores, tanques, tubulações e instrumentos industriais sem identificação de fabricante.",
+    caption: "Imagem contextual para segmento químico.",
+    kind: "photo",
+  },
+  "segmento-alimentos-bebidas": {
+    src: "/visuals/segmento-alimentos-bebidas.webp",
+    alt: "Linha industrial de alimentos e bebidas com tanques, tubulações, instrumentos de processo e envase sem rótulos comerciais.",
+    caption: "Imagem contextual para segmento de alimentos e bebidas.",
+    kind: "photo",
+  },
+  "segmento-automotivo": {
+    src: "/visuals/segmento-automotivo.webp",
+    alt: "Área de produção automotiva com robôs industriais, carroceria sem marca e bancada de controle dimensional.",
+    caption: "Imagem contextual para segmento automotivo.",
+    kind: "photo",
+  },
+  "segmento-hospitalar": {
+    src: "/visuals/segmento-hospitalar.webp",
+    alt: "Área técnica hospitalar limpa com equipamento de esterilização, bancada e instrumentos sem identificação institucional.",
+    caption: "Imagem contextual para segmento hospitalar.",
+    kind: "photo",
+  },
+  "segmento-industrial": {
+    src: "/visuals/segmento-industrial.webp",
+    alt: "Planta industrial limpa com tubulações, tanques e transmissores de processo sem marca ou identificação de cliente.",
+    caption: "Imagem contextual para outros segmentos industriais.",
+    kind: "photo",
+  },
   laboratorio: {
     src: "/visuals/laboratorio.webp",
     alt: "Laboratório limpo com equipamentos térmicos e de apoio, sem marcas ou identificação de terceiros.",
@@ -155,12 +191,12 @@ const productTypeMedia = {
 } satisfies Record<string, MediaKey>;
 
 const segmentMedia = {
-  farmaceutico: "laboratorio",
-  quimico: "processo",
-  "alimentos-bebidas": "laboratorio",
-  automotivo: "dimensional",
-  hospitalar: "laboratorio",
-  industrial: "processo",
+  farmaceutico: "segmento-farmaceutico",
+  quimico: "segmento-quimico",
+  "alimentos-bebidas": "segmento-alimentos-bebidas",
+  automotivo: "segmento-automotivo",
+  hospitalar: "segmento-hospitalar",
+  industrial: "segmento-industrial",
 } satisfies Record<string, MediaKey>;
 
 export function mediaForKey(key: string | undefined): PageMedia {
