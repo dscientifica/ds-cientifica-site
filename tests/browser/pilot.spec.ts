@@ -149,7 +149,10 @@ test("mobile navigation, keyboard and complete pilot journey", async ({
     .getByRole("link", { name: "Calibração", exact: true })
     .click();
   await expect(page).toHaveURL("/calibracao");
-  await page.getByRole("link", { name: "Explorar pressão" }).click();
+  await page
+    .getByRole("link", { name: /Pressão/ })
+    .first()
+    .click();
   await expect(page).toHaveURL("/calibracao/pressao");
   await page
     .getByRole("link", { name: /Manômetros/ })
