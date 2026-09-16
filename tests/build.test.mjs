@@ -4,40 +4,10 @@ import { readFile, access } from "node:fs/promises";
 import { join } from "node:path";
 import { load } from "cheerio";
 import { resolveAxionUrl } from "../src/config/site.ts";
-import {
-  calibrationQuantities,
-  productCategories,
-} from "../src/data/catalog.ts";
-import { segments } from "../src/data/segments.ts";
+import { productCategories } from "../src/data/catalog.ts";
+import { publicRoutes } from "../src/data/publicRoutes.ts";
 
-const calibrationRoutes = calibrationQuantities.flatMap((quantity) => [
-  `/calibracao/${quantity.slug}`,
-  ...quantity.equipment.map(
-    (equipment) => `/calibracao/${quantity.slug}/${equipment.slug}`,
-  ),
-]);
-const productRoutes = productCategories.flatMap((category) => [
-  `/produtos/${category.slug}`,
-  ...category.types.map((type) => `/produtos/${category.slug}/${type.slug}`),
-]);
-const segmentRoutes = [
-  "/segmentos",
-  ...segments.map((segment) => segment.href),
-];
-const routes = [
-  "/",
-  "/calibracao",
-  ...calibrationRoutes,
-  "/manutencao",
-  "/qualificacao",
-  "/produtos",
-  ...productRoutes,
-  ...segmentRoutes,
-  "/conteudo-tecnico",
-  "/sobre",
-  "/contato",
-  "/area-do-cliente",
-];
+const routes = [...publicRoutes];
 const fileFor = (route) =>
   route === "/404" ? "dist/404.html" : join("dist", route, "index.html");
 const documents = new Map(
@@ -64,7 +34,7 @@ test("AXION only accepts a confirmed, valid HTTPS destination", () => {
   );
 });
 
-test("site pages have unique SEO, one h1, Portuguese and noindex", () => {
+test("site pages have unique SEO, one h1, Portuguese and indexation directives", () => {
   const titles = new Set();
   for (const [route, $] of documents) {
     assert.equal($("html").attr("lang"), "pt-BR", route);
@@ -75,7 +45,7 @@ test("site pages have unique SEO, one h1, Portuguese and noindex", () => {
     );
     assert.equal(
       $("meta[name='robots']").attr("content"),
-      "noindex, nofollow",
+      route === "/404" ? "noindex, nofollow" : "index, follow",
       route,
     );
     assert.equal(
@@ -114,8 +84,8 @@ test("all internal links, fragments and assets resolve in the static build", asy
   }
 });
 
-test("sitemap contains every generated public route while preview robots disallows crawling", async () => {
-  const $ = load(await readFile("dist/sitemap-0.xml", "utf8"), { xml: true });
+test("sitemap contains every public indexable route while robots allows crawling", async () => {
+  const $ = load(await readFile("dist/sitemap.xml", "utf8"), { xml: true });
   assert.deepEqual(
     $("loc")
       .map((_, el) => $(el).text().replace(/\/$/, ""))
@@ -129,11 +99,13 @@ test("sitemap contains every generated public route while preview robots disallo
   );
   assert.equal(
     await readFile("dist/robots.txt", "utf8"),
-    "User-agent: *\nDisallow: /\n",
+    "User-agent: *\nAllow: /\nSitemap: https://www.dscientifica.com.br/sitemap.xml\n",
   );
   const headers = await readFile("dist/_headers", "utf8");
-  assert.match(headers, /X-Robots-Tag: noindex, nofollow/);
+  assert.doesNotMatch(headers, /X-Robots-Tag/i);
   assert.match(headers, /X-Content-Type-Options: nosniff/);
+  await access("dist/favicon.ico");
+  await access("dist/apple-touch-icon.png");
 });
 
 test("legacy quote route redirects permanently to the central contact flow", async () => {

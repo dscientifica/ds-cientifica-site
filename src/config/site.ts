@@ -1,6 +1,6 @@
 export const site = {
   name: "DS Científica",
-  indexable: false,
+  indexable: true,
   contacts: { whatsapp: "", email: "", axionUrl: "" },
   form: { enabled: false },
 } as const;
