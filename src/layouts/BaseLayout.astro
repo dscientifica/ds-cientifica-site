@@ -8,8 +8,10 @@ interface Props {
   title: string;
   description: string;
   noindex?: boolean;
+  fullTitle?: string;
 }
-const { title, description, noindex = false } = Astro.props;
+const { title, description, noindex = false, fullTitle } = Astro.props;
+const pageTitle = fullTitle || `${title} | DS Científica`;
 const canonical = new URL(
   Astro.url.pathname.replace(/\/$/, "") || "/",
   Astro.site,
@@ -21,7 +23,7 @@ const canonical = new URL(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} | DS Científica</title>
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta
       name="robots"
@@ -33,11 +35,13 @@ const canonical = new URL(
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:title" content={`${title} | DS Científica`} />
+    <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="theme-color" content="#102a43" />
-    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   </head>
   <body
