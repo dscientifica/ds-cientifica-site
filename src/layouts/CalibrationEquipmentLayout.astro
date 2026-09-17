@@ -2,6 +2,7 @@
 import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
+import Card from "../components/Card.astro";
 import CTA from "../components/CTA.astro";
 import SegmentLinks from "../components/SegmentLinks.astro";
 import PageMedia from "../components/PageMedia.astro";
@@ -12,18 +13,23 @@ import {
   type CalibrationEquipment,
   type CalibrationQuantity,
 } from "../data/catalog";
+import { calibrationEquipmentSeo } from "../data/seo";
 interface Props {
   quantity: CalibrationQuantity;
   equipment: CalibrationEquipment;
 }
 const { quantity, equipment } = Astro.props;
 const title = `Calibração de ${equipment.title}`;
+const seo = calibrationEquipmentSeo[`${quantity.slug}/${equipment.slug}`];
+const pageTitle = seo?.title || title;
+const pageHeading = seo?.h1 || title;
+const pageDescription =
+  seo?.description ||
+  `${equipment.description} Consulte a DS Científica para avaliação da faixa e características da aplicação.`;
+const pageLead = seo?.lead || equipment.description;
 ---
 
-<BaseLayout
-  title={title}
-  description={`${equipment.description} Consulte a DS Científica para avaliação da faixa e características da aplicação.`}
->
+<BaseLayout title={pageTitle} description={pageDescription}>
   <Breadcrumbs
     items={[
       { label: "Início", href: "/" },
@@ -35,10 +41,10 @@ const title = `Calibração de ${equipment.title}`;
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <p class="eyebrow">Calibração / {quantity.title}</p><h1>{title}</h1><p
-          class="lead"
-        >
-          {equipment.description}
+        <p class="eyebrow">Calibração / {quantity.title}</p><h1>
+          {pageHeading}
+        </h1><p class="lead">
+          {pageLead}
         </p><p class="hero-note">{rangeMessage}</p><a
           class="button"
           href="/contato#orcamento"
@@ -61,6 +67,45 @@ const title = `Calibração de ${equipment.title}`;
       </div>
     </div>
   </section>
+  {
+    seo?.sections.map((section) => (
+      <Section
+        eyebrow={section.eyebrow}
+        title={section.title}
+        intro={section.intro}
+        tone={section.tone}
+      >
+        {section.columns && (
+          <div class="split">
+            {section.columns.map((column) => (
+              <div class="prose">
+                <h3>{column.title}</h3>
+                <p>{column.body}</p>
+                {column.items && (
+                  <ul>
+                    {column.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {section.links && (
+          <div class="grid">
+            {section.links.map((link) => (
+              <Card
+                title={link.label}
+                description={link.description}
+                href={link.href}
+              />
+            ))}
+          </div>
+        )}
+      </Section>
+    ))
+  }
   <Section eyebrow="Equipamento" title="O que é e onde entra no processo."
     ><div class="split">
       <div class="prose">

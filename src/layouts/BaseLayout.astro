@@ -16,6 +16,13 @@ const canonical = new URL(
   Astro.url.pathname.replace(/\/$/, "") || "/",
   Astro.site,
 );
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  url: new URL("/", Astro.site).href,
+  logo: new URL("/brand/ds-cientifica-logo.png", Astro.site).href,
+};
 ---
 
 <!doctype html>
@@ -43,6 +50,11 @@ const canonical = new URL(
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(organizationSchema).replace(/</g, "\\u003c")}
+    />
   </head>
   <body
     ><a class="skip-link" href="#conteudo">Pular para o conteúdo</a><Header

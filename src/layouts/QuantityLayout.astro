@@ -8,16 +8,19 @@ import CTA from "../components/CTA.astro";
 import PageMedia from "../components/PageMedia.astro";
 import { mediaForKey } from "../data/media";
 import { rangeMessage, type CalibrationQuantity } from "../data/catalog";
+import { calibrationQuantitySeo } from "../data/seo";
 interface Props {
   quantity: CalibrationQuantity;
 }
 const { quantity } = Astro.props;
+const seo = calibrationQuantitySeo[quantity.slug];
+const pageTitle = seo?.title || `Calibração de ${quantity.title}`;
+const pageHeading = seo?.h1 || `Calibração de ${quantity.title}`;
+const pageDescription = seo?.description || quantity.description;
+const pageLead = seo?.lead || quantity.intro;
 ---
 
-<BaseLayout
-  title={`Calibração de ${quantity.title}`}
-  description={quantity.description}
->
+<BaseLayout title={pageTitle} description={pageDescription}>
   <Breadcrumbs
     items={[
       { label: "Início", href: "/" },
@@ -27,13 +30,52 @@ const { quantity } = Astro.props;
   />
   <Hero
     eyebrow="Calibração"
-    title={`Calibração de ${quantity.title}`}
-    description={quantity.intro}
+    title={pageHeading}
+    description={pageLead}
     href="#equipamentos"
     cta="Ver equipamentos"
   >
     <PageMedia media={mediaForKey(quantity.slug)} priority />
   </Hero>
+  {
+    seo?.sections.map((section) => (
+      <Section
+        eyebrow={section.eyebrow}
+        title={section.title}
+        intro={section.intro}
+        tone={section.tone}
+      >
+        {section.columns && (
+          <div class="split">
+            {section.columns.map((column) => (
+              <div class="prose">
+                <h3>{column.title}</h3>
+                <p>{column.body}</p>
+                {column.items && (
+                  <ul>
+                    {column.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {section.links && (
+          <div class="grid">
+            {section.links.map((link) => (
+              <Card
+                title={link.label}
+                description={link.description}
+                href={link.href}
+              />
+            ))}
+          </div>
+        )}
+      </Section>
+    ))
+  }
   <Section
     id="equipamentos"
     eyebrow="Equipamentos"
