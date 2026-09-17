@@ -125,20 +125,20 @@ summary:focus-visible {
   padding-block: 22px;
 }
 .brand {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.3;
+  display: inline-flex;
+  align-items: center;
+  width: clamp(58px, 7vw, 78px);
+  flex: 0 0 auto;
 }
-.brand strong {
-  font-size: 1.5rem;
-  letter-spacing: -0.045em;
+.brand picture {
+  display: block;
+  width: 100%;
 }
-.brand small {
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  margin-top: 5px;
-  color: var(--muted);
+.brand img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
 }
 .header-caption {
   font-size: 0.875rem;
@@ -548,6 +548,9 @@ summary:focus-visible {
   font-size: 0.875rem;
   margin-top: 18px;
 }
+.site-footer .brand {
+  width: 86px;
+}
 .footer-grid h2 {
   font-size: 0.9375rem;
   margin-bottom: 16px;
@@ -921,11 +924,8 @@ summary:focus-visible {
     padding-block: 18px;
     gap: 16px;
   }
-  .brand strong {
-    font-size: 1.25rem;
-  }
-  .brand small {
-    font-size: 0.75rem;
+  .brand {
+    width: 58px;
   }
   .client-link {
     font-size: 0.8125rem;
