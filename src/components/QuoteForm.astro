@@ -1,3 +1,7 @@
+---
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
 <section class="section" id="orcamento">
   <div class="container form-layout">
     <div>
@@ -12,8 +16,11 @@
       class="quote-form"
       aria-label="Solicitação de orçamento"
       autocomplete="off"
+      data-turnstile-required={turnstileSiteKey ? "true" : "false"}
     >
       <p class="form-note">* Campos obrigatórios</p>
+      <input type="hidden" name="clientRequestId" />
+      <input type="hidden" name="turnstileToken" />
       <noscript
         ><p class="noscript">
           Ative o JavaScript para preencher e revisar sua solicitação.
@@ -154,14 +161,29 @@
         </div><div class="review-block">
           <h4>Equipamentos</h4><ol id="review-equipment"></ol>
         </div><p class="inline-notice">
-          Sua solicitação está organizada para conferência. O envio será tratado
-          em uma próxima etapa de atendimento da DS Científica.
-        </p><div class="quote-actions">
+          Ao enviar esta solicitação, você concorda com o tratamento dos dados
+          informados pela DS Científica para análise e atendimento da sua
+          solicitação de orçamento.
+        </p>
+        {
+          turnstileSiteKey && (
+            <div class="turnstile-field">
+              <div
+                class="cf-turnstile"
+                data-sitekey={turnstileSiteKey}
+                data-callback="quoteTurnstileCallback"
+                data-expired-callback="quoteTurnstileExpired"
+                data-error-callback="quoteTurnstileExpired"
+              />
+            </div>
+          )
+        }
+        <div class="quote-actions">
           <button type="button" class="button button-outline" id="back-to-edit">
             Voltar para editar
           </button>
           <button type="button" class="button" id="confirm-review">
-            Marcar revisão como pronta
+            Enviar solicitação de orçamento
           </button>
         </div>
       </section>
@@ -175,6 +197,16 @@
     </form>
   </div>
 </section>
+{
+  turnstileSiteKey && (
+    <script
+      is:inline
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+    />
+  )
+}
 <script>
   type Equipment = {
     servico: string;
@@ -185,6 +217,17 @@
     quantidade: string;
     observacoes: string;
   };
+  type QuoteResponse = {
+    ok?: boolean;
+    protocol?: string;
+    error?: string;
+  };
+  type TurnstileWindow = Window & {
+    quoteTurnstileCallback?: (token: string) => void;
+    quoteTurnstileExpired?: () => void;
+    turnstile?: { reset?: (element?: Element | string) => void };
+  };
+
   const form = document.querySelector<HTMLFormElement>(".quote-form");
   const editStep =
     form?.querySelector<HTMLFieldSetElement>('[data-step="edit"]');
@@ -201,6 +244,7 @@
   const reviewClient = form?.querySelector<HTMLElement>("#review-client");
   const reviewEquipment =
     form?.querySelector<HTMLOListElement>("#review-equipment");
+  const turnstileWidget = form?.querySelector<HTMLElement>(".cf-turnstile");
 
   if (
     form &&
@@ -229,6 +273,8 @@
     ];
     const equipments: Equipment[] = [];
     let editingIndex: number | null = null;
+    let sending = false;
+    let sent = false;
 
     const field = <
       T extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
@@ -238,8 +284,33 @@
 
     const value = (name: string) => field(name).value.trim();
 
+    const ensureClientRequestId = () => {
+      const input = field<HTMLInputElement>("clientRequestId");
+      if (!input.value) {
+        input.value = crypto.randomUUID
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      }
+      return input.value;
+    };
+
     const setStatus = (message = "") => {
       status.textContent = message;
+    };
+
+    const resetTurnstile = () => {
+      const win = window as TurnstileWindow;
+      win.turnstile?.reset?.(turnstileWidget ?? undefined);
+      field<HTMLInputElement>("turnstileToken").value = "";
+    };
+
+    (window as TurnstileWindow).quoteTurnstileCallback = (token: string) => {
+      field<HTMLInputElement>("turnstileToken").value = token;
+      setStatus("");
+    };
+
+    (window as TurnstileWindow).quoteTurnstileExpired = () => {
+      field<HTMLInputElement>("turnstileToken").value = "";
     };
 
     const clearCustomValidity = (names: string[]) => {
@@ -310,7 +381,7 @@
     const renderEquipments = () => {
       list.textContent = "";
       emptyMessage.hidden = equipments.length > 0;
-      reviewButton.disabled = equipments.length === 0;
+      reviewButton.disabled = equipments.length === 0 || sent;
       for (const [index, item] of equipments.entries()) {
         const li = document.createElement("li");
         li.className = "equipment-item";
@@ -337,6 +408,7 @@
         const edit = document.createElement("button");
         edit.type = "button";
         edit.textContent = "Editar";
+        edit.disabled = sent;
         edit.addEventListener("click", () => {
           editingIndex = index;
           for (const name of equipmentFields)
@@ -349,6 +421,7 @@
         const remove = document.createElement("button");
         remove.type = "button";
         remove.textContent = "Remover";
+        remove.disabled = sent;
         remove.addEventListener("click", () => {
           equipments.splice(index, 1);
           clearEquipmentForm();
@@ -396,6 +469,78 @@
       }
     };
 
+    const payload = () => ({
+      clientRequestId: ensureClientRequestId(),
+      turnstileToken: value("turnstileToken"),
+      client: {
+        empresa: value("empresa"),
+        nome: value("nome"),
+        whatsapp: value("whatsapp"),
+        email: value("email"),
+        cidade: value("cidade"),
+      },
+      equipments,
+    });
+
+    const sendQuote = async () => {
+      if (sending || sent) return;
+      setStatus("");
+      if (!validateClient()) return;
+      if (equipments.length === 0) {
+        setStatus("Adicione pelo menos um equipamento antes de enviar.");
+        return;
+      }
+      if (
+        form.dataset.turnstileRequired === "true" &&
+        !value("turnstileToken")
+      ) {
+        setStatus("Confirme a validação anti-spam antes de enviar.");
+        return;
+      }
+
+      sending = true;
+      confirmButton.disabled = true;
+      backButton.disabled = true;
+      confirmButton.textContent = "Enviando...";
+      try {
+        const response = await fetch("/api/orcamento", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(payload()),
+        });
+        const result = (await response
+          .json()
+          .catch(() => ({}))) as QuoteResponse;
+        if (!response.ok || !result.ok || !result.protocol) {
+          setStatus(
+            result.error ||
+              "Não foi possível enviar agora. Os dados foram preservados para nova tentativa.",
+          );
+          resetTurnstile();
+          return;
+        }
+        sent = true;
+        setStatus(
+          `Solicitação de orçamento recebida. Protocolo: ${result.protocol}. A DS Científica recebeu sua solicitação para análise.`,
+        );
+        confirmButton.textContent = "Solicitação enviada";
+        backButton.disabled = false;
+        renderEquipments();
+      } catch {
+        setStatus(
+          "Não foi possível enviar agora. Os dados foram preservados para nova tentativa.",
+        );
+        resetTurnstile();
+      } finally {
+        sending = false;
+        if (!sent) {
+          confirmButton.disabled = false;
+          backButton.disabled = false;
+          confirmButton.textContent = "Enviar solicitação de orçamento";
+        }
+      }
+    };
+
     addButton.addEventListener("click", () => {
       setStatus("");
       if (!validateEquipment()) return;
@@ -434,14 +579,13 @@
     });
 
     confirmButton.addEventListener("click", () => {
-      setStatus(
-        "Revisão pronta. Confira os dados e prossiga pelo atendimento combinado com a DS Científica.",
-      );
+      void sendQuote();
     });
 
     form.addEventListener("submit", (event) => event.preventDefault());
     form.addEventListener("input", () => setStatus(""));
     form.addEventListener("change", () => setStatus(""));
+    ensureClientRequestId();
     editStep.disabled = false;
     addButton.hidden = false;
     reviewButton.hidden = false;

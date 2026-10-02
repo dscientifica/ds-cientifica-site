@@ -243,19 +243,35 @@ test("segment pages expose commercial paths and catalog links on desktop and mob
   }
 });
 
-test("form rejects invalid fields and never sends or persists data", async ({
+test("form validates fields, preserves data on error and confirms after stored quote", async ({
   page,
 }) => {
   await page.goto("/contato#orcamento");
   await expect(page.locator("#add-equipment")).toBeVisible();
-  const requests: string[] = [];
-  page.on("request", (req) => {
-    if (
-      req.method() !== "GET" ||
-      ["fetch", "xhr", "document"].includes(req.resourceType())
-    )
-      requests.push(req.url());
+  const requests: unknown[] = [];
+  let attempts = 0;
+  await page.route("**/api/orcamento", async (route) => {
+    attempts += 1;
+    const body = route.request().postDataJSON();
+    requests.push(body);
+    if (attempts === 1) {
+      await route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        body: JSON.stringify({
+          ok: false,
+          error: "Não foi possível registrar a solicitação agora.",
+        }),
+      });
+      return;
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ ok: true, protocol: "DSO-20260918-ABCDEFGH" }),
+    });
   });
+
   const add = page.getByRole("button", {
     name: "+ Adicionar outro equipamento",
   });
@@ -307,16 +323,46 @@ test("form rejects invalid fields and never sends or persists data", async ({
     "Calibração - Manômetro digital",
   );
   await page
-    .getByRole("button", { name: "Marcar revisão como pronta" })
+    .getByRole("button", { name: "Enviar solicitação de orçamento" })
     .click();
-  await expect(page.getByRole("status")).toContainText("Revisão pronta.");
-  expect(requests).toEqual([]);
+  await expect(page.getByRole("status")).toContainText(
+    "Não foi possível registrar a solicitação agora.",
+  );
+  await expect(page.locator(".quote-review")).toContainText("Empresa teste");
+  await expect(page.locator(".quote-review")).toContainText(
+    "Manômetro digital",
+  );
+  await page
+    .getByRole("button", { name: "Enviar solicitação de orçamento" })
+    .click();
+  await expect(page.getByRole("status")).toContainText(
+    "Solicitação de orçamento recebida. Protocolo: DSO-20260918-ABCDEFGH.",
+  );
+  await expect(
+    page.getByRole("button", { name: "Solicitação enviada" }),
+  ).toBeDisabled();
+  expect(attempts).toBe(2);
+  expect(requests).toHaveLength(2);
+  expect(requests[0]).toMatchObject({
+    client: {
+      empresa: "Empresa teste",
+      nome: "Teste",
+      email: "teste@example.test",
+      cidade: "Cidade de teste/SP",
+    },
+    equipments: [
+      {
+        servico: "Calibração",
+        equipamento: "Manômetro digital",
+        quantidade: "1",
+      },
+    ],
+  });
   expect(
     await page.evaluate(() => [localStorage.length, sessionStorage.length]),
   ).toEqual([0, 0]);
   await expect(page).toHaveURL("/contato#orcamento");
 });
-
 test("quote form handles multiple equipment items with edit and removal", async ({
   page,
 }) => {
