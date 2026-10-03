@@ -2,3 +2,7 @@ name = "ds-cientifica-site-preview"
 pages_build_output_dir = "./dist"
 # Keep Cloudflare Pages on the static Astro output and preserve the custom 404 page.
 not_found_handling = "404-page"
+
+[env.preview.vars]
+PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAAFMhsiHoPeU_gcG5"
+QUOTE_ALLOWED_ORIGINS = "https://www.dscientifica.com.br, https://feature-orcamento-backend.ds-cientifica-site.pages.dev"
