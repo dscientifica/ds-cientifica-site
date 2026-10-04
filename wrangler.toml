@@ -4,5 +4,5 @@ pages_build_output_dir = "./dist"
 not_found_handling = "404-page"
 
 [env.preview.vars]
-PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAAFMhsiHoPeU_gcG5"
+PUBLIC_TURNSTILE_SITE_KEY = "1x00000000000000000000AA"
 QUOTE_ALLOWED_ORIGINS = "https://www.dscientifica.com.br, https://feature-orcamento-backend.ds-cientifica-site.pages.dev"
