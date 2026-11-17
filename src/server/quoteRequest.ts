@@ -79,6 +79,15 @@ const MAX_EQUIPMENT_ITEMS = 10;
 const PROTOCOL_RANDOM_LENGTH = 8;
 const MAX_PROTOCOL_ATTEMPTS = 5;
 const RESEND_EMAIL_API_URL = "https://api.resend.com/emails";
+const TURNSTILE_ERROR_CODES = new Set([
+  "missing-input-secret",
+  "invalid-input-secret",
+  "missing-input-response",
+  "invalid-input-response",
+  "bad-request",
+  "timeout-or-duplicate",
+  "internal-error",
+]);
 const SERVICES = new Set([
   "Calibração",
   "Manutenção",
@@ -254,23 +263,82 @@ const allowedOrigins = (env: QuoteEnv) =>
     .map((origin) => origin.trim())
     .filter(Boolean);
 
+const logTurnstileFailure = (
+  reason:
+    | "missing_secret"
+    | "request_failed"
+    | "http_error"
+    | "invalid_response"
+    | "rejected",
+  httpStatus?: number,
+  errorCodes?: unknown,
+) => {
+  const safeCodes = new Set<string>();
+  if (Array.isArray(errorCodes)) {
+    for (const code of errorCodes) {
+      if (typeof code === "string" && TURNSTILE_ERROR_CODES.has(code))
+        safeCodes.add(code);
+      if (safeCodes.size === TURNSTILE_ERROR_CODES.size) break;
+    }
+  }
+  console.error("quote_turnstile_failed", {
+    reason,
+    ...(httpStatus === undefined ? {} : { httpStatus }),
+    errorCodes: [...safeCodes],
+  });
+};
+
 const verifyTurnstile = async (
   token: string,
   env: QuoteEnv,
   fetcher: typeof fetch,
 ) => {
-  if (!env.TURNSTILE_SECRET_KEY) return false;
+  if (!env.TURNSTILE_SECRET_KEY) {
+    logTurnstileFailure("missing_secret");
+    return false;
+  }
   const body = new URLSearchParams({
     secret: env.TURNSTILE_SECRET_KEY,
     response: token,
   });
-  const response = await fetcher(
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-    { method: "POST", body },
-  );
-  if (!response.ok) return false;
-  const result = (await response.json()) as { success?: boolean };
-  return result.success === true;
+  let response: Response;
+  try {
+    response = await fetcher(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      { method: "POST", body },
+    );
+  } catch {
+    logTurnstileFailure("request_failed");
+    return false;
+  }
+  let result: unknown;
+  try {
+    result = await response.json();
+  } catch {
+    logTurnstileFailure(
+      response.ok ? "invalid_response" : "http_error",
+      response.status,
+    );
+    return false;
+  }
+  const validation =
+    result !== null && typeof result === "object" && !Array.isArray(result)
+      ? (result as { success?: unknown; "error-codes"?: unknown })
+      : undefined;
+  const codes = validation?.["error-codes"];
+  if (!response.ok) {
+    logTurnstileFailure("http_error", response.status, codes);
+    return false;
+  }
+  if (!validation || typeof validation.success !== "boolean") {
+    logTurnstileFailure("invalid_response", response.status, codes);
+    return false;
+  }
+  if (validation.success !== true) {
+    logTurnstileFailure("rejected", response.status, codes);
+    return false;
+  }
+  return true;
 };
 
 const buildEmail = (protocol: string, data: QuoteData, createdAt: string) => {

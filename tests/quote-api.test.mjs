@@ -306,6 +306,129 @@ test("quote API rejects invalid Turnstile", async () => {
   assert.equal(db.requests.length, 0);
 });
 
+const turnstileFailureCases = [
+  {
+    name: "only allowlisted, unique error codes",
+    result: {
+      success: false,
+      "error-codes": [
+        "invalid-input-secret",
+        "invalid-input-secret",
+        "missing-input-secret",
+        "missing-input-response",
+        "invalid-input-response",
+        "bad-request",
+        "timeout-or-duplicate",
+        "internal-error",
+        "SENSITIVE_UPSTREAM_VALUE",
+        { secret: "SENSITIVE_UPSTREAM_VALUE" },
+      ],
+      secret: "secret-test",
+      token: "turnstile-valid-token",
+      client: validPayload().client,
+      metadata: "SENSITIVE_UPSTREAM_VALUE",
+    },
+    expected: {
+      reason: "rejected",
+      httpStatus: 200,
+      errorCodes: [
+        "invalid-input-secret",
+        "missing-input-secret",
+        "missing-input-response",
+        "invalid-input-response",
+        "bad-request",
+        "timeout-or-duplicate",
+        "internal-error",
+      ],
+    },
+  },
+  {
+    name: "a malformed error-codes field",
+    result: { success: false, "error-codes": "SENSITIVE_UPSTREAM_VALUE" },
+    expected: { reason: "rejected", httpStatus: 200, errorCodes: [] },
+  },
+  {
+    name: "a null validation response",
+    result: null,
+    expected: { reason: "invalid_response", httpStatus: 200, errorCodes: [] },
+  },
+  {
+    name: "a truthy non-boolean success value",
+    result: { success: "true", details: "SENSITIVE_UPSTREAM_VALUE" },
+    expected: { reason: "invalid_response", httpStatus: 200, errorCodes: [] },
+  },
+  {
+    name: "an upstream HTTP failure",
+    status: 503,
+    result: { success: true, "error-codes": ["internal-error"] },
+    expected: {
+      reason: "http_error",
+      httpStatus: 503,
+      errorCodes: ["internal-error"],
+    },
+  },
+  {
+    name: "a non-JSON validation response",
+    raw: "SENSITIVE_UPSTREAM_VALUE",
+    expected: { reason: "invalid_response", httpStatus: 200, errorCodes: [] },
+  },
+  {
+    name: "an exception containing sensitive values",
+    throws: true,
+    expected: { reason: "request_failed", errorCodes: [] },
+  },
+  {
+    name: "a missing Secret",
+    env: { TURNSTILE_SECRET_KEY: undefined },
+    expected: { reason: "missing_secret", errorCodes: [] },
+  },
+];
+
+for (const scenario of turnstileFailureCases) {
+  test(`quote API safely diagnoses Turnstile with ${scenario.name}`, async (t) => {
+    const db = new MockD1();
+    const log = t.mock.method(console, "error", () => {});
+    let calls = 0;
+    const response = await handleQuoteRequest(
+      requestFor(validPayload()),
+      envFor(db, scenario.env),
+      optionsFor(async () => {
+        calls += 1;
+        if (scenario.throws)
+          throw new Error(
+            JSON.stringify({
+              marker: "SENSITIVE_UPSTREAM_VALUE",
+              secret: "secret-test",
+              resend: "resend-secret",
+              payload: validPayload(),
+            }),
+          );
+        return new Response(scenario.raw ?? JSON.stringify(scenario.result), {
+          status: scenario.status ?? 200,
+        });
+      }),
+    );
+    const logs = log.mock.calls.map((call) => call.arguments);
+    assert.deepEqual(logs, [["quote_turnstile_failed", scenario.expected]]);
+    assert.equal(response.status, 400);
+    assert.deepEqual(await response.json(), {
+      ok: false,
+      error: "Não foi possível validar a proteção anti-spam.",
+    });
+    assert.equal(calls, scenario.env ? 0 : 1);
+    assert.equal(db.requests.length, 0);
+    assert.equal(db.items.length, 0);
+    for (const sensitive of [
+      "SENSITIVE_UPSTREAM_VALUE",
+      "secret-test",
+      "resend-secret",
+      "turnstile-valid-token",
+      ...Object.values(validPayload().client),
+    ])
+      assert.equal(JSON.stringify(logs).includes(sensitive), false);
+  });
+}
+
 test("quote API rejects requests without Origin", async () => {
   const db = new MockD1();
   const response = await handleQuoteRequest(
