@@ -4,7 +4,7 @@ pages_build_output_dir = "./dist"
 not_found_handling = "404-page"
 
 [env.preview.vars]
-PUBLIC_TURNSTILE_SITE_KEY = "1x00000000000000000000AA"
+PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAFMhsiHoPeU_gcG5"
 QUOTE_ALLOWED_ORIGINS = "https://www.dscientifica.com.br, https://feature-orcamento-backend.ds-cientifica-site.pages.dev"
 QUOTE_EMAIL_FROM = "DS Científica <orcamento@orcamento.dscientifica.com.br>"
 QUOTE_EMAIL_TO = "contato@dscientifica.com.br"
@@ -13,3 +13,14 @@ QUOTE_EMAIL_TO = "contato@dscientifica.com.br"
 binding = "QUOTE_DB"
 database_name = "ds-cientifica-quotes-preview"
 database_id = "eb1616a9-f2cc-41e6-b105-c578b39eeafa"
+
+[env.production.vars]
+PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAFMhsiHoPeU_gcG5"
+QUOTE_ALLOWED_ORIGINS = "https://www.dscientifica.com.br"
+QUOTE_EMAIL_FROM = "DS Científica <orcamento@orcamento.dscientifica.com.br>"
+QUOTE_EMAIL_TO = "contato@dscientifica.com.br"
+
+[[env.production.d1_databases]]
+binding = "QUOTE_DB"
+database_name = "ds-cientifica-quotes-production"
+database_id = "680fe086-5e63-462e-ab18-23ea8a0366fc"
