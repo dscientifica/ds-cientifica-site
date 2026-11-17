@@ -20,7 +20,6 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     >
       <p class="form-note">* Campos obrigatórios</p>
       <input type="hidden" name="clientRequestId" />
-      <input type="hidden" name="turnstileToken" />
       <noscript
         ><p class="noscript">
           Ative o JavaScript para preencher e revisar sua solicitação.
@@ -168,13 +167,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
         {
           turnstileSiteKey && (
             <div class="turnstile-field">
-              <div
-                class="cf-turnstile"
-                data-sitekey={turnstileSiteKey}
-                data-callback="quoteTurnstileCallback"
-                data-expired-callback="quoteTurnstileExpired"
-                data-error-callback="quoteTurnstileExpired"
-              />
+              <div class="cf-turnstile" data-sitekey={turnstileSiteKey} />
             </div>
           )
         }
@@ -223,8 +216,6 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     error?: string;
   };
   type TurnstileWindow = Window & {
-    quoteTurnstileCallback?: (token: string) => void;
-    quoteTurnstileExpired?: () => void;
     turnstile?: { reset?: (element?: Element | string) => void };
   };
 
@@ -298,19 +289,19 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       status.textContent = message;
     };
 
+    // Read the field managed by Turnstile even if it loads before this module.
+    const turnstileResponse = () =>
+      form.querySelector<HTMLInputElement>(
+        'input[name="cf-turnstile-response"]',
+      );
+    const turnstileToken = () => turnstileResponse()?.value.trim() || "";
+
     const resetTurnstile = () => {
-      const win = window as TurnstileWindow;
-      win.turnstile?.reset?.(turnstileWidget ?? undefined);
-      field<HTMLInputElement>("turnstileToken").value = "";
-    };
-
-    (window as TurnstileWindow).quoteTurnstileCallback = (token: string) => {
-      field<HTMLInputElement>("turnstileToken").value = token;
-      setStatus("");
-    };
-
-    (window as TurnstileWindow).quoteTurnstileExpired = () => {
-      field<HTMLInputElement>("turnstileToken").value = "";
+      const response = turnstileResponse();
+      if (response) response.value = "";
+      if (turnstileWidget) {
+        (window as TurnstileWindow).turnstile?.reset?.(turnstileWidget);
+      }
     };
 
     const clearCustomValidity = (names: string[]) => {
@@ -471,7 +462,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 
     const payload = () => ({
       clientRequestId: ensureClientRequestId(),
-      turnstileToken: value("turnstileToken"),
+      turnstileToken: turnstileToken(),
       client: {
         empresa: value("empresa"),
         nome: value("nome"),
@@ -490,10 +481,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
         setStatus("Adicione pelo menos um equipamento antes de enviar.");
         return;
       }
-      if (
-        form.dataset.turnstileRequired === "true" &&
-        !value("turnstileToken")
-      ) {
+      if (form.dataset.turnstileRequired === "true" && !turnstileToken()) {
         setStatus("Confirme a validação anti-spam antes de enviar.");
         return;
       }

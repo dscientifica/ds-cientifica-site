@@ -6,3 +6,10 @@ not_found_handling = "404-page"
 [env.preview.vars]
 PUBLIC_TURNSTILE_SITE_KEY = "1x00000000000000000000AA"
 QUOTE_ALLOWED_ORIGINS = "https://www.dscientifica.com.br, https://feature-orcamento-backend.ds-cientifica-site.pages.dev"
+QUOTE_EMAIL_FROM = "DS Científica <orcamento@orcamento.dscientifica.com.br>"
+QUOTE_EMAIL_TO = "contato@dscientifica.com.br"
+
+[[env.preview.d1_databases]]
+binding = "QUOTE_DB"
+database_name = "ds-cientifica-quotes-preview"
+database_id = "eb1616a9-f2cc-41e6-b105-c578b39eeafa"

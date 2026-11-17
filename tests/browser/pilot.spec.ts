@@ -363,6 +363,89 @@ test("form validates fields, preserves data on error and confirms after stored q
   ).toEqual([0, 0]);
   await expect(page).toHaveURL("/contato#orcamento");
 });
+for (const width of [390, 1280]) {
+  test(`quote sends the native Turnstile response without callbacks at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    const requests: { clientRequestId: string; turnstileToken: string }[] = [];
+    await page.route("**/api/orcamento", async (route) => {
+      requests.push(route.request().postDataJSON());
+      await route.fulfill({
+        status: requests.length === 1 ? 500 : 200,
+        contentType: "application/json",
+        body: JSON.stringify(
+          requests.length === 1
+            ? { ok: false, error: "Falha de teste. Tente novamente." }
+            : { ok: true, protocol: "DSO-20261116-ABCDEFGH" },
+        ),
+      });
+    });
+    await page.goto("/contato#orcamento");
+    // Simulate the response field created by Turnstile, without external calls.
+    await page.locator(".quote-form").evaluate((form: HTMLFormElement) => {
+      form.dataset.turnstileRequired = "true";
+      const response = document.createElement("input");
+      response.type = "hidden";
+      response.name = "cf-turnstile-response";
+      form.append(response);
+    });
+    await page.getByLabel("Empresa *").fill("Empresa teste");
+    await page.getByLabel("Nome *").fill("Teste");
+    await page.getByLabel("E-mail *").fill("teste@example.test");
+    await page.getByLabel("Cidade/UF *").fill("Cidade de teste/SP");
+    await page.getByLabel("Serviço *").selectOption("Calibração");
+    await page.getByLabel("Equipamento *").fill("Manômetro digital");
+    await page.getByLabel("Quantidade *").fill("1");
+    await page
+      .getByRole("button", { name: "+ Adicionar outro equipamento" })
+      .click();
+    await page.getByRole("button", { name: "Revisar solicitação" }).click();
+    const send = page.getByRole("button", {
+      name: "Enviar solicitação de orçamento",
+    });
+    const response = page.locator('input[name="cf-turnstile-response"]');
+    const setToken = (token: string) =>
+      response.evaluate((input: HTMLInputElement, value: string) => {
+        input.value = value;
+      }, token);
+
+    await send.click();
+    await expect(page.getByRole("status")).toContainText(
+      "Confirme a validação anti-spam antes de enviar.",
+    );
+    expect(requests).toHaveLength(0);
+    await setToken("simulated-widget-token-first");
+    await setToken("");
+    await send.click();
+    expect(requests).toHaveLength(0);
+
+    await setToken("simulated-widget-token-first");
+    await send.click();
+    await expect(page.getByRole("status")).toContainText(
+      "Falha de teste. Tente novamente.",
+    );
+    expect(requests).toHaveLength(1);
+    expect(requests[0].turnstileToken).toBe("simulated-widget-token-first");
+    await expect(response).toHaveValue("");
+    await expect(page.locator(".quote-review")).toContainText("Empresa teste");
+    await expect(page.locator(".quote-review")).toContainText(
+      "Manômetro digital",
+    );
+    await send.click();
+    expect(requests).toHaveLength(1);
+
+    await setToken("simulated-widget-token-retry");
+    await send.click();
+    await expect(page.getByRole("status")).toContainText(
+      "Solicitação de orçamento recebida. Protocolo: DSO-20261116-ABCDEFGH.",
+    );
+    expect(requests).toHaveLength(2);
+    expect(requests[1].turnstileToken).toBe("simulated-widget-token-retry");
+    expect(requests[1].clientRequestId).toBe(requests[0].clientRequestId);
+  });
+}
+
 test("quote form handles multiple equipment items with edit and removal", async ({
   page,
 }) => {
