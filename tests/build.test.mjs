@@ -8,6 +8,10 @@ import { productCategories } from "../src/data/catalog.ts";
 import { publicRoutes } from "../src/data/publicRoutes.ts";
 
 const routes = [...publicRoutes];
+const siteOrigin = "https://www.dscientifica.com.br";
+const redirectingPagePaths = new Set(
+  routes.filter((route) => route !== "/").map((route) => route.slice(0, -1)),
+);
 const fileFor = (route) =>
   route === "/404" ? "dist/404.html" : join("dist", route, "index.html");
 const documents = new Map(
@@ -50,7 +54,13 @@ test("site pages have unique SEO, one h1, Portuguese and indexation directives",
     );
     assert.equal(
       $("link[rel='canonical']").attr("href"),
-      `https://www.dscientifica.com.br${route}`,
+      `${siteOrigin}${route}`,
+      route,
+    );
+    assert.equal(
+      $("meta[property='og:url']").attr("content"),
+      `${siteOrigin}${route}`,
+      route,
     );
     assert.equal(
       $("meta[property='og:title']").attr("content"),
@@ -63,14 +73,50 @@ test("site pages have unique SEO, one h1, Portuguese and indexation directives",
   assert.equal(titles.size, documents.size);
 });
 
+test("breadcrumb links and structured data use the canonical public URLs", () => {
+  for (const [route, $] of documents) {
+    const breadcrumbs = $("script[type='application/ld+json']")
+      .toArray()
+      .map((script) => JSON.parse($(script).text()))
+      .filter((schema) => schema["@type"] === "BreadcrumbList");
+    if (route !== "/" && route !== "/404")
+      assert.equal(breadcrumbs.length, 1, route);
+    for (const breadcrumb of breadcrumbs) {
+      const items = breadcrumb.itemListElement;
+      assert.ok(items.length >= 2, route);
+      for (const [index, item] of items.entries()) {
+        const url = new URL(item.item);
+        assert.equal(item.position, index + 1, route);
+        assert.equal(url.origin, siteOrigin, `${route}: ${item.item}`);
+        assert.ok(routes.includes(url.pathname), `${route}: ${item.item}`);
+        assert.equal(url.search, "", `${route}: ${item.item}`);
+        assert.equal(url.hash, "", `${route}: ${item.item}`);
+      }
+      assert.equal(items.at(-1).item, `${siteOrigin}${route}`, route);
+      assert.deepEqual(
+        $(".breadcrumbs a")
+          .map((_, anchor) => new URL($(anchor).attr("href"), siteOrigin).href)
+          .get(),
+        items.slice(0, -1).map((item) => item.item),
+        route,
+      );
+    }
+  }
+});
+
 test("all internal links, fragments and assets resolve in the static build", async () => {
   for (const [route, $] of documents) {
     for (const el of $(
       "a[href], img[src], script[src], link[href]",
     ).toArray()) {
       const value = $(el).attr("href") || $(el).attr("src");
-      if (!value || /^(https?:|mailto:|tel:)/.test(value)) continue;
-      const url = new URL(value, `https://example.test${route}`);
+      if (!value || /^(mailto:|tel:)/.test(value)) continue;
+      const url = new URL(value, `${siteOrigin}${route}`);
+      if (url.origin !== siteOrigin) continue;
+      assert.ok(
+        !redirectingPagePaths.has(url.pathname),
+        `${route}: ${value} points to a public page without its canonical trailing slash`,
+      );
       if (documents.has(url.pathname)) {
         if (url.hash)
           assert.ok(
@@ -86,17 +132,28 @@ test("all internal links, fragments and assets resolve in the static build", asy
 
 test("sitemap contains every public indexable route while robots allows crawling", async () => {
   const $ = load(await readFile("dist/sitemap.xml", "utf8"), { xml: true });
-  assert.deepEqual(
-    $("loc")
-      .map((_, el) => $(el).text().replace(/\/$/, ""))
-      .get()
-      .sort(),
-    routes
-      .map((route) =>
-        `https://www.dscientifica.com.br${route}`.replace(/\/$/, ""),
-      )
-      .sort(),
+  const sitemapUrls = $("loc")
+    .map((_, el) => $(el).text())
+    .get();
+  assert.equal(routes.length, 95);
+  assert.equal(new Set(routes).size, routes.length);
+  assert.ok(
+    routes.every((route) => route.startsWith("/") && route.endsWith("/")),
   );
+  assert.deepEqual(
+    [...sitemapUrls].sort(),
+    routes.map((route) => `${siteOrigin}${route}`).sort(),
+  );
+  for (const url of sitemapUrls) {
+    const page = documents.get(new URL(url).pathname);
+    assert.ok(page, url);
+    assert.equal(page("link[rel='canonical']").attr("href"), url, url);
+    assert.equal(
+      page("meta[name='robots']").attr("content"),
+      "index, follow",
+      url,
+    );
+  }
   assert.equal(
     await readFile("dist/robots.txt", "utf8"),
     "User-agent: *\nAllow: /\nSitemap: https://www.dscientifica.com.br/sitemap.xml\n",
@@ -128,7 +185,7 @@ test("pending integrations have no invented destinations or service page", () =>
     );
     assert.ok(!hrefs.includes("/servicos"));
   }
-  const contact = documents.get("/contato");
+  const contact = documents.get("/contato/");
   assert.equal(contact("form").attr("action"), undefined);
   assert.equal(contact("fieldset[disabled]").length, 1);
   assert.equal(contact("button[type='submit']").length, 0);
@@ -140,22 +197,22 @@ test("quote form is centralized on contact and budget CTAs resolve there", () =>
     if ($('form[aria-label="Solicitação de orçamento"]').length)
       formRoutes.push(route);
   }
-  assert.deepEqual(formRoutes, ["/contato"]);
+  assert.deepEqual(formRoutes, ["/contato/"]);
 
   for (const [route, $] of documents) {
-    if (route === "/contato") continue;
+    if (route === "/contato/") continue;
     assert.equal($('main a[href="#orcamento"]').length, 0, route);
   }
 
   for (const route of [
-    "/calibracao/pressao/manometros",
-    "/manutencao",
-    "/qualificacao",
-    "/produtos/pressao/manometros",
-    "/segmentos/industrial",
+    "/calibracao/pressao/manometros/",
+    "/manutencao/",
+    "/qualificacao/",
+    "/produtos/pressao/manometros/",
+    "/segmentos/industrial/",
   ]) {
     const $ = documents.get(route);
-    assert.ok($('main a[href="/contato#orcamento"]').length >= 1, route);
+    assert.ok($('main a[href="/contato/#orcamento"]').length >= 1, route);
   }
 
   const contexts = [];
@@ -168,7 +225,7 @@ test("quote form is centralized on contact and budget CTAs resolve there", () =>
   assert.ok(
     contexts.some(
       ([route, context]) =>
-        route === "/calibracao/pressao/manometros" &&
+        route === "/calibracao/pressao/manometros/" &&
         context === "Calibração / Pressão / Manômetros digitais e analógicos",
     ),
   );
@@ -192,12 +249,12 @@ test("Home is a clean commercial hub with segment navigation", () => {
       .get(),
     ["Confiabilidade", "Suporte técnico", "Soluções", "Parceria"],
   );
-  assert.equal($(".home-contact a[href='/contato#orcamento']").length, 1);
+  assert.equal($(".home-contact a[href='/contato/#orcamento']").length, 1);
   assert.deepEqual(
     $("#solucoes a")
       .map((_, el) => $(el).attr("href"))
       .get(),
-    ["/calibracao", "/manutencao", "/qualificacao", "/produtos"],
+    ["/calibracao/", "/manutencao/", "/qualificacao/", "/produtos/"],
   );
   assert.deepEqual(
     $("#solucoes .solution-copy p")
@@ -217,17 +274,17 @@ test("Home is a clean commercial hub with segment navigation", () => {
       .get(),
     [
       "Farmacêutico",
-      "/segmentos/farmaceutico",
+      "/segmentos/farmaceutico/",
       "Químico",
-      "/segmentos/quimico",
+      "/segmentos/quimico/",
       "Alimentos e Bebidas",
-      "/segmentos/alimentos-bebidas",
+      "/segmentos/alimentos-bebidas/",
       "Automotivo",
-      "/segmentos/automotivo",
+      "/segmentos/automotivo/",
       "Hospitalar",
-      "/segmentos/hospitalar",
+      "/segmentos/hospitalar/",
       "Industrial",
-      "/segmentos/industrial",
+      "/segmentos/industrial/",
     ],
   );
   assert.equal(
@@ -239,7 +296,7 @@ test("Home is a clean commercial hub with segment navigation", () => {
 });
 
 test("product pages use contextual visual cards and solution-oriented footer copy", () => {
-  const products = documents.get("/produtos");
+  const products = documents.get("/produtos/");
   assert.equal(
     products(".card .card-media img").length,
     productCategories.length,
@@ -254,43 +311,43 @@ test("product pages use contextual visual cards and solution-oriented footer cop
   );
 
   for (const category of productCategories) {
-    const $ = documents.get(`/produtos/${category.slug}`);
+    const $ = documents.get(`/produtos/${category.slug}/`);
     assert.equal($(".card .card-media img").length, category.types.length);
   }
 });
 
 test("segment pages connect applications, solutions and catalog items", () => {
   const expectations = {
-    "/segmentos/farmaceutico": [
-      "/calibracao/temperatura",
-      "/qualificacao",
-      "/calibracao/temperatura/autoclaves",
-      "/calibracao/fisico-quimica/phmetros",
+    "/segmentos/farmaceutico/": [
+      "/calibracao/temperatura/",
+      "/qualificacao/",
+      "/calibracao/temperatura/autoclaves/",
+      "/calibracao/fisico-quimica/phmetros/",
     ],
-    "/segmentos/quimico": [
-      "/calibracao/pressao/transmissores-de-pressao-diferencial",
-      "/produtos/nivel/instrumentos-de-nivel",
-      "/calibracao/fisico-quimica/orp",
+    "/segmentos/quimico/": [
+      "/calibracao/pressao/transmissores-de-pressao-diferencial/",
+      "/produtos/nivel/instrumentos-de-nivel/",
+      "/calibracao/fisico-quimica/orp/",
     ],
-    "/segmentos/alimentos-bebidas": [
-      "/calibracao/vazao/eletromagneticos",
-      "/calibracao/massa/balancas-analiticas",
-      "/calibracao/optica-fotometria/refratometros",
+    "/segmentos/alimentos-bebidas/": [
+      "/calibracao/vazao/eletromagneticos/",
+      "/calibracao/massa/balancas-analiticas/",
+      "/calibracao/optica-fotometria/refratometros/",
     ],
-    "/segmentos/automotivo": [
-      "/calibracao/dimensional/paquimetros",
-      "/calibracao/dimensional/micrometros",
-      "/calibracao/massa/balancas-digitais",
+    "/segmentos/automotivo/": [
+      "/calibracao/dimensional/paquimetros/",
+      "/calibracao/dimensional/micrometros/",
+      "/calibracao/massa/balancas-digitais/",
     ],
-    "/segmentos/hospitalar": [
-      "/calibracao/temperatura/registradores-data-loggers",
-      "/calibracao/temperatura/incubadoras",
-      "/produtos/equipamentos-de-laboratorio/equipamentos-termicos-e-de-apoio",
+    "/segmentos/hospitalar/": [
+      "/calibracao/temperatura/registradores-data-loggers/",
+      "/calibracao/temperatura/incubadoras/",
+      "/produtos/equipamentos-de-laboratorio/equipamentos-termicos-e-de-apoio/",
     ],
-    "/segmentos/industrial": [
-      "/calibracao/pressao/transmissores-de-pressao",
-      "/calibracao/vazao/eletromagneticos",
-      "/produtos/nivel/instrumentos-de-nivel",
+    "/segmentos/industrial/": [
+      "/calibracao/pressao/transmissores-de-pressao/",
+      "/calibracao/vazao/eletromagneticos/",
+      "/produtos/nivel/instrumentos-de-nivel/",
     ],
   };
 
@@ -311,28 +368,28 @@ test("segment pages connect applications, solutions and catalog items", () => {
       0,
       route,
     );
-    assert.ok($('main a[href="/contato#orcamento"]').length >= 2, route);
+    assert.ok($('main a[href="/contato/#orcamento"]').length >= 2, route);
     assert.equal($('main a[href="#orcamento"]').length, 0, route);
     for (const href of expectedLinks)
       assert.ok($(`main a[href="${href}"]`).length >= 1, `${route}: ${href}`);
   }
 
   assert.match(
-    documents.get("/segmentos/farmaceutico")("main").text(),
+    documents.get("/segmentos/farmaceutico/")("main").text(),
     /controle e monitoramento de temperatura/,
   );
   assert.match(
-    documents.get("/segmentos/quimico")("main").text(),
+    documents.get("/segmentos/quimico/")("main").text(),
     /Pressão diferencial|Transmissores de pressão diferencial/,
   );
   assert.match(
-    documents.get("/segmentos/industrial")("main").text(),
+    documents.get("/segmentos/industrial/")("main").text(),
     /Instrumentação de processo/,
   );
 });
 
 test("service hubs use client-facing maintenance and qualification copy", () => {
-  const maintenance = documents.get("/manutencao");
+  const maintenance = documents.get("/manutencao/");
   assert.match(
     maintenance("main").text(),
     /Do diagnóstico à solução: suporte técnico para manter sua operação funcionando\./,
@@ -346,7 +403,7 @@ test("service hubs use client-facing maintenance and qualification copy", () => 
   ])
     assert.match(maintenance("main").text(), new RegExp(term));
 
-  const qualification = documents.get("/qualificacao");
+  const qualification = documents.get("/qualificacao/");
   for (const term of [
     "Qualificação térmica",
     "Mapeamento térmico",
@@ -375,19 +432,24 @@ test("public pages do not expose internal development language", () => {
 });
 
 test("global navigation points to real site sections", () => {
-  for (const [, $] of documents) {
+  for (const [route, $] of documents) {
     const nav = $("#main-nav a")
       .map((_, el) => [$(el).text().trim(), $(el).attr("href")])
       .get();
-    assert.ok(nav.includes("Segmentos") && nav.includes("/segmentos"));
+    assert.ok(nav.includes("Segmentos") && nav.includes("/segmentos/"));
     assert.ok(
-      nav.includes("Conteúdo Técnico") && nav.includes("/conteudo-tecnico"),
+      nav.includes("Conteúdo Técnico") && nav.includes("/conteudo-tecnico/"),
     );
-    assert.ok(nav.includes("Sobre a DS") && nav.includes("/sobre"));
-    assert.ok(nav.includes("Contato") && nav.includes("/contato"));
+    assert.ok(nav.includes("Sobre a DS") && nav.includes("/sobre/"));
+    assert.ok(nav.includes("Contato") && nav.includes("/contato/"));
     assert.ok(
-      nav.includes("Área do Cliente") && nav.includes("/area-do-cliente"),
+      nav.includes("Área do Cliente") && nav.includes("/area-do-cliente/"),
     );
+    const currentLink = $("#main-nav a[aria-current='page']");
+    const matchingLink = $(`#main-nav a[href="${route}"]`);
+    assert.equal(currentLink.length, matchingLink.length, route);
+    if (matchingLink.length)
+      assert.equal(currentLink.attr("href"), route, route);
   }
 });
 
@@ -406,19 +468,19 @@ test("content avoids unsupported accreditation, ranges and supplier references",
 test("page visuals use controlled photographic media instead of large generic icons", () => {
   const routeMedia = {
     "/": ["/visuals/calibracao.webp", "/visuals/manutencao.webp"],
-    "/calibracao": ["/visuals/calibracao.webp"],
-    "/calibracao/pressao": ["/visuals/pressao.webp"],
-    "/calibracao/pressao/manometros": ["/visuals/manometro-digital.webp"],
-    "/calibracao/temperatura/autoclaves": ["/visuals/qualificacao.webp"],
-    "/calibracao/fisico-quimica/phmetros": ["/visuals/fisico-quimica.webp"],
-    "/manutencao": ["/visuals/manutencao.webp"],
-    "/qualificacao": ["/visuals/qualificacao.webp"],
-    "/produtos": ["/visuals/produtos.webp"],
-    "/produtos/pressao": ["/visuals/pressao.webp"],
-    "/produtos/pressao/manometros": ["/visuals/manometro-digital.webp"],
-    "/produtos/vazao/medidores-de-vazao": ["/visuals/vazao.webp"],
-    "/produtos/nivel/instrumentos-de-nivel": ["/visuals/nivel.webp"],
-    "/segmentos": [
+    "/calibracao/": ["/visuals/calibracao.webp"],
+    "/calibracao/pressao/": ["/visuals/pressao.webp"],
+    "/calibracao/pressao/manometros/": ["/visuals/manometro-digital.webp"],
+    "/calibracao/temperatura/autoclaves/": ["/visuals/qualificacao.webp"],
+    "/calibracao/fisico-quimica/phmetros/": ["/visuals/fisico-quimica.webp"],
+    "/manutencao/": ["/visuals/manutencao.webp"],
+    "/qualificacao/": ["/visuals/qualificacao.webp"],
+    "/produtos/": ["/visuals/produtos.webp"],
+    "/produtos/pressao/": ["/visuals/pressao.webp"],
+    "/produtos/pressao/manometros/": ["/visuals/manometro-digital.webp"],
+    "/produtos/vazao/medidores-de-vazao/": ["/visuals/vazao.webp"],
+    "/produtos/nivel/instrumentos-de-nivel/": ["/visuals/nivel.webp"],
+    "/segmentos/": [
       "/visuals/processo.webp",
       "/visuals/segmento-farmaceutico.webp",
       "/visuals/segmento-quimico.webp",
@@ -427,18 +489,18 @@ test("page visuals use controlled photographic media instead of large generic ic
       "/visuals/segmento-hospitalar.webp",
       "/visuals/segmento-industrial.webp",
     ],
-    "/segmentos/farmaceutico": ["/visuals/segmento-farmaceutico.webp"],
-    "/segmentos/quimico": ["/visuals/segmento-quimico.webp"],
-    "/segmentos/alimentos-bebidas": [
+    "/segmentos/farmaceutico/": ["/visuals/segmento-farmaceutico.webp"],
+    "/segmentos/quimico/": ["/visuals/segmento-quimico.webp"],
+    "/segmentos/alimentos-bebidas/": [
       "/visuals/segmento-alimentos-bebidas.webp",
     ],
-    "/segmentos/automotivo": ["/visuals/segmento-automotivo.webp"],
-    "/segmentos/hospitalar": ["/visuals/segmento-hospitalar.webp"],
-    "/segmentos/industrial": ["/visuals/segmento-industrial.webp"],
-    "/conteudo-tecnico": ["/visuals/conteudo.webp"],
-    "/sobre": ["/visuals/laboratorio.webp"],
-    "/contato": ["/visuals/processo.webp"],
-    "/area-do-cliente": ["/visuals/cliente.webp"],
+    "/segmentos/automotivo/": ["/visuals/segmento-automotivo.webp"],
+    "/segmentos/hospitalar/": ["/visuals/segmento-hospitalar.webp"],
+    "/segmentos/industrial/": ["/visuals/segmento-industrial.webp"],
+    "/conteudo-tecnico/": ["/visuals/conteudo.webp"],
+    "/sobre/": ["/visuals/laboratorio.webp"],
+    "/contato/": ["/visuals/processo.webp"],
+    "/area-do-cliente/": ["/visuals/cliente.webp"],
   };
   for (const [route, expectedSources] of Object.entries(routeMedia)) {
     const $ = documents.get(route);
@@ -470,25 +532,25 @@ test("page visuals use controlled photographic media instead of large generic ic
 
 test("contextual photos are used before falling back to pending media", () => {
   for (const route of [
-    "/calibracao",
-    "/calibracao/pressao",
-    "/calibracao/temperatura",
-    "/calibracao/massa",
-    "/calibracao/vazao",
-    "/calibracao/dimensional",
-    "/calibracao/fisico-quimica",
-    "/calibracao/optica-fotometria",
-    "/manutencao",
-    "/qualificacao",
-    "/produtos",
-    "/produtos/nivel",
-    "/segmentos/farmaceutico",
-    "/segmentos/automotivo",
+    "/calibracao/",
+    "/calibracao/pressao/",
+    "/calibracao/temperatura/",
+    "/calibracao/massa/",
+    "/calibracao/vazao/",
+    "/calibracao/dimensional/",
+    "/calibracao/fisico-quimica/",
+    "/calibracao/optica-fotometria/",
+    "/manutencao/",
+    "/qualificacao/",
+    "/produtos/",
+    "/produtos/nivel/",
+    "/segmentos/farmaceutico/",
+    "/segmentos/automotivo/",
   ]) {
     const $ = documents.get(route);
     assert.equal($(".page-media-pending").length, 0, route);
   }
-  for (const route of ["/conteudo-tecnico", "/area-do-cliente"]) {
+  for (const route of ["/conteudo-tecnico/", "/area-do-cliente/"]) {
     const $ = documents.get(route);
     assert.ok($(".page-media-pending").length >= 1, route);
   }

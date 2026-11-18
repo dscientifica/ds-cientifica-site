@@ -3,5 +3,5 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: "https://www.dscientifica.com.br",
   output: "static",
-  trailingSlash: "never",
+  trailingSlash: "always",
 });

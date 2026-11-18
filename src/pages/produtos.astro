@@ -1,4 +1,5 @@
 ---
+import { pageHref } from "../utils/urls";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
@@ -41,7 +42,7 @@ import { productCategories } from "../data/catalog";
           <Card
             title={category.title}
             description={category.description}
-            href={`/produtos/${category.slug}`}
+            href={pageHref(`/produtos/${category.slug}`)}
           >
             <PageMedia
               media={mediaForProduct(category.slug)}

@@ -2,6 +2,7 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { site } from "../config/site";
+import { pageHref } from "../utils/urls";
 import "../styles/global.css";
 import "../styles/quote-review.css";
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
 const { title, description, noindex = false, fullTitle } = Astro.props;
 const pageTitle = fullTitle || `${title} | DS Científica`;
 const canonical = new URL(
-  Astro.url.pathname.replace(/\/$/, "") || "/",
+  pageHref(Astro.url.pathname.replace(/\/+$/, "") || "/"),
   Astro.site,
 );
 const organizationSchema = {

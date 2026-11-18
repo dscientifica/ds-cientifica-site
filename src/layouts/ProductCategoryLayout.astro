@@ -1,4 +1,5 @@
 ---
+import { pageHref } from "../utils/urls";
 import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Section from "../components/Section.astro";
@@ -46,7 +47,7 @@ const { category } = Astro.props;
           <Card
             title={type.title}
             description={type.description}
-            href={`/produtos/${category.slug}/${type.slug}`}
+            href={pageHref(`/produtos/${category.slug}/${type.slug}`)}
           >
             <PageMedia
               media={mediaForProduct(category.slug, type.slug)}

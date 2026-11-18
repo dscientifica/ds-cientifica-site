@@ -1,4 +1,5 @@
 ---
+import { pageHref } from "../../utils/urls";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Section from "../../components/Section.astro";
@@ -34,7 +35,7 @@ import { segments } from "../../data/segments";
           <article class="card card-active segment-navigation-card">
             <PageMedia media={mediaForSegment(segment.slug)} compact />
             <h3>
-              <a href={segment.href}>
+              <a href={pageHref(segment.href)}>
                 {segment.extendedLabel || segment.title}
                 <span aria-hidden="true">↗</span>
               </a>

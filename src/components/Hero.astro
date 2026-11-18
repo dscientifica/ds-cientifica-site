@@ -1,4 +1,5 @@
 ---
+import { pageHref } from "../utils/urls";
 interface Props {
   eyebrow: string;
   title: string;
@@ -16,7 +17,7 @@ const { eyebrow, title, description, href, cta } = Astro.props;
         {description}
       </p>{
         href && (
-          <a class="button" href={href}>
+          <a class="button" href={pageHref(href)}>
             {cta}
             <span aria-hidden="true">↗</span>
           </a>

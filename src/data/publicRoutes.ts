@@ -1,5 +1,6 @@
 import { calibrationQuantities, productCategories } from "./catalog.ts";
 import { segments } from "./segments.ts";
+import { pageHref } from "../utils/urls.ts";
 
 const calibrationRoutes = calibrationQuantities.flatMap((quantity) => [
   `/calibracao/${quantity.slug}`,
@@ -31,4 +32,4 @@ export const publicRoutes = [
   "/sobre",
   "/contato",
   "/area-do-cliente",
-] as const;
+].map(pageHref);

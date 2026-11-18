@@ -5,11 +5,11 @@ import { load } from "cheerio";
 
 const documents = new Map(
   await Promise.all(
-    ["/", "/calibracao/pressao/manometros"].map(async (route) => [
+    ["/", "/calibracao/pressao/manometros/"].map(async (route) => [
       route,
       load(
         await readFile(
-          route === "/" ? "dist/index.html" : `dist${route}/index.html`,
+          route === "/" ? "dist/index.html" : `dist${route}index.html`,
           "utf8",
         ),
       ),
@@ -19,20 +19,20 @@ const documents = new Map(
 
 test("segment links use one reusable structure on Home and internal pages", () => {
   const expectedHome = [
-    ["Farmacêutico", "/segmentos/farmaceutico"],
-    ["Químico", "/segmentos/quimico"],
-    ["Alimentos e Bebidas", "/segmentos/alimentos-bebidas"],
-    ["Automotivo", "/segmentos/automotivo"],
-    ["Hospitalar", "/segmentos/hospitalar"],
-    ["Industrial", "/segmentos/industrial"],
+    ["Farmacêutico", "/segmentos/farmaceutico/"],
+    ["Químico", "/segmentos/quimico/"],
+    ["Alimentos e Bebidas", "/segmentos/alimentos-bebidas/"],
+    ["Automotivo", "/segmentos/automotivo/"],
+    ["Hospitalar", "/segmentos/hospitalar/"],
+    ["Industrial", "/segmentos/industrial/"],
   ];
   const expectedEquipment = [
     ...expectedHome.slice(0, 5),
-    ["Outros segmentos industriais", "/segmentos/industrial"],
+    ["Outros segmentos industriais", "/segmentos/industrial/"],
   ];
   for (const [route, expected] of [
     ["/", expectedHome],
-    ["/calibracao/pressao/manometros", expectedEquipment],
+    ["/calibracao/pressao/manometros/", expectedEquipment],
   ]) {
     const $ = documents.get(route);
     assert.deepEqual(

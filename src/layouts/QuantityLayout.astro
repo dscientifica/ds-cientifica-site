@@ -1,4 +1,5 @@
 ---
+import { pageHref } from "../utils/urls";
 import BaseLayout from "./BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Hero from "../components/Hero.astro";
@@ -68,7 +69,7 @@ const pageLead = seo?.lead || quantity.intro;
               <Card
                 title={link.label}
                 description={link.description}
-                href={link.href}
+                href={pageHref(link.href)}
               />
             ))}
           </div>
@@ -89,7 +90,7 @@ const pageLead = seo?.lead || quantity.intro;
           <Card
             title={item.title}
             description={item.description}
-            href={`/calibracao/${quantity.slug}/${item.slug}`}
+            href={pageHref(`/calibracao/${quantity.slug}/${item.slug}`)}
           />
         ))
       }

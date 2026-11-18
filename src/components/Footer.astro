@@ -1,4 +1,5 @@
 ---
+import { pageHref } from "../utils/urls";
 import Brand from "./Brand.astro";
 import { clientAreaHref } from "../config/site";
 ---
@@ -8,17 +9,18 @@ import { clientAreaHref } from "../config/site";
     <div>
       <Brand /><p>Soluções para laboratórios e processos industriais.</p>
     </div><div>
-      <h2>Soluções</h2><a href="/calibracao">Calibração</a><a href="/manutencao"
-        >Manutenção</a
-      ><a href="/qualificacao">Qualificação</a><a href="/produtos">Produtos</a>
-    </div><div>
-      <h2>Navegação</h2><a href="/segmentos">Segmentos</a><a
-        href="/conteudo-tecnico">Conteúdo Técnico</a
-      ><a href="/sobre">Sobre a DS</a><a href="/contato">Contato</a>
-    </div><div>
-      <h2>Cliente</h2><a href={clientAreaHref}>Área do Cliente / AXION</a><a
-        href="/contato#orcamento">Solicitar orçamento</a
+      <h2>Soluções</h2><a href="/calibracao/">Calibração</a><a
+        href="/manutencao/">Manutenção</a
+      ><a href="/qualificacao/">Qualificação</a><a href="/produtos/">Produtos</a
       >
+    </div><div>
+      <h2>Navegação</h2><a href="/segmentos/">Segmentos</a><a
+        href="/conteudo-tecnico/">Conteúdo Técnico</a
+      ><a href="/sobre/">Sobre a DS</a><a href="/contato/">Contato</a>
+    </div><div>
+      <h2>Cliente</h2><a href={pageHref(clientAreaHref)}
+        >Área do Cliente / AXION</a
+      ><a href="/contato/#orcamento">Solicitar orçamento</a>
     </div>
   </div><div class="container footer-bottom">
     DS Científica <span>Soluções e suporte técnico para sua operação.</span>
