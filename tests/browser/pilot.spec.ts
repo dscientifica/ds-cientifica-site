@@ -2,19 +2,19 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 const routes = [
   "/",
-  "/calibracao",
-  "/calibracao/pressao",
-  "/calibracao/pressao/manometros",
-  "/manutencao",
-  "/qualificacao",
-  "/produtos",
-  "/segmentos",
-  "/segmentos/farmaceutico",
-  "/segmentos/quimico",
-  "/segmentos/alimentos-bebidas",
-  "/segmentos/automotivo",
-  "/segmentos/hospitalar",
-  "/segmentos/industrial",
+  "/calibracao/",
+  "/calibracao/pressao/",
+  "/calibracao/pressao/manometros/",
+  "/manutencao/",
+  "/qualificacao/",
+  "/produtos/",
+  "/segmentos/",
+  "/segmentos/farmaceutico/",
+  "/segmentos/quimico/",
+  "/segmentos/alimentos-bebidas/",
+  "/segmentos/automotivo/",
+  "/segmentos/hospitalar/",
+  "/segmentos/industrial/",
 ];
 
 for (const width of [390, 1280]) {
@@ -37,10 +37,10 @@ for (const width of [390, 1280]) {
     await expect(page.locator(".home-hero h1 span")).toHaveText("resultados");
     await expect(page.locator(".home-hero-highlights li")).toHaveCount(4);
     for (const [label, path] of [
-      ["Calibração", "/calibracao"],
-      ["Manutenção", "/manutencao"],
-      ["Qualificação", "/qualificacao"],
-      ["Produtos", "/produtos"],
+      ["Calibração", "/calibracao/"],
+      ["Manutenção", "/manutencao/"],
+      ["Qualificação", "/qualificacao/"],
+      ["Produtos", "/produtos/"],
     ]) {
       await page.goto("/");
       await page
@@ -55,16 +55,16 @@ for (const width of [390, 1280]) {
       .locator(".home-contact")
       .getByRole("link", { name: "Solicitar orçamento" })
       .click();
-    await expect(page).toHaveURL("/contato#orcamento");
+    await expect(page).toHaveURL("/contato/#orcamento");
     await expect(page.locator("#orcamento")).toBeInViewport();
     await page.goto("/");
     for (const [label, path] of [
-      ["Farmacêutico", "/segmentos/farmaceutico"],
-      ["Químico", "/segmentos/quimico"],
-      ["Alimentos e Bebidas", "/segmentos/alimentos-bebidas"],
-      ["Automotivo", "/segmentos/automotivo"],
-      ["Hospitalar", "/segmentos/hospitalar"],
-      ["Industrial", "/segmentos/industrial"],
+      ["Farmacêutico", "/segmentos/farmaceutico/"],
+      ["Químico", "/segmentos/quimico/"],
+      ["Alimentos e Bebidas", "/segmentos/alimentos-bebidas/"],
+      ["Automotivo", "/segmentos/automotivo/"],
+      ["Hospitalar", "/segmentos/hospitalar/"],
+      ["Industrial", "/segmentos/industrial/"],
     ]) {
       await page.goto("/");
       await page
@@ -88,7 +88,7 @@ test("client menu reaches the client area from every route on mobile", async ({
       .getByRole("navigation", { name: "Navegação principal" })
       .getByRole("link", { name: "Área do Cliente", exact: true })
       .click();
-    await expect(page).toHaveURL("/area-do-cliente");
+    await expect(page).toHaveURL("/area-do-cliente/");
     await expect(page.locator("h1")).toContainText(
       "Tenha o controle dos seus equipamentos",
     );
@@ -148,22 +148,22 @@ test("mobile navigation, keyboard and complete pilot journey", async ({
     .getByRole("navigation", { name: "Navegação principal" })
     .getByRole("link", { name: "Calibração", exact: true })
     .click();
-  await expect(page).toHaveURL("/calibracao");
+  await expect(page).toHaveURL("/calibracao/");
   await page
     .getByRole("link", { name: /Pressão/ })
     .first()
     .click();
-  await expect(page).toHaveURL("/calibracao/pressao");
+  await expect(page).toHaveURL("/calibracao/pressao/");
   await page
     .getByRole("link", { name: /Manômetros/ })
     .first()
     .click();
-  await expect(page).toHaveURL("/calibracao/pressao/manometros");
+  await expect(page).toHaveURL("/calibracao/pressao/manometros/");
   await page
     .getByRole("link", { name: /Solicitar orçamento/ })
     .first()
     .click();
-  await expect(page).toHaveURL("/contato#orcamento");
+  await expect(page).toHaveURL("/contato/#orcamento");
   await expect(page.locator("#orcamento")).toBeInViewport();
 });
 
@@ -171,26 +171,26 @@ test("quote CTAs point to the central contact budget flow", async ({
   page,
 }) => {
   for (const route of [
-    "/calibracao/pressao/manometros",
-    "/manutencao",
-    "/qualificacao",
-    "/produtos/pressao/manometros",
-    "/segmentos/industrial",
+    "/calibracao/pressao/manometros/",
+    "/manutencao/",
+    "/qualificacao/",
+    "/produtos/pressao/manometros/",
+    "/segmentos/industrial/",
   ]) {
     await page.goto(route);
     const quoteLinks = page.locator(
-      'main a[href="/contato#orcamento"], main a[href="#orcamento"]',
+      'main a[href="/contato/#orcamento"], main a[href="#orcamento"]',
     );
     await expect(quoteLinks.first()).toBeVisible();
     await expect(
       page.locator('main form[aria-label="Solicitação de orçamento"]'),
-    ).toHaveCount(route === "/contato" ? 1 : 0);
+    ).toHaveCount(route === "/contato/" ? 1 : 0);
     const localAnchors = await page
       .locator('main a[href="#orcamento"]')
       .count();
     expect(localAnchors, route).toBe(0);
     await quoteLinks.first().click();
-    await expect(page).toHaveURL("/contato#orcamento");
+    await expect(page).toHaveURL("/contato/#orcamento");
     await expect(
       page.locator('form[aria-label="Solicitação de orçamento"]'),
     ).toBeVisible();
@@ -205,12 +205,12 @@ test("segment pages expose commercial paths and catalog links on desktop and mob
   for (const width of [390, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     for (const route of [
-      "/segmentos/farmaceutico",
-      "/segmentos/quimico",
-      "/segmentos/alimentos-bebidas",
-      "/segmentos/automotivo",
-      "/segmentos/hospitalar",
-      "/segmentos/industrial",
+      "/segmentos/farmaceutico/",
+      "/segmentos/quimico/",
+      "/segmentos/alimentos-bebidas/",
+      "/segmentos/automotivo/",
+      "/segmentos/hospitalar/",
+      "/segmentos/industrial/",
     ]) {
       await page.goto(route);
       await expect(page.locator(".segment-application-list li")).toHaveCount(4);
@@ -225,7 +225,7 @@ test("segment pages expose commercial paths and catalog links on desktop and mob
       ).toHaveCount(0);
       await expect(page.locator('main a[href="#orcamento"]')).toHaveCount(0);
       await expect(
-        page.locator('main a[href="/contato#orcamento"]').first(),
+        page.locator('main a[href="/contato/#orcamento"]').first(),
       ).toBeVisible();
       expect(
         await page.evaluate(
@@ -236,8 +236,8 @@ test("segment pages expose commercial paths and catalog links on desktop and mob
       await expect(page.locator("h1")).toBeVisible();
       expect(page.url()).not.toContain("/segmentos/");
       await page.goto(route);
-      await page.locator('main a[href="/contato#orcamento"]').first().click();
-      await expect(page).toHaveURL("/contato#orcamento");
+      await page.locator('main a[href="/contato/#orcamento"]').first().click();
+      await expect(page).toHaveURL("/contato/#orcamento");
       await expect(page.locator("#orcamento")).toBeInViewport();
     }
   }
@@ -246,7 +246,7 @@ test("segment pages expose commercial paths and catalog links on desktop and mob
 test("form validates fields, preserves data on error and confirms after stored quote", async ({
   page,
 }) => {
-  await page.goto("/contato#orcamento");
+  await page.goto("/contato/#orcamento");
   await expect(page.locator("#add-equipment")).toBeVisible();
   const requests: unknown[] = [];
   let attempts = 0;
@@ -361,7 +361,7 @@ test("form validates fields, preserves data on error and confirms after stored q
   expect(
     await page.evaluate(() => [localStorage.length, sessionStorage.length]),
   ).toEqual([0, 0]);
-  await expect(page).toHaveURL("/contato#orcamento");
+  await expect(page).toHaveURL("/contato/#orcamento");
 });
 for (const width of [390, 1280]) {
   test(`quote sends the native Turnstile response without callbacks at ${width}px`, async ({
@@ -381,7 +381,7 @@ for (const width of [390, 1280]) {
         ),
       });
     });
-    await page.goto("/contato#orcamento");
+    await page.goto("/contato/#orcamento");
     // Simulate the response field created by Turnstile, without external calls.
     await page.locator(".quote-form").evaluate((form: HTMLFormElement) => {
       form.dataset.turnstileRequired = "true";
@@ -449,7 +449,7 @@ for (const width of [390, 1280]) {
 test("quote form handles multiple equipment items with edit and removal", async ({
   page,
 }) => {
-  await page.goto("/contato#orcamento");
+  await page.goto("/contato/#orcamento");
   await page.getByLabel("Empresa *").fill("Empresa teste");
   await page.getByLabel("Nome *").fill("Teste");
   await page.getByLabel("E-mail *").fill("teste@example.test");
@@ -514,7 +514,7 @@ test("no JavaScript keeps navigation usable and form inert", async ({
     viewport: { width: 320, height: 800 },
   });
   const page = await context.newPage();
-  await page.goto("/contato#orcamento");
+  await page.goto("/contato/#orcamento");
   await expect(page.locator("#main-nav")).toBeVisible();
   await expect(page.getByLabel("Empresa *")).toBeDisabled();
   await expect(page.locator("#add-equipment")).toBeHidden();

@@ -1,4 +1,5 @@
 ---
+import { pageHref } from "../utils/urls";
 interface Props {
   items: { label: string; href?: string }[];
 }
@@ -10,7 +11,7 @@ const schema = {
     "@type": "ListItem",
     position: index + 1,
     name: item.label,
-    item: new URL(item.href || Astro.url.pathname, Astro.site).href,
+    item: new URL(pageHref(item.href || Astro.url.pathname), Astro.site).href,
   })),
 };
 ---
@@ -21,7 +22,7 @@ const schema = {
       items.map((item) => (
         <li>
           {item.href ? (
-            <a href={item.href}>{item.label}</a>
+            <a href={pageHref(item.href)}>{item.label}</a>
           ) : (
             <span aria-current="page">{item.label}</span>
           )}

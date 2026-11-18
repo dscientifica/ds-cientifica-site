@@ -1,4 +1,5 @@
 ---
+import { pageHref } from "../utils/urls";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Axion from "../components/Axion.astro";
 import PageMedia from "../components/PageMedia.astro";
@@ -80,7 +81,7 @@ import "../styles/home.css";
         solutions.map((solution) => (
           <a
             class:list={["solution-path", solution.key]}
-            href={solution.href}
+            href={pageHref(solution.href)}
             aria-labelledby={`solution-${solution.key}`}
           >
             <div class="solution-art">
@@ -146,7 +147,7 @@ import "../styles/home.css";
       Científica avalia a aplicação e orienta a solução mais adequada.
     </p>
     <div class="home-actions">
-      <a class="button" href="/contato#orcamento"
+      <a class="button" href="/contato/#orcamento"
         >Solicitar orçamento <span aria-hidden="true">↗</span></a
       >{
         whatsappUrl && (
